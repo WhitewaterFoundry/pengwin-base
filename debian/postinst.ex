@@ -20,6 +20,9 @@ set -e
 
 case "$1" in
     configure)
+
+    chmod u+x /usr/local/bin/wlinux-help
+
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

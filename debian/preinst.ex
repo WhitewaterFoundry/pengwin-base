@@ -16,6 +16,9 @@ set -e
 
 case "$1" in
     install|upgrade)
+
+    mkdir -p /etc/fonts
+
     ;;
 
     abort-upgrade)
