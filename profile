@@ -44,13 +44,3 @@ export LIBGL_ALWAYS_INDIRECT=1
 
 # speed up some GUI apps like gedit
 export NO_AT_BRIDGE=1
-
-# alias wlinux helper apps
-alias wlinux-setup='bash /etc/setup'
-alias wlinux-help='bash /etc/helpme'
-
-# does .firstrun exist? if not, mention wlinux-setup and touch .firstrun
-if [ ! -f ~/.firstrun ]; then
-    echo "Welcome to WLinux. Type 'wlinux-setup' to run the setup tool. You will only see this message once."
-    touch ~/.firstrun
-fi
