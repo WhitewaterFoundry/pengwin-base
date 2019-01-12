@@ -1,5 +1,6 @@
 environment /etc/
 os-release /etc/
+bashrc /etc/
 profile /etc/
 wsl.conf /etc/
 preferences /etc/apt/
@@ -8,5 +9,3 @@ local.conf /etc/fonts/
 default /etc/dpkg/origins/
 wlinux-help /usr/local/bin/
 wlinux.ico /usr/local/lib/
-skel /etc
-skel/* /etc/skel
