@@ -6,6 +6,9 @@ if [[ -f "/home/.envs/envrc" ]] ; then
     source "/home/.envs/envrc"
 fi
 
+# Add our own + common aliases
+alias ll="ls -al"
+
 # Execute on user's shell first-run
 if [ ! -f "~/.firstrun" ]; then
     echo "Welcome to WLinux. Type 'wlinux-setup' to run the setup tool. You will only see this message once."
