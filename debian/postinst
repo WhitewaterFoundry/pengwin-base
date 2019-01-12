@@ -23,6 +23,9 @@ case "$1" in
 
     chmod u+x /usr/local/bin/wlinux-help
 
+    echo 'Defaults lecture_file = /etc/sudoers.lecture' >> /etc/sudoers
+    echo 'Enter your UNIX password below. This is not your Windows password.' >> /etc/sudoers.lecture
+
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
