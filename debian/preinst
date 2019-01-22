@@ -15,10 +15,12 @@ set -e
 
 
 case "$1" in
-    install|upgrade)
+    install)
+        mkdir -p /etc/fonts
+        mv /etc/profile /etc/profile.old
+    ;;
 
-    mkdir -p /etc/fonts
-
+    upgrade)
     ;;
 
     abort-upgrade)
