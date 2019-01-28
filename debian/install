@@ -1,5 +1,4 @@
 environment /etc/
-os-release /etc/
 bashrc /etc/
 profile /etc/
 wsl.conf /etc/
