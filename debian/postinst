@@ -33,6 +33,13 @@ case "$1" in
     echo 'SUPPORT_URL="https://github.com/whitewaterfoundry/WLinux"' >> /etc/os-release
     echo 'BUG_REPORT_URL="https://github.com/whitewaterfoundry/WLinux"' >> /etc/os-release
 
+    setup_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-setup/gpgkey"
+    base_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-base/gpgkey"
+
+    echo -n "Installing Whitewater Foundry GPG keys..."
+    curl -L "${setup_gpgkey}" 2> /dev/null | apt-key add - &>/dev/null
+    curl -L "${base_gpgkey}" 2> /dev/null  | apt-key add - &>/dev/null
+
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
