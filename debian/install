@@ -4,6 +4,7 @@ profile /etc/
 wsl.conf /etc/
 preferences /etc/apt/
 sources.list /etc/apt/
+sources.list.d /etc/apt/
 local.conf /etc/fonts/
 default /etc/dpkg/origins/
 wlinux-help /usr/local/bin/
