@@ -26,13 +26,6 @@ case "$1" in
     echo 'Defaults lecture_file = /etc/sudoers.lecture' >> /etc/sudoers
     echo 'Enter your UNIX password below. This is not your Windows password.' >> /etc/sudoers.lecture
 
-    echo 'PRETTY_NAME="WLinux"' > /etc/os-release
-    echo 'NAME="WLinux"' >> /etc/os-release
-    echo 'ID=debian' >> /etc/os-release
-    echo 'HOME_URL="https://github.com/whitewaterfoundry/WLinux"' >> /etc/os-release
-    echo 'SUPPORT_URL="https://github.com/whitewaterfoundry/WLinux"' >> /etc/os-release
-    echo 'BUG_REPORT_URL="https://github.com/whitewaterfoundry/WLinux"' >> /etc/os-release
-
     setup_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-setup/gpgkey"
     base_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-base/gpgkey"
 

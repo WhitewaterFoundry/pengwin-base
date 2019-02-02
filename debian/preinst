@@ -16,9 +16,61 @@ set -e
 
 case "$1" in
     install)
-        echo "Backuping up current /etc/profile to /etc/profile.old"
-        mkdir -p /etc/fonts
-        mv /etc/profile /etc/profile.old
+        # Backup all old files since we over-write a lot of other package's files
+        if [ ! -d "/etc/fonts" ] ; then
+            echo "Creating /etc/fonts"
+            mkdir -p /etc/fonts
+        else
+            if [ -f "/etc/fonts/local.conf" ] ; then
+                echo "Backing up /etc/fonts/local.conf"
+                mv /etc/fonts/local.conf /etc/fonts/local.conf.old
+            fi
+        fi
+
+        if [ -f "/etc/profile"  ] ; then
+            echo "Backing up /etc/profile"
+            mv /etc/profile /etc/profile.old
+        fi
+
+        if [ -f "/etc/os-release" ] ; then
+            echo "Backing up /etc/os-release"
+            mv /etc/os-release /etc/os-release.old
+        fi
+
+        if [ -f "/etc/environment" ] ; then
+            echo "Backing up /etc/environment"
+            mv /etc/environment /etc/environment.old
+        fi
+
+        if [ -f "/etc/bashrc" ] ; then
+            echo "Backing up /etc/bashrc"
+            mv /etc/bashrc /etc/bashrc.old
+        fi
+
+        if [ -f "/etc/apt/preferences" ] ; then
+            echo "Backing up /etc/apt/preferences"
+            mv /etc/apt/preferences /etc/apt/preferences.old
+        fi
+
+        if [ -f "/etc/apt/sources.list" ] ; then
+            echo "Backing up /etc/apt/sources.list"
+            mv /etc/apt/sources.list /etc/apt/sources.list.old
+        fi
+
+        if [ -f "/etc/dpkg/origins/default" ] ; then
+            echo "Backing up /etc/dpkg/origins/default"
+            mv /etc/dpkg/origins/default /etc/dpkg/origins/default.old
+        fi
+
+        if [ -f "/etc/sudoers" ] ; then
+            echo "Backing up /etc/sudoers"
+            cp /etc/sudoers /etc/sudoers.old
+        fi
+
+        if [ -f "/etc/sudoers.lecture" ] ; then
+            echo "Backing up /etc/sudoers.lecture"
+            cp /etc/sudoers.lecture /etc/sudoers.lecture.old
+        fi
     ;;
 
     upgrade)
