@@ -30,8 +30,18 @@ case "$1" in
     base_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-base/gpgkey"
 
     echo -n "Installing Whitewater Foundry GPG keys..."
-    curl -L "${setup_gpgkey}" 2> /dev/null | apt-key add - &>/dev/null
-    curl -L "${base_gpgkey}" 2> /dev/null  | apt-key add - &>/dev/null
+    tmpdir=$(mktemp -d)
+    cd ${tmpdir}
+    curl -L "${setup_gpgkey}" -o setup_gpgkey 2> /dev/null
+    curl -L "${base_gpgkey}" -o base_gpgkey 2> /dev/null
+
+    gpg --no-default-keychain --keychain "${tmpdir}/whitewaterfoundry.gpg" --import setup_gpgkey
+    gpg --no-default-keychain --keychain "${tmpdir}/whitewaterfoundry.gpg" --import base_gpgkey
+
+    if [ ! -d "/etc/apt/trusted.gpg.d" ] ; then
+        mkdir -p /etc/apt/trusted.gpg.d
+    fi
+    mv whitewaterfoundry.gpg /etc/apt/trusted.gpg.d
 
     ;;
 
