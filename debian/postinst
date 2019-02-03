@@ -35,13 +35,14 @@ case "$1" in
     curl -L "${setup_gpgkey}" -o setup_gpgkey 2> /dev/null
     curl -L "${base_gpgkey}" -o base_gpgkey 2> /dev/null
 
-    gpg --no-default-keychain --keychain "${tmpdir}/whitewaterfoundry.gpg" --import setup_gpgkey
-    gpg --no-default-keychain --keychain "${tmpdir}/whitewaterfoundry.gpg" --import base_gpgkey
+    gpg --no-default-keyring --keyring "${tmpdir}/whitewaterfoundry.gpg" --import setup_gpgkey
+    gpg --no-default-keyring --keyring "${tmpdir}/whitewaterfoundry.gpg" --import base_gpgkey
 
     if [ ! -d "/etc/apt/trusted.gpg.d" ] ; then
         mkdir -p /etc/apt/trusted.gpg.d
     fi
     mv whitewaterfoundry.gpg /etc/apt/trusted.gpg.d
+    rm -r ${tmpdir}
 
     ;;
 
