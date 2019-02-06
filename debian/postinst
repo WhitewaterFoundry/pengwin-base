@@ -33,8 +33,8 @@ case "$1" in
     tmpdir=$(mktemp -d)
     cd ${tmpdir}
 
-    curl -L ${setup_gpgkey}	| gpg --ignore-time-conflicts --no-options --no-default-keyring --keyring "${tmpdir}/whitewaterfoundry-archive-keyring.gpg" --import -
-    curl -L ${base_gpgkey}	| gpg --ignore-time-conflicts --no-options --no-default-keyring --keyring "${tmpdir}/whitewaterfoundry-archive-keyring.gpg" --import -
+    curl -L ${setup_gpgkey}	| gpg --ignore-time-conflict --no-options --no-default-keyring --keyring "${tmpdir}/whitewaterfoundry-archive-keyring.gpg" --import -
+    curl -L ${base_gpgkey}	| gpg --ignore-time-conflict --no-options --no-default-keyring --keyring "${tmpdir}/whitewaterfoundry-archive-keyring.gpg" --import -
 
     if [ ! -d "/etc/apt/trusted.gpg.d" ] ; then
         mkdir -p /etc/apt/trusted.gpg.d
