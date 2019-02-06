@@ -36,17 +36,17 @@ case "$1" in
     curl -L ${base_gpgkey} -o base_gpgkey.pub > /dev/null 2>&1
 
     keyring_location="/etc/apt/trusted.gpg.d"
-    primary_keyring="${keyring_location}/whitewaterfoundry-archive-keyring.gpg"
-    secret_keyring="${keyring_location}/whitewaterfoundry-archive-secring.gpg"
-    trustdb_keyring="${keyring_location}/whitewaterfoundry-archive-trustdb.gpg"
+    primary_keyring="${tmpdir}/whitewaterfoundry-archive-keyring.gpg"
 
     mkdir -p ~/.gnupg # this needs to be done to prevent odd gpg fatal error
     if [ ! -d "/etc/apt/trusted.gpg.d" ] ; then
         mkdir -p /etc/apt/trusted.gpg.d
     fi    
     
-    gpg --ignore-time-conflict --no-options --no-default-keyring --secret-keyring ${secret_keyring} --trustdb-name ${trustdb_keyring} --keyring ${primary_keyring} --primary-keyring ${primary_keyring} --import setup_gpgkey.pub
-    gpg --ignore-time-conflict --no-options --no-default-keyring --secret-keyring ${secret_keyring} --trustdb-name ${trustdb_keyring} --keyring ${primary_keyring} --primary-keyring ${primary_keyring} --import base_gpgkey.pub
+    gpg --ignore-time-conflict --no-options --no-default-keyring --homedir ${tmpdir} --keyring ${primary_keyring} --import setup_gpgkey.pub > /dev/null 2>&1
+    gpg --ignore-time-conflict --no-options --no-default-keyring --homedir ${tmpdir} --keyring ${primary_keyring} --import base_gpgkey.pub > /dev/null 2>&1
+
+    mv ${primary_keyring} ${keyring_location}
 
     rm -r ${tmpdir}
     echo " Done!"
