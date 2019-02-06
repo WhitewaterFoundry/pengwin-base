@@ -26,27 +26,30 @@ case "$1" in
     echo 'Defaults lecture_file = /etc/sudoers.lecture' >> /etc/sudoers
     echo 'Enter your UNIX password below. This is not your Windows password.' >> /etc/sudoers.lecture
 
-    setup_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-setup/gpgkey"
-    base_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-base/gpgkey"
-
     echo -n "Installing Whitewater Foundry GPG keys..."
     tmpdir=$(mktemp -d)
     cd ${tmpdir}
 
+    setup_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-setup/gpgkey"
+    base_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-base/gpgkey"
     curl -L ${setup_gpgkey} -o setup_gpgkey.pub > /dev/null 2>&1
     curl -L ${base_gpgkey} -o base_gpgkey.pub > /dev/null 2>&1
 
-    mkdir -p ~/.gnupg # this needs to be done to prevent odd gpg fatal error
-    gpg --ignore-time-conflict --no-default-keyring --keyring ./whitewaterfoundry-archive-keyring.gpg --import base_gpgkey.pub > /dev/null 2>&1
-    gpg --ignore-time-conflict --no-default-keyring --keyring ./whitewaterfoundry-archive-keyring.gpg --import setup_gpgkey.pub > /dev/null 2>&1
+    keyring_location="/etc/apt/trusted.gpg.d"
+    primary_keyring="${keyring_location}/whitewaterfoundry-archive-keyring.gpg"
+    secret_keyring="${keyring_location}/whitewaterfoundry-archive-secring.gpg"
+    trustdb_keyring="${keyring_location}/whitewaterfoundry-archive-trustdb.gpg"
 
+    mkdir -p ~/.gnupg # this needs to be done to prevent odd gpg fatal error
     if [ ! -d "/etc/apt/trusted.gpg.d" ] ; then
         mkdir -p /etc/apt/trusted.gpg.d
-    fi
-    mv whitewaterfoundry-archive-keyring.gpg /etc/apt/trusted.gpg.d
+    fi    
+    
+    gpg --ignore-time-conflict --no-options --no-default-keyring --secret-keyring ${secret_keyring} --trustdb-name ${trustdb_keyring} --keyring ${primary_keyring} --primary-keyring ${primary_keyring} --import setup_gpgkey.pub
+    gpg --ignore-time-conflict --no-options --no-default-keyring --secret-keyring ${secret_keyring} --trustdb-name ${trustdb_keyring} --keyring ${primary_keyring} --primary-keyring ${primary_keyring} --import base_gpgkey.pub
+
     rm -r ${tmpdir}
     echo " Done!"
-
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
