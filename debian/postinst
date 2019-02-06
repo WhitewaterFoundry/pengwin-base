@@ -32,16 +32,14 @@ case "$1" in
     echo -n "Installing Whitewater Foundry GPG keys..."
     tmpdir=$(mktemp -d)
     cd ${tmpdir}
-    curl -L "${setup_gpgkey}" -o setup_gpgkey 2> /dev/null
-    curl -L "${base_gpgkey}" -o base_gpgkey 2> /dev/null
 
-    gpg --no-default-keyring --keyring "${tmpdir}/whitewaterfoundry.gpg" --import setup_gpgkey
-    gpg --no-default-keyring --keyring "${tmpdir}/whitewaterfoundry.gpg" --import base_gpgkey
+    curl -L ${setup_gpgkey}	| gpg --ignore-time-conflicts --no-options --no-default-keyring --keyring "${tmpdir}/whitewaterfoundry-archive-keyring.gpg" --import -
+    curl -L ${base_gpgkey}	| gpg --ignore-time-conflicts --no-options --no-default-keyring --keyring "${tmpdir}/whitewaterfoundry-archive-keyring.gpg" --import -
 
     if [ ! -d "/etc/apt/trusted.gpg.d" ] ; then
         mkdir -p /etc/apt/trusted.gpg.d
     fi
-    mv whitewaterfoundry.gpg /etc/apt/trusted.gpg.d
+    mv whitewaterfoundry-archive-keyring.gpg /etc/apt/trusted.gpg.d
     rm -r ${tmpdir}
 
     ;;
