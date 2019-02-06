@@ -45,6 +45,7 @@ case "$1" in
     fi
     mv whitewaterfoundry-archive-keyring.gpg /etc/apt/trusted.gpg.d
     rm -r ${tmpdir}
+    echo " Done!"
 
     ;;
 
