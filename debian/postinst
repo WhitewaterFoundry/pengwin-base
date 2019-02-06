@@ -36,10 +36,8 @@ case "$1" in
     curl -L ${setup_gpgkey} -o setup_gpgkey.pub
     curl -L ${base_gpgkey} -o base_gpgkey.pub
 
-    gpg --ignore-time-conflict --no-options --no-default-keyring
---keyring ./whitewaterfoundry-archive-keyring.gpg --import ./base_gpgkey.pub
-    gpg --ignore-time-conflict --no-options --no-default-keyring
---keyring ./whitewaterfoundry-archive-keyring.gpg --import ./setup_gpgkey.pub
+    gpg --ignore-time-conflict --no-options --no-default-keyring --keyring ./whitewaterfoundry-archive-keyring.gpg --import ./base_gpgkey.pub
+    gpg --ignore-time-conflict --no-options --no-default-keyring --keyring ./whitewaterfoundry-archive-keyring.gpg --import ./setup_gpgkey.pub
 
     if [ ! -d "/etc/apt/trusted.gpg.d" ] ; then
         mkdir -p /etc/apt/trusted.gpg.d
