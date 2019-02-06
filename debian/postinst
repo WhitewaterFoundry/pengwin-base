@@ -33,11 +33,12 @@ case "$1" in
     tmpdir=$(mktemp -d)
     cd ${tmpdir}
 
-    curl -L ${setup_gpgkey} -o setup_gpgkey.pub
-    curl -L ${base_gpgkey} -o base_gpgkey.pub
+    curl -L ${setup_gpgkey} -o setup_gpgkey.pub > /dev/null 2>&1
+    curl -L ${base_gpgkey} -o base_gpgkey.pub > /dev/null 2>&1
 
-    gpg --ignore-time-conflict --no-default-keyring --keyring ./whitewaterfoundry-archive-keyring.gpg --import base_gpgkey.pub
-    gpg --ignore-time-conflict --no-default-keyring --keyring ./whitewaterfoundry-archive-keyring.gpg --import setup_gpgkey.pub
+    mkdir -p ~/.gnupg # this needs to be done to prevent odd gpg fatal error
+    gpg --ignore-time-conflict --no-default-keyring --keyring ./whitewaterfoundry-archive-keyring.gpg --import base_gpgkey.pub > /dev/null 2>&1
+    gpg --ignore-time-conflict --no-default-keyring --keyring ./whitewaterfoundry-archive-keyring.gpg --import setup_gpgkey.pub > /dev/null 2>&1
 
     if [ ! -d "/etc/apt/trusted.gpg.d" ] ; then
         mkdir -p /etc/apt/trusted.gpg.d
