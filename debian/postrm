@@ -21,64 +21,111 @@ set -e
 
 case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
-        rm /etc/fonts/local.conf
-        if [ -f "/etc/fonts/local.conf.old" ] ; then
+	backup_dir=/etc/pre-wlinux
+
+	# /etc/fonts/local.conf
+	if [ -f "/etc/fonts/local.conf" ] ; then
+	    echo "Deleting current /etc/fonts/local.conf"
+	    rm /etc/fonts/local.conf
+	fi
+        if [ -f "${backup_dir}/local.conf" ] ; then
             echo "Restoring backup /etc/fonts/local.conf"
-            mv /etc/fonts/local.conf.old /etc/fonts/local.conf
+            mv ${backup_dir}/local.conf /etc/fonts
         fi
 
+	# /etc/profile
         rm /etc/profile
-        if [ -f "/etc/profile.old" ] ; then
+        if [ -f "${backup_dir}/profile" ] ; then
             echo "Restoring backup /etc/profile"
-            mv /etc/profile.old /etc/profile
+            mv ${backup_dir}/profile /etc
         fi
 
+	# /etc/os-release
         rm /etc/os-release
-        if [ -f "/etc/os-release.old" ] ; then
+        if [ -f "${backup_dir}/os-release" ] ; then
             echo "Restoring backup /etc/os-release"
-            mv /etc/os-release.old /etc/os-release
+            mv ${backup_dir}/os-release /etc
         fi
 
+	# /etc/environment
         rm /etc/environment
-        if [ -f "/etc/environment.old" ] ; then
+        if [ -f "${backup_dir}/environment" ] ; then
             echo "Restoring backup /etc/environment"
-            mv /etc/environment.old /etc/environment
+            mv ${backup_dir}/environment /etc
         fi
 
+	# /etc/bashrc
         rm /etc/bashrc
-        if [ -f "/etc/bashrc.old" ] ; then
+        if [ -f "${backup_dir}/bashrc" ] ; then
             echo "Restoring backup /etc/bashrc"
-            mv /etc/bashrc.old /etc/bashrc
+            mv ${backup_dir}/bashrc /etc
         fi
 
+	# /etc/apt/preferences
         rm /etc/apt/preferences
-        if [ -f "/etc/apt/preferences.old" ] ; then
+        if [ -f "${backup_dir}/preferences" ] ; then
             echo "Restoring backup /etc/apt/preferences"
-            mv /etc/apt/preferences.old /etc/apt/preferences
+            mv ${backup_dir}/preferences /etc/apt
         fi
 
+	# /etc/apt/sources.list
         rm /etc/apt/sources.list
-        if [ -f "/etc/apt/sources.list.old" ] ; then
+        if [ -f "${backup_dir}/sources.list" ] ; then
             echo "Restoring backup /etc/apt/sources.list"
-            mv /etc/apt/sources.list.old /etc/apt/sources.list
+            mv ${backup_dir}/sources.list /etc/apt
         fi
 
-        rm /etc/dpkg/origins/default
-        if [ -f "/etc/dpkg/origins/default.old" ] ; then
+	# /etc/apt/trusted.gpg
+	if [ -f "/etc/apt/trusted.gpg" ] ; then
+	    echo "Removing current /etc/apt/trusted.gpg"
+	    rm /etc/apt/trusted.gpg
+	fi
+	if [ -f "${backup_dir}/trusted.gpg" ] ; then
+	    echo "Restoring backup /etc/apt/trusted.gpg"
+	    mv ${backup_dir}/trusted.gpg /etc/apt
+	fi
+
+	# /etc/apt/trusted.gpg.d
+	if [ -d "/etc/apt/trusted.gpg.d" ] ; then
+	    echo "Removing current /etc/apt/trusted.gpg.d"
+	    rm -r /etc/apt/trusted.gpg.d
+	fi
+	if [ -d "${backup_dir}/trusted.gpg.d" ] ; then
+	    echo "Restoring backup /etc/apt/trusted.gpg.d"
+	    mv ${backup_dir}/trusted.gpg.d /etc/apt
+	fi
+
+	# /etc/dpkg/origins/default
+        if [ -f "/etc/dpkg/origins/default" ] ; then
+	    echo "Removing current /etc/dpkg/origins/default"
+	    rm /etc/dpkg/origins/default
+	fi
+        if [ -f "${backup_dir}/default" ] ; then
             echo "Restoring backup /etc/dpkg/origins/default"
-            mv /etc/dpkg/origins/default.old /etc/dpkg/origins/default
+            mv ${backup_dir}/default /etc/dpkg/origins
         fi
 
-        rm /etc/sudoers
-        if [ -f "/etc/sudoers.old" ] ; then
+	# /etc/sudoers
+        if [ -f "/etc/sudoers" ] ; then
+	    echo "Removing current /etc/sudoers"
+	    rm /etc/sudoers
+        if [ -f "${backup_dir}/sudoers" ] ; then
             echo "Restoring backup /etc/sudoers"
-            mv /etc/sudoers.old /etc/sudoers
+            mv ${backup_dir}/sudoers /etc
         fi
 
-        if [ -f "/etc/sudoers.lecture.old" ] ; then
+	# /etc/sudoers.lecture
+	if [ -f "/etc/sudoers.lecture" ] ; then
+	    echo "Removing current /etc/sudoers.lecture"
+	    rm /etc/sudoers.lecture
+	fi
+        if [ -f "${backup_dir}/sudoers.lecture" ] ; then
             echo "Restoring backup /etc/sudoers.lecture"
-            mv /etc/sudoers.lecture.old /etc/sudoers.lecture
+            mv ${backup_dir}/sudoers.lecture /etc
         fi
+
+	# Delete our (now) unused backups dir
+	rm -r ${backup_dir}
     ;;
 
     *)

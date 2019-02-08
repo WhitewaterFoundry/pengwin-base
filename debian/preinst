@@ -17,59 +17,72 @@ set -e
 case "$1" in
     install)
         # Backup all old files since we over-write a lot of other package's files
+	backup_dir="/etc/pre-wlinux"
+	mkdir -p ${backup_dir}
+
         if [ ! -d "/etc/fonts" ] ; then
             echo "Creating /etc/fonts"
             mkdir -p /etc/fonts
         else
             if [ -f "/etc/fonts/local.conf" ] ; then
                 echo "Backing up /etc/fonts/local.conf"
-                mv /etc/fonts/local.conf /etc/fonts/local.conf.old
+                mv /etc/fonts/local.conf ${backup_dir}
             fi
         fi
 
         if [ -f "/etc/profile"  ] ; then
             echo "Backing up /etc/profile"
-            mv /etc/profile /etc/profile.old
+            mv /etc/profile ${backup_dir}
         fi
 
         if [ -f "/etc/os-release" ] ; then
             echo "Backing up /etc/os-release"
-            mv /etc/os-release /etc/os-release.old
+            mv /etc/os-release ${backup_dir}
         fi
 
         if [ -f "/etc/environment" ] ; then
             echo "Backing up /etc/environment"
-            mv /etc/environment /etc/environment.old
+            mv /etc/environment ${backup_dir}
         fi
 
         if [ -f "/etc/bashrc" ] ; then
             echo "Backing up /etc/bashrc"
-            mv /etc/bashrc /etc/bashrc.old
+            mv /etc/bashrc ${backup_dir}
         fi
 
         if [ -f "/etc/apt/preferences" ] ; then
             echo "Backing up /etc/apt/preferences"
-            mv /etc/apt/preferences /etc/apt/preferences.old
+            mv /etc/apt/preferences ${backup_dir}
         fi
 
         if [ -f "/etc/apt/sources.list" ] ; then
             echo "Backing up /etc/apt/sources.list"
-            mv /etc/apt/sources.list /etc/apt/sources.list.old
+            mv /etc/apt/sources.list ${backup_dir}
         fi
+
+	if [ -d "/etc/apt/trusted.gpg" ] ; then
+	    echo "Backing up /etc/apt/trusted.gpg"
+	    cp /etc/apt/trusted.gpg ${backup_dir}
+	fi
+
+	if [ -d "/etc/apt/trusted.gpg.d" ] ; then
+	    echo "Backing up /etc/apt/trusted.gpg.d/"
+	    cp -r /etc/apt/trusted.gpg.d ${backup_dir}
+	fi
 
         if [ -f "/etc/dpkg/origins/default" ] ; then
             echo "Backing up /etc/dpkg/origins/default"
-            mv /etc/dpkg/origins/default /etc/dpkg/origins/default.old
+            mv /etc/dpkg/origins/default ${backup_dir}
         fi
 
         if [ -f "/etc/sudoers" ] ; then
             echo "Backing up /etc/sudoers"
-            cp /etc/sudoers /etc/sudoers.old
+            cp /etc/sudoers ${backup_dir}
         fi
 
         if [ -f "/etc/sudoers.lecture" ] ; then
             echo "Backing up /etc/sudoers.lecture"
-            cp /etc/sudoers.lecture /etc/sudoers.lecture.old
+            cp /etc/sudoers.lecture ${backup_dir}
         fi
     ;;
 
