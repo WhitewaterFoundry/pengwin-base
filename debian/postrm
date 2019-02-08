@@ -127,6 +127,9 @@ case "$1" in
 
 	# Delete our (now) unused backups dir
 	rm -r ${backup_dir}
+
+	# Delete our sources we added (shouldn't need to be doing this)
+	rm /etc/apt/sources.list.d/whitewaterfoundry.list
     ;;
 
     *)
