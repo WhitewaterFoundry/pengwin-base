@@ -109,6 +109,7 @@ case "$1" in
         if [ -f "/etc/sudoers" ] ; then
 	    echo "Removing current /etc/sudoers"
 	    rm /etc/sudoers
+	fi
         if [ -f "${backup_dir}/sudoers" ] ; then
             echo "Restoring backup /etc/sudoers"
             mv ${backup_dir}/sudoers /etc
