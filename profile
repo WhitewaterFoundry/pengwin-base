@@ -46,7 +46,7 @@ export LIBGL_ALWAYS_INDIRECT=1
 export NO_AT_BRIDGE=1
 
 # Execute on user's shell first-run
-if [ ! -f "~/.firstrun" ]; then
+if [ ! -f "${HOME}/.firstrun" ]; then
     echo "Welcome to WLinux. Type 'wlinux-setup' to run the setup tool. You will only see this message on first run"
-    touch ~/.firstrun
+    touch "${HOME}/.firstrun"
 fi
