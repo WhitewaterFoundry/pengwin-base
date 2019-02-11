@@ -30,9 +30,9 @@ case "$1" in
 		/etc/apt/preferences \
 		/etc/apt/sources.list \
 		/etc/apt/trusted.gpg \
-		/etc/dpkg/origins/default \
-		/etc/sudoers \
-		/etc/sudoers.lecture"
+		/etc/dpkg/origins/default"
+#		/etc/sudoers \
+#		/etc/sudoers.lecture"
 
         # Backup all old files since we over-write a lot of other package's files
 	backup_dir="/etc/pre-wlinux"
@@ -44,6 +44,16 @@ case "$1" in
 	        mv ${FILE} ${backup_dir}
 	    fi
 	done
+
+	# Temporary solution
+	if [ -f "/etc/sudoers" ] ; then
+	    echo "Backing up /etc/sudoers to ${backup_dir}"
+	    cp /etc/sudoers ${backup_dir}
+	fi
+	if [ -f "/etc/sudoers.lecture" ] ; then
+	    echo "Backing up /etc/sudoers.lecture ${backup_dir}"
+	    cp /etc/sudoers.lecture ${backup_dir}
+	fi
     ;;
 
     upgrade)
