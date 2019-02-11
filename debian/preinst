@@ -44,7 +44,7 @@ case "$1" in
 	    if [ ${FILE: -1} == "/" ] ; then
 	        cp -r ${FILE} ${backup_dir}
 	    else
-	        cp ${FILE} ${backup_dir}
+	        mv ${FILE} ${backup_dir}
 	    fi
 	done
     ;;
