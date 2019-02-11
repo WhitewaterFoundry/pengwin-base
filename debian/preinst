@@ -30,7 +30,6 @@ case "$1" in
 		/etc/apt/preferences \
 		/etc/apt/sources.list \
 		/etc/apt/trusted.gpg \
-		/etc/apt/trusted.gpg.d/ \
 		/etc/dpkg/origins/default \
 		/etc/sudoers \
 		/etc/sudoers.lecture"
@@ -41,11 +40,7 @@ case "$1" in
 
 	for FILE in ${FILES} ; do
 	    echo "Backing up ${FILE} to ${backup_dir}"
-	    if [ ${FILE: -1} == "/" ] ; then
-	        cp -r ${FILE} ${backup_dir}
-	    else
-	        mv ${FILE} ${backup_dir}
-	    fi
+	    mv ${FILE} ${backup_dir}
 	done
     ;;
 
