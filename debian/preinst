@@ -16,28 +16,21 @@ set -e
 
 case "$1" in
     install)
+	# Ensure all necessary filesystem directories exist
+	mkdir -p /etcfonts
+	mkdir -p /etc/profile.d
+	mkdir -p /etc/apt/sources.list.d
+	mkdir -p /etc/dpkg/origins
+	
         # Backup all old files since we over-write a lot of other package's files
 	backup_dir="/etc/pre-wlinux"
 	mkdir -p ${backup_dir}
 
-        if [ ! -d "/etc/fonts" ] ; then
-            echo "Creating /etc/fonts"
-            mkdir -p /etc/fonts
-        else
-            if [ -f "/etc/fonts/local.conf" ] ; then
-                echo "Backing up /etc/fonts/local.conf"
-                mv /etc/fonts/local.conf ${backup_dir}
-            fi
+        if [ -f "/etc/fonts/local.conf" ] ; then
+            echo "Backing up /etc/fonts/local.conf"
+            mv /etc/fonts/local.conf ${backup_dir}
         fi
-	
-	if [ ! -d "/etc/profile.d" ] ; then
-		echo "Creating /etc/profile.d"
-		mkdir -p /etc/profile.d
-	fi
-#        if [ -f "/etc/profile"  ] ; then
-#            echo "Backing up /etc/profile"
-#            mv /etc/profile ${backup_dir}
-#        fi
+
 
         if [ -f "/etc/os-release" ] ; then
             echo "Backing up /etc/os-release"
