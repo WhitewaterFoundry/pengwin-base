@@ -34,11 +34,11 @@ case "$1" in
         fi
 
 	# /etc/profile
-        rm /etc/profile
-        if [ -f "${backup_dir}/profile" ] ; then
-            echo "Restoring backup /etc/profile"
-            mv ${backup_dir}/profile /etc
-        fi
+#        rm /etc/profile
+#        if [ -f "${backup_dir}/profile" ] ; then
+#            echo "Restoring backup /etc/profile"
+#            mv ${backup_dir}/profile /etc
+#        fi
 
 	# /etc/os-release
         rm /etc/os-release
