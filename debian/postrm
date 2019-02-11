@@ -23,113 +23,27 @@ case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
 	backup_dir=/etc/pre-wlinux
 
-	# /etc/fonts/local.conf
-	if [ -f "/etc/fonts/local.conf" ] ; then
-	    echo "Deleting current /etc/fonts/local.conf"
-	    rm /etc/fonts/local.conf
-	fi
-        if [ -f "${backup_dir}/local.conf" ] ; then
-            echo "Restoring backup /etc/fonts/local.conf"
-            mv ${backup_dir}/local.conf /etc/fonts
-        fi
+        # List of files we change / require backing up
+        FILES="/etc/fonts/local.conf \
+            /etc/os-release \
+            /etc/environment \
+            /etc/bashrc \
+            /etc/apt/preferences \
+            /etc/apt/sources.list \
+            /etc/apt/trusted.gpg \
+            /etc/dpkg/origins/default \
+            /etc/sudoers \
+            /etc/sudoers.lecture"
 
-	# /etc/profile
-#        rm /etc/profile
-#        if [ -f "${backup_dir}/profile" ] ; then
-#            echo "Restoring backup /etc/profile"
-#            mv ${backup_dir}/profile /etc
-#        fi
+        # Backup all old files since we over-write a lot of other package's files
+        backup_dir="/etc/pre-wlinux"
+        mkdir -p ${backup_dir}
 
-	# /etc/os-release
-        rm /etc/os-release
-        if [ -f "${backup_dir}/os-release" ] ; then
-            echo "Restoring backup /etc/os-release"
-            mv ${backup_dir}/os-release /etc
-        fi
-
-	# /etc/environment
-        rm /etc/environment
-        if [ -f "${backup_dir}/environment" ] ; then
-            echo "Restoring backup /etc/environment"
-            mv ${backup_dir}/environment /etc
-        fi
-
-	# /etc/bashrc
-        rm /etc/bashrc
-        if [ -f "${backup_dir}/bashrc" ] ; then
-            echo "Restoring backup /etc/bashrc"
-            mv ${backup_dir}/bashrc /etc
-        fi
-
-	# /etc/apt/preferences
-        rm /etc/apt/preferences
-        if [ -f "${backup_dir}/preferences" ] ; then
-            echo "Restoring backup /etc/apt/preferences"
-            mv ${backup_dir}/preferences /etc/apt
-        fi
-
-	# /etc/apt/sources.list
-        rm /etc/apt/sources.list
-        if [ -f "${backup_dir}/sources.list" ] ; then
-            echo "Restoring backup /etc/apt/sources.list"
-            mv ${backup_dir}/sources.list /etc/apt
-        fi
-
-	# /etc/apt/trusted.gpg
-	if [ -f "/etc/apt/trusted.gpg" ] ; then
-	    echo "Removing current /etc/apt/trusted.gpg"
-	    rm /etc/apt/trusted.gpg
-	fi
-	if [ -f "${backup_dir}/trusted.gpg" ] ; then
-	    echo "Restoring backup /etc/apt/trusted.gpg"
-	    mv ${backup_dir}/trusted.gpg /etc/apt
-	fi
-
-	# /etc/apt/trusted.gpg.d
-	if [ -d "/etc/apt/trusted.gpg.d" ] ; then
-	    echo "Removing current /etc/apt/trusted.gpg.d"
-	    rm -r /etc/apt/trusted.gpg.d
-	fi
-	if [ -d "${backup_dir}/trusted.gpg.d" ] ; then
-	    echo "Restoring backup /etc/apt/trusted.gpg.d"
-	    mv ${backup_dir}/trusted.gpg.d /etc/apt
-	fi
-
-	# /etc/dpkg/origins/default
-        if [ -f "/etc/dpkg/origins/default" ] ; then
-	    echo "Removing current /etc/dpkg/origins/default"
-	    rm /etc/dpkg/origins/default
-	fi
-        if [ -f "${backup_dir}/default" ] ; then
-            echo "Restoring backup /etc/dpkg/origins/default"
-            mv ${backup_dir}/default /etc/dpkg/origins
-        fi
-
-	# /etc/sudoers
-        if [ -f "/etc/sudoers" ] ; then
-	    echo "Removing current /etc/sudoers"
-	    rm /etc/sudoers
-	fi
-        if [ -f "${backup_dir}/sudoers" ] ; then
-            echo "Restoring backup /etc/sudoers"
-            mv ${backup_dir}/sudoers /etc
-        fi
-
-	# /etc/sudoers.lecture
-	if [ -f "/etc/sudoers.lecture" ] ; then
-	    echo "Removing current /etc/sudoers.lecture"
-	    rm /etc/sudoers.lecture
-	fi
-        if [ -f "${backup_dir}/sudoers.lecture" ] ; then
-            echo "Restoring backup /etc/sudoers.lecture"
-            mv ${backup_dir}/sudoers.lecture /etc
-        fi
-
-	# Delete our (now) unused backups dir
-	rm -r ${backup_dir}
-
-	# Delete our sources we added (shouldn't need to be doing this)
-	rm /etc/apt/sources.list.d/whitewaterfoundry.list
+        for FILE in ${FILES} ; do
+            echo "Restoring backed up ${FILE}"
+	    ACTUAL=$(echo ${FILE} | awk -f '/' '{ print NF }')
+	    cp ${backup_dir}/${ACTUAL} ${FILE}
+        done
     ;;
 
     *)
