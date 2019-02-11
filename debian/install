@@ -1,6 +1,6 @@
 environment /etc/
 bashrc /etc/
-profile /etc/
+profile.d/* /etc/profile.d
 os-release /etc/
 wsl.conf /etc/
 preferences /etc/apt/
