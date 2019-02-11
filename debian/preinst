@@ -29,11 +29,15 @@ case "$1" in
                 mv /etc/fonts/local.conf ${backup_dir}
             fi
         fi
-
-        if [ -f "/etc/profile"  ] ; then
-            echo "Backing up /etc/profile"
-            mv /etc/profile ${backup_dir}
-        fi
+	
+	if [ ! -d "/etc/profile.d" ] ; then
+		echo "Creating /etc/profile.d"
+		mkdir -p /etc/profile.d
+	fi
+#        if [ -f "/etc/profile"  ] ; then
+#            echo "Backing up /etc/profile"
+#            mv /etc/profile ${backup_dir}
+#        fi
 
         if [ -f "/etc/os-release" ] ; then
             echo "Backing up /etc/os-release"
