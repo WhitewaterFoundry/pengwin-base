@@ -20,6 +20,6 @@ export NO_AT_BRIDGE=1
 
 # Execute on user's shell first-run
 if [ ! -f "${HOME}/.firstrun" ]; then
-    echo "Welcome to WLinux. Type 'wlinux-setup' to run the setup tool. You will only see this $
+    echo "Welcome to WLinux. Type 'wlinux-setup' to run the setup tool. You will only see this message on first run"
     touch "${HOME}/.firstrun"
 fi
