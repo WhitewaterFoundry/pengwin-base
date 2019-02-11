@@ -40,9 +40,12 @@ case "$1" in
         mkdir -p ${backup_dir}
 
         for FILE in ${FILES} ; do
-            echo "Restoring backed up ${FILE}"
-	    ACTUAL=$(echo ${FILE} | awk -f '/' '{ print NF }')
-	    cp ${backup_dir}/${ACTUAL} ${FILE}
+	    FILENAME=$(echo ${FILE} | awk -f '/' '{ print NF }')
+	    BACKUP=${backup_dir}/${FILENAME}
+	    if [ -f "${BACKUP}" ] ; then
+	        echo "Restoring backed up ${FILE}"
+	        cp ${BACKUP} ${FILE}
+	    fi
         done
     ;;
 

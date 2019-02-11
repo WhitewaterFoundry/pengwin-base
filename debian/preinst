@@ -39,8 +39,10 @@ case "$1" in
 	mkdir -p ${backup_dir}
 
 	for FILE in ${FILES} ; do
-	    echo "Backing up ${FILE} to ${backup_dir}"
-	    mv ${FILE} ${backup_dir}
+	    if [ -f "${FILE}" ] ; then
+	        echo "Backing up ${FILE} to ${backup_dir}"
+	        mv ${FILE} ${backup_dir}
+	    fi
 	done
     ;;
 
