@@ -29,8 +29,8 @@ case "$1" in
 		/etc/bashrc \
 		/etc/apt/preferences \
 		/etc/apt/sources.list \
-		/etc/apt/trusted.gpg \
-		/etc/dpkg/origins/default"
+		/etc/apt/trusted.gpg"
+#		/etc/dpkg/origins/default \
 #		/etc/sudoers \
 #		/etc/sudoers.lecture"
 
