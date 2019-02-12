@@ -31,9 +31,9 @@ case "$1" in
             /etc/apt/preferences \
             /etc/apt/sources.list \
             /etc/apt/trusted.gpg \
-            /etc/dpkg/origins/default \
             /etc/sudoers \
             /etc/sudoers.lecture"
+#           /etc/dpkg/origins/default
 
         # Backup all old files since we over-write a lot of other package's files
         backup_dir="/etc/pre-wlinux"
@@ -48,6 +48,10 @@ case "$1" in
 	        cp ${BACKUP} ${FILE}
 	    fi
         done
+
+	echo "Restoring /etc/dpkg/origins/debian symlink"
+	ln -sf /etc/dpkg/origins/debian /etc/dpkg/origins/default
+	rm /etc/dpkg/origins/wlinux
     ;;
 
     *)
