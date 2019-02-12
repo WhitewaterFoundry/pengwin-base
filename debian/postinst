@@ -21,8 +21,6 @@ set -e
 case "$1" in
     configure)
 
-    chmod u+x /usr/local/bin/wlinux-help
-
     echo 'Defaults lecture_file = /etc/sudoers.lecture' >> /etc/sudoers
     echo 'Enter your UNIX password below. This is not your Windows password.' >> /etc/sudoers.lecture
 
