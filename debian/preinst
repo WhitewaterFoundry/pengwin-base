@@ -24,7 +24,7 @@ case "$1" in
 	
 	# List of files we change / require backing up
 	FILES="/etc/fonts/local.conf \
-		/etc/os-release \
+		/usr/lib/os-release \
 		/etc/environment \
 		/etc/bashrc \
 		/etc/apt/preferences \

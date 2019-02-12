@@ -25,7 +25,7 @@ case "$1" in
 
         # List of files we change / require backing up
         FILES="/etc/fonts/local.conf \
-            /etc/os-release \
+            /usr/lib/os-release \
             /etc/environment \
             /etc/bashrc \
             /etc/apt/preferences \
@@ -40,7 +40,8 @@ case "$1" in
         mkdir -p ${backup_dir}
 
         for FILE in ${FILES} ; do
-	    FILENAME=$(echo ${FILE} | awk -f '/' '{ print NF }')
+	    COUNT=$(echo ${FILE} | awk -F '/' '{ print NF }')
+	    FILENAME=$(echo ${FILE} | cut -d '/' -f $COUNT)
 	    BACKUP=${backup_dir}/${FILENAME}
 	    if [ -f "${BACKUP}" ] ; then
 	        echo "Restoring backed up ${FILE}"
