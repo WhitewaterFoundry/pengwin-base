@@ -52,6 +52,14 @@ case "$1" in
 	echo "Restoring /etc/dpkg/origins/debian symlink"
 	ln -sf /etc/dpkg/origins/debian /etc/dpkg/origins/default
 	rm /etc/dpkg/origins/wlinux
+
+	# Temporary
+	if [ -f "/etc/apt/sources.list.d/whitewaterfoundry.list" ] ; then
+	    rm /etc/apt/sources.list.d/whitewaterfoundry.list
+	fi
+	if [ -f "/etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg" ] ; then
+	    rm /etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg
+	fi
     ;;
 
     *)
