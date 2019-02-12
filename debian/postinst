@@ -26,6 +26,9 @@ case "$1" in
     echo 'Defaults lecture_file = /etc/sudoers.lecture' >> /etc/sudoers
     echo 'Enter your UNIX password below. This is not your Windows password.' >> /etc/sudoers.lecture
 
+    echo 'Symlinking /etc/dpkg/origins/default to /etc/dpkg/origins/wlinux'
+    ln -s /etc/dpkg/origins/wlinux
+
     echo -n "Installing Whitewater Foundry GPG keys..."
     tmpdir=$(mktemp -d)
     cd ${tmpdir}
