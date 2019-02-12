@@ -1,7 +1,7 @@
 environment /etc/
 bashrc /etc/
 profile.d/* /etc/profile.d
-os-release /etc/
+os-release /usr/lib
 wsl.conf /etc/
 preferences /etc/apt/
 sources.list /etc/apt/
