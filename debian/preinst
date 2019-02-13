@@ -35,23 +35,26 @@ case "$1" in
 #		/etc/sudoers.lecture"
 
         # Backup all old files since we over-write a lot of other package's files
-	backup_dir="/etc/pre-wlinux"
-	mkdir -p ${backup_dir}
+	WLINUX_DIR="/etc/wlinux"
+	DIVERT_DIR="${WLINUX_DIR}/divert"
+	mkdir -p ${WLINUX_DIR}
 
 	for FILE in ${FILES} ; do
 	    if [ -f "${FILE}" ] ; then
-	        echo "Backing up ${FILE} to ${backup_dir}"
-	        mv ${FILE} ${backup_dir}
+	        echo "Diverting ${FILE} to ${DIVERT_DIR}"
+		COUNT=$(echo ${FILE} | awk -F '/' '{ print NF }')
+        	FILENAME=$(echo ${FILE} | cut -d '/' -f $COUNT)
+		dpkg-divert --package wlinux-base --add --rename --divert "${WLINUX_DIR}/divert/${FILENAME}" "${FILE}"
 	    fi
 	done
 
 	# Temporary solution
 	if [ -f "/etc/sudoers" ] ; then
-	    echo "Backing up /etc/sudoers to ${backup_dir}"
+	    echo "Diverting /etc/sudoers to ${DIVERT_DIR}"
 	    cp /etc/sudoers ${backup_dir}
 	fi
 	if [ -f "/etc/sudoers.lecture" ] ; then
-	    echo "Backing up /etc/sudoers.lecture ${backup_dir}"
+	    echo "Diverting /etc/sudoers.lecture to ${DIVERT_DIR}"
 	    cp /etc/sudoers.lecture ${backup_dir}
 	fi
     ;;
