@@ -22,7 +22,7 @@ set -e
 case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
         # Temporary
-	if [ -f "/etc/environment" && -f "" ] ; then
+	if [ -f "/etc/environment" ] ; then
 	    rm /etc/environment
 	fi
 	if [ -f "/etc/apt/sources.list.d/whitewaterfoundry.list" ] ; then
