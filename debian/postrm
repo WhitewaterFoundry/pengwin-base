@@ -36,17 +36,13 @@ case "$1" in
 #           /etc/dpkg/origins/default
 
         # Backup all old files since we over-write a lot of other package's files
-        WLINUX_DIR="/etc/wlinux"
-	DIVERT_DIR="${DIVERT_DIR}/divert"
-        mkdir -p ${DIVERT_DIR}
+	DIVERT_SUFFIX=".wlinux-divert"
 
         for FILE in ${FILES} ; do
-	    COUNT=$(echo ${FILE} | awk -F '/' '{ print NF }')
-	    FILENAME=$(echo ${FILE} | cut -d '/' -f $COUNT)
-	    DIVERTED="${DIVERT_DIR}/${FILENAME}"
+	    DIVERTED="${FILE}${DIVERT_SUFFIX}"
 	    if [ -f "${DIVERTED}" ] ; then
 	        echo "Restoring diverted ${FILE}"
-	       dpkg-divert --package wlinux-base --remove --rename --divert "${DIVERT_DIR}/${FILENAME}" "${FILE}"
+	       dpkg-divert --remove --rename --divert "${DIVERTED}" "${FILE}"
 	    fi
         done
 

@@ -29,34 +29,20 @@ case "$1" in
 		/etc/bashrc \
 		/etc/apt/preferences \
 		/etc/apt/sources.list \
-		/etc/apt/trusted.gpg"
-#		/etc/dpkg/origins/default \
-#		/etc/sudoers \
-#		/etc/sudoers.lecture"
+		/etc/apt/trusted.gpg \
+		/etc/sudoers \
+		/etc/sudoers.lecture"
+#		/etc/dpkg/origins/default
 
         # Backup all old files since we over-write a lot of other package's files
-	WLINUX_DIR="/etc/wlinux"
-	DIVERT_DIR="${WLINUX_DIR}/divert"
-	mkdir -p ${WLINUX_DIR}
+	DIVERT_SUFFIX=".wlinux-divert"
 
 	for FILE in ${FILES} ; do
 	    if [ -f "${FILE}" ] ; then
 	        echo "Diverting ${FILE} to ${DIVERT_DIR}"
-		COUNT=$(echo ${FILE} | awk -F '/' '{ print NF }')
-        	FILENAME=$(echo ${FILE} | cut -d '/' -f $COUNT)
-		dpkg-divert --package wlinux-base --add --rename --divert "${WLINUX_DIR}/divert/${FILENAME}" "${FILE}"
+		dpkg-divert --add --rename --divert "${FILE}${DIVERT_SUFFIX}" "${FILE}"
 	    fi
 	done
-
-	# Temporary solution
-	if [ -f "/etc/sudoers" ] ; then
-	    echo "Diverting /etc/sudoers to ${DIVERT_DIR}"
-	    cp /etc/sudoers ${backup_dir}
-	fi
-	if [ -f "/etc/sudoers.lecture" ] ; then
-	    echo "Diverting /etc/sudoers.lecture to ${DIVERT_DIR}"
-	    cp /etc/sudoers.lecture ${backup_dir}
-	fi
     ;;
 
     upgrade)
