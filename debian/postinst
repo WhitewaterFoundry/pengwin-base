@@ -20,8 +20,18 @@ set -e
 
 case "$1" in
     configure)
+    DIVERT_SUFFIX=".wlinux-divert"
 
-    echo 'Defaults lecture_file = /etc/sudoers.lecture' >> /etc/sudoers
+    SUDOERS="/etc/sudoers"
+    if [ -f "${SUDOERS}${DIVERT_SUFFIX}" ] ; then
+        cp "${SUDOERS}${DIVERT_SUFFIX}" "${SUDOERS}"
+    fi
+    echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "${SUDOERS}"
+
+    LECTURE="/etc/sudoers.lecture"
+    if [ -f "${LECTURE}${DIVERT_SUFFIX}" ] ; then
+        cp "${LECTURE}${DIVERT_SUFFIX}" "${LECTURE}"
+    fi
     echo 'Enter your UNIX password below. This is not your Windows password.' >> /etc/sudoers.lecture
 
     echo 'Symlinking /etc/dpkg/origins/default to /etc/dpkg/origins/wlinux'
