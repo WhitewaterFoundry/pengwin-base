@@ -42,7 +42,7 @@ case "$1" in
 	    DIVERTED="${FILE}${DIVERT_SUFFIX}"
 	    if [ -f "${DIVERTED}" ] ; then
 	        echo "Restoring diverted ${FILE}"
-	       dpkg-divert --remove --rename --divert "${DIVERTED}" "${FILE}"
+	       dpkg-divert --remove --rename "${DIVERTED}" "${FILE}"
 	    fi
         done
 
