@@ -49,8 +49,10 @@ case "$1" in
         for FILE in ${FILES} ; do
 	    DIVERTED="${FILE}${DIVERT_SUFFIX}"
 	    if [ -f "${DIVERTED}" ] ; then
-	        echo "Restoring diverted ${FILE}"
+	    if [ -f "${}" ] ; then
 	        rm "${FILE}"
+	    fi
+	        echo "Restoring diverted ${FILE}"
 	        dpkg-divert --remove --rename "${FILE}"
 	    fi
         done
