@@ -39,7 +39,7 @@ case "$1" in
 
 	for FILE in ${FILES} ; do
 	    if [ -f "${FILE}" ] ; then
-	        echo "Diverting ${FILE} to ${DIVERT_DIR}"
+	        echo "Diverting ${FILE}"
 		dpkg-divert --add --rename --divert "${FILE}${DIVERT_SUFFIX}" "${FILE}"
 	    fi
 	done
