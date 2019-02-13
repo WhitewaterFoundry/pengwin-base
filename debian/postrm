@@ -49,7 +49,7 @@ case "$1" in
         for FILE in ${FILES} ; do
 	    DIVERTED="${FILE}${DIVERT_SUFFIX}"
 	    if [ -f "${DIVERTED}" ] ; then
-	    if [ -f "${}" ] ; then
+	    if [ -f "${FILE}" ] ; then
 	        rm "${FILE}"
 	    fi
 	        echo "Restoring diverted ${FILE}"
