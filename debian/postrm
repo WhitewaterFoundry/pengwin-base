@@ -21,9 +21,22 @@ set -e
 
 case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
-	backup_dir=/etc/pre-wlinux
+        # Temporary
+	if [ -f "/etc/environment" && -f "" ] ; then
+	    rm /etc/environment
+	fi
+	if [ -f "/etc/apt/sources.list.d/whitewaterfoundry.list" ] ; then
+            rm /etc/apt/sources.list.d/whitewaterfoundry.list
+        fi
+        if [ -f "/etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg" ] ; then
+            rm /etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg
+        fi
+        if [ -f "/etc/wsl.conf" ] ; then
+            rm /etc/wsl.conf
+        fi
 
-        # List of files we change / require backing up
+
+	# List of files we change / require backing up
         FILES="/etc/fonts/local.conf \
             /usr/lib/os-release \
             /etc/environment \
@@ -35,28 +48,19 @@ case "$1" in
             /etc/sudoers.lecture"
 #           /etc/dpkg/origins/default
 
-        # Backup all old files since we over-write a lot of other package's files
 	DIVERT_SUFFIX=".wlinux-divert"
 
         for FILE in ${FILES} ; do
 	    DIVERTED="${FILE}${DIVERT_SUFFIX}"
 	    if [ -f "${DIVERTED}" ] ; then
 	        echo "Restoring diverted ${FILE}"
-	       dpkg-divert --remove --rename "${DIVERTED}" "${FILE}"
+	       dpkg-divert --remove --rename "${FILE}"
 	    fi
         done
 
 	echo "Restoring /etc/dpkg/origins/debian symlink"
 	ln -sf /etc/dpkg/origins/debian /etc/dpkg/origins/default
 	rm /etc/dpkg/origins/wlinux
-
-	# Temporary
-	if [ -f "/etc/apt/sources.list.d/whitewaterfoundry.list" ] ; then
-	    rm /etc/apt/sources.list.d/whitewaterfoundry.list
-	fi
-	if [ -f "/etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg" ] ; then
-	    rm /etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg
-	fi
     ;;
 
     *)
