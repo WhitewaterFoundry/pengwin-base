@@ -22,9 +22,6 @@ set -e
 case "$1" in
     purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
         # Temporary
-	if [ -f "/etc/environment" ] ; then
-	    rm /etc/environment
-	fi
 	if [ -f "/etc/apt/sources.list.d/whitewaterfoundry.list" ] ; then
             rm /etc/apt/sources.list.d/whitewaterfoundry.list
         fi
@@ -49,12 +46,12 @@ case "$1" in
 #           /etc/dpkg/origins/default
 
 	DIVERT_SUFFIX=".wlinux-divert"
-
         for FILE in ${FILES} ; do
 	    DIVERTED="${FILE}${DIVERT_SUFFIX}"
 	    if [ -f "${DIVERTED}" ] ; then
 	        echo "Restoring diverted ${FILE}"
-	       dpkg-divert --remove --rename "${FILE}"
+	        rm "${FILE}"
+	        dpkg-divert --remove --rename "${FILE}"
 	    fi
         done
 
