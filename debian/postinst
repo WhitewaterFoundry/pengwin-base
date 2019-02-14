@@ -25,7 +25,7 @@ case "$1" in
         if [ -f "/etc/sudoers${DIVERT_SUFFIX}" ] ; then
             cp "/etc/sudoers${DIVERT_SUFFIX}" "/etc/sudoers"
         fi
-        echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "${SUDOERS}"
+        echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "/etc/sudoers"
 
         if [ -f "/etc/sudoers.lecture${DIVERT_SUFFIX}" ] ; then
             cp "/etc/sudoers.lecture${DIVERT_SUFFIX}" "/etc/sudoers.lecture"
@@ -49,8 +49,8 @@ case "$1" in
         primary_keyring="${TMPDIR}/whitewaterfoundry-archive-keyring.gpg"
 
         mkdir -p ~/.gnupg # this needs to be done to prevent odd gpg fatal error
-        if [ ! -d "/etc/apt/trusted.gpg.d" ] ; then
-            mkdir -p /etc/apt/trusted.gpg.d
+        if [ ! -d "${keyring_location}" ] ; then
+            mkdir -p "${keyring_location}"
         fi
         
         gpg --ignore-time-conflict --no-options --no-default-keyring --homedir ${TMPDIR} --keyring ${primary_keyring} --import setup_gpgkey.pub > /dev/null 2>&1
