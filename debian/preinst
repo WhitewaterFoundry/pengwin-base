@@ -16,33 +16,33 @@ set -e
 
 case "$1" in
     install)
-	# Ensure all necessary filesystem directories exist
-	mkdir -p /etcfonts
-	mkdir -p /etc/profile.d
-	mkdir -p /etc/apt/sources.list.d
-	mkdir -p /etc/dpkg/origins
-	
-	# List of files we change / require backing up
-	FILES="/etc/fonts/local.conf \
-		/usr/lib/os-release \
-		/etc/environment \
-		/etc/bashrc \
-		/etc/apt/preferences \
-		/etc/apt/sources.list \
-		/etc/apt/trusted.gpg \
-		/etc/sudoers \
-		/etc/sudoers.lecture"
-#		/etc/dpkg/origins/default
+		# Ensure all necessary filesystem directories exist
+		mkdir -p /etcfonts
+		mkdir -p /etc/profile.d
+		mkdir -p /etc/apt/sources.list.d
+		mkdir -p /etc/dpkg/origins
+		
+		# List of files we change / require backing up
+		FILES="/etc/fonts/local.conf \
+			/usr/lib/os-release \
+			/etc/environment \
+			/etc/bashrc \
+			/etc/apt/preferences \
+			/etc/apt/sources.list \
+			/etc/apt/trusted.gpg \
+			/etc/sudoers \
+			/etc/sudoers.lecture"
 
-        # Backup all old files since we over-write a lot of other package's files
-	DIVERT_SUFFIX=".wlinux-divert"
+	    # dpkg-divert all currently existing files since 
+	    # we overwrite a lot of other package's files
+		DIVERT_SUFFIX=".wlinux-divert"
 
-	for FILE in ${FILES} ; do
-	    if [ -f "${FILE}" ] ; then
-	        echo "Diverting ${FILE}"
-		dpkg-divert --add --rename --divert "${FILE}${DIVERT_SUFFIX}" "${FILE}"
-	    fi
-	done
+		for FILE in ${FILES} ; do
+		    if [ -f "${FILE}" ] ; then
+		        echo "Diverting ${FILE}"
+				dpkg-divert --add --rename --divert "${FILE}${DIVERT_SUFFIX}" "${FILE}"
+		    fi
+		done
     ;;
 
     upgrade)
