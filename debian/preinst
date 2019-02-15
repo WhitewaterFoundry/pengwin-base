@@ -15,7 +15,7 @@ set -e
 
 
 case "$1" in
-    install)
+	install)
 		# Ensure all necessary filesystem directories exist
 		mkdir -p /etcfonts
 		mkdir -p /etc/profile.d
@@ -33,28 +33,28 @@ case "$1" in
 			/etc/sudoers \
 			/etc/sudoers.lecture"
 
-	    # dpkg-divert all currently existing files since 
-	    # we overwrite a lot of other package's files
+		# dpkg-divert all currently existing files since 
+		# we overwrite a lot of other package's files
 		DIVERT_SUFFIX=".wlinux-divert"
 
 		for FILE in ${FILES} ; do
-		    if [ -f "${FILE}" ] ; then
-		        echo "Diverting ${FILE}"
+			if [ -f "${FILE}" ] ; then
+				echo "Diverting ${FILE}"
 				dpkg-divert --add --rename --divert "${FILE}${DIVERT_SUFFIX}" "${FILE}"
-		    fi
+			fi
 		done
-    ;;
+	;;
 
-    upgrade)
-    ;;
+	upgrade)
+	;;
 
-    abort-upgrade)
-    ;;
+	abort-upgrade)
+	;;
 
-    *)
-        echo "preinst called with unknown argument \`$1'" >&2
-        exit 1
-    ;;
+	*)
+		echo "preinst called with unknown argument \`$1'" >&2
+		exit 1
+	;;
 esac
 
 # dh_installdeb will replace this with shell code automatically

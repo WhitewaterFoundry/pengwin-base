@@ -20,56 +20,56 @@ set -e
 
 
 case "$1" in
-    purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
-	    # Temporary
-	    rm -f /etc/apt/sources.list.d/whitewaterfoundry.list
-	    rm -f /etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg
-	    rm -f /etc/wsl.conf
-	 #	  if [ -f "/etc/apt/sources.list.d/whitewaterfoundry.list" ] ; then
-	 #        rm /etc/apt/sources.list.d/whitewaterfoundry.list
-	 #    fi
-	 #    if [ -f "/etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg" ] ; then
-	 #        rm /etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg
-	 #    fi
-	 #    if [ -f "/etc/wsl.conf" ] ; then
-	 #        rm /etc/wsl.conf
-	 #    fi
+	purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+		# Temporary
+		rm -f /etc/apt/sources.list.d/whitewaterfoundry.list
+		rm -f /etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg
+		rm -f /etc/wsl.conf
+	 	#	  if [ -f "/etc/apt/sources.list.d/whitewaterfoundry.list" ] ; then
+	 	#        rm /etc/apt/sources.list.d/whitewaterfoundry.list
+	 	#    fi
+	 	#    if [ -f "/etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg" ] ; then
+	 	#        rm /etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg
+	 	#    fi
+	 	#    if [ -f "/etc/wsl.conf" ] ; then
+	 	#        rm /etc/wsl.conf
+	 	#    fi
 
 		# List of files we change / require backing up
-	    FILES="/etc/fonts/local.conf \
-	        /usr/lib/os-release \
-	        /etc/environment \
-	        /etc/bashrc \
-	        /etc/apt/preferences \
-	        /etc/apt/sources.list \
-	        /etc/apt/trusted.gpg \
-	        /etc/sudoers \
-	        /etc/sudoers.lecture"
+		FILES="/etc/fonts/local.conf \
+			/usr/lib/os-release \
+			/etc/environment \
+			/etc/bashrc \
+			/etc/apt/preferences \
+			/etc/apt/sources.list \
+			/etc/apt/trusted.gpg \
+			/etc/sudoers \
+			/etc/sudoers.lecture"
 
 		DIVERT_SUFFIX=".wlinux-divert"
-	    for FILE in ${FILES} ; do
-		    DIVERTED="${FILE}${DIVERT_SUFFIX}"
-		    if [ -f "${DIVERTED}" ] ; then
-			    if [ -f "${FILE}" ] ; then
-			        rm "${FILE}"
-			    fi
+		for FILE in ${FILES} ; do
+			DIVERTED="${FILE}${DIVERT_SUFFIX}"
+			if [ -f "${DIVERTED}" ] ; then
+				if [ -f "${FILE}" ] ; then
+					rm "${FILE}"
+				fi
 
-			    echo "Restoring diverted ${FILE}"
-			    dpkg-divert --remove --rename "${FILE}"
-		    fi
-	    done
+				echo "Restoring diverted ${FILE}"
+				dpkg-divert --remove --rename "${FILE}"
+			fi
+		done
 
 		echo "Restoring /etc/dpkg/origins/debian symlink"
 		ln -sf /etc/dpkg/origins/debian /etc/dpkg/origins/default
 		# if [ -f "/etc/dpkg/origins/wlinux" ] ; then
 		rm -f /etc/dpkg/origins/wlinux
 		# fi
-    ;;
+	;;
 
-    *)
-        echo "postrm called with unknown argument \`$1'" >&2
-        exit 1
-    ;;
+	*)
+		echo "postrm called with unknown argument \`$1'" >&2
+		exit 1
+	;;
 esac
 
 # dh_installdeb will replace this with shell code automatically

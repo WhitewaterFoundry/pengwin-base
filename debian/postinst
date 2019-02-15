@@ -19,57 +19,57 @@ set -e
 
 
 case "$1" in
-    configure)
-        DIVERT_SUFFIX=".wlinux-divert"
+	configure)
+		DIVERT_SUFFIX=".wlinux-divert"
 
-        if [ -f "/etc/sudoers${DIVERT_SUFFIX}" ] ; then
-            cp "/etc/sudoers${DIVERT_SUFFIX}" "/etc/sudoers"
-        fi
-        echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "/etc/sudoers"
+		if [ -f "/etc/sudoers${DIVERT_SUFFIX}" ] ; then
+			cp "/etc/sudoers${DIVERT_SUFFIX}" "/etc/sudoers"
+		fi
+		echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "/etc/sudoers"
 
-        if [ -f "/etc/sudoers.lecture${DIVERT_SUFFIX}" ] ; then
-            cp "/etc/sudoers.lecture${DIVERT_SUFFIX}" "/etc/sudoers.lecture"
-        fi
-        echo 'Enter your UNIX password below. This is not your Windows password.' >> /etc/sudoers.lecture
+		if [ -f "/etc/sudoers.lecture${DIVERT_SUFFIX}" ] ; then
+			cp "/etc/sudoers.lecture${DIVERT_SUFFIX}" "/etc/sudoers.lecture"
+		fi
+		echo 'Enter your UNIX password below. This is not your Windows password.' >> /etc/sudoers.lecture
 
-        echo 'Symlinking /etc/dpkg/origins/default to /etc/dpkg/origins/wlinux'
-        ln -sf /etc/dpkg/origins/wlinux /etc/dpkg/origins/default
+		echo 'Symlinking /etc/dpkg/origins/default to /etc/dpkg/origins/wlinux'
+		ln -sf /etc/dpkg/origins/wlinux /etc/dpkg/origins/default
 
-        ### Whitewater Foundry GPG Key install
-        echo -n "Installing Whitewater Foundry GPG keys..."
-        TMPDIR=$(mktemp -d)
-        cd ${TMPDIR}
+		### Whitewater Foundry GPG Key install
+		echo -n "Installing Whitewater Foundry GPG keys..."
+		TMPDIR=$(mktemp -d)
+		cd ${TMPDIR}
 
-        setup_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-setup/gpgkey"
-        base_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-base/gpgkey"
-        curl -L ${setup_gpgkey} -o setup_gpgkey.pub > /dev/null 2>&1
-        curl -L ${base_gpgkey} -o base_gpgkey.pub > /dev/null 2>&1
+		setup_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-setup/gpgkey"
+		base_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-base/gpgkey"
+		curl -L ${setup_gpgkey} -o setup_gpgkey.pub > /dev/null 2>&1
+		curl -L ${base_gpgkey} -o base_gpgkey.pub > /dev/null 2>&1
 
-        keyring_location="/etc/apt/trusted.gpg.d"
-        primary_keyring="${TMPDIR}/whitewaterfoundry-archive-keyring.gpg"
+		keyring_location="/etc/apt/trusted.gpg.d"
+		primary_keyring="${TMPDIR}/whitewaterfoundry-archive-keyring.gpg"
 
-        mkdir -p ~/.gnupg # this needs to be done to prevent odd gpg fatal error
-        if [ ! -d "${keyring_location}" ] ; then
-            mkdir -p "${keyring_location}"
-        fi
-        
-        gpg --ignore-time-conflict --no-options --no-default-keyring --homedir ${TMPDIR} --keyring ${primary_keyring} --import setup_gpgkey.pub > /dev/null 2>&1
-        gpg --ignore-time-conflict --no-options --no-default-keyring --homedir ${TMPDIR} --keyring ${primary_keyring} --import base_gpgkey.pub  > /dev/null 2>&1
+		mkdir -p ~/.gnupg # this needs to be done to prevent odd gpg fatal error
+		if [ ! -d "${keyring_location}" ] ; then
+			mkdir -p "${keyring_location}"
+		fi
+		
+		gpg --ignore-time-conflict --no-options --no-default-keyring --homedir ${TMPDIR} --keyring ${primary_keyring} --import setup_gpgkey.pub > /dev/null 2>&1
+		gpg --ignore-time-conflict --no-options --no-default-keyring --homedir ${TMPDIR} --keyring ${primary_keyring} --import base_gpgkey.pub  > /dev/null 2>&1
 
-        mv ${primary_keyring} ${keyring_location}
+		mv ${primary_keyring} ${keyring_location}
 
-        rm -r ${TMPDIR}
-        echo " Done!"
-        ###
-    ;;
+		rm -r ${TMPDIR}
+		echo " Done!"
+		###
+	;;
 
-    abort-upgrade|abort-remove|abort-deconfigure)
-    ;;
+	abort-upgrade|abort-remove|abort-deconfigure)
+	;;
 
-    *)
-        echo "postinst called with unknown argument \`$1'" >&2
-        exit 1
-    ;;
+	*)
+		echo "postinst called with unknown argument \`$1'" >&2
+		exit 1
+	;;
 esac
 
 # dh_installdeb will replace this with shell code automatically
