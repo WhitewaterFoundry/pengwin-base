@@ -15,87 +15,46 @@ set -e
 
 
 case "$1" in
-    install)
-        # Backup all old files since we over-write a lot of other package's files
-	backup_dir="/etc/pre-wlinux"
-	mkdir -p ${backup_dir}
+	install)
+		# Ensure all necessary filesystem directories exist
+		mkdir -p /etcfonts
+		mkdir -p /etc/profile.d
+		mkdir -p /etc/apt/sources.list.d
+		mkdir -p /etc/dpkg/origins
+		
+		# List of files we change / require backing up
+		FILES="/etc/fonts/local.conf \
+			/usr/lib/os-release \
+			/etc/environment \
+			/etc/bashrc \
+			/etc/apt/preferences \
+			/etc/apt/sources.list \
+			/etc/apt/trusted.gpg \
+			/etc/sudoers \
+			/etc/sudoers.lecture"
 
-        if [ ! -d "/etc/fonts" ] ; then
-            echo "Creating /etc/fonts"
-            mkdir -p /etc/fonts
-        else
-            if [ -f "/etc/fonts/local.conf" ] ; then
-                echo "Backing up /etc/fonts/local.conf"
-                mv /etc/fonts/local.conf ${backup_dir}
-            fi
-        fi
+		# dpkg-divert all currently existing files since 
+		# we overwrite a lot of other package's files
+		DIVERT_SUFFIX=".wlinux-divert"
 
-        if [ -f "/etc/profile"  ] ; then
-            echo "Backing up /etc/profile"
-            mv /etc/profile ${backup_dir}
-        fi
+		for FILE in ${FILES} ; do
+			if [ -f "${FILE}" ] ; then
+				echo "Diverting ${FILE}"
+				dpkg-divert --add --rename --divert "${FILE}${DIVERT_SUFFIX}" "${FILE}"
+			fi
+		done
+	;;
 
-        if [ -f "/etc/os-release" ] ; then
-            echo "Backing up /etc/os-release"
-            mv /etc/os-release ${backup_dir}
-        fi
+	upgrade)
+	;;
 
-        if [ -f "/etc/environment" ] ; then
-            echo "Backing up /etc/environment"
-            mv /etc/environment ${backup_dir}
-        fi
+	abort-upgrade)
+	;;
 
-        if [ -f "/etc/bashrc" ] ; then
-            echo "Backing up /etc/bashrc"
-            mv /etc/bashrc ${backup_dir}
-        fi
-
-        if [ -f "/etc/apt/preferences" ] ; then
-            echo "Backing up /etc/apt/preferences"
-            mv /etc/apt/preferences ${backup_dir}
-        fi
-
-        if [ -f "/etc/apt/sources.list" ] ; then
-            echo "Backing up /etc/apt/sources.list"
-            mv /etc/apt/sources.list ${backup_dir}
-        fi
-
-	if [ -d "/etc/apt/trusted.gpg" ] ; then
-	    echo "Backing up /etc/apt/trusted.gpg"
-	    cp /etc/apt/trusted.gpg ${backup_dir}
-	fi
-
-	if [ -d "/etc/apt/trusted.gpg.d" ] ; then
-	    echo "Backing up /etc/apt/trusted.gpg.d/"
-	    cp -r /etc/apt/trusted.gpg.d ${backup_dir}
-	fi
-
-        if [ -f "/etc/dpkg/origins/default" ] ; then
-            echo "Backing up /etc/dpkg/origins/default"
-            mv /etc/dpkg/origins/default ${backup_dir}
-        fi
-
-        if [ -f "/etc/sudoers" ] ; then
-            echo "Backing up /etc/sudoers"
-            cp /etc/sudoers ${backup_dir}
-        fi
-
-        if [ -f "/etc/sudoers.lecture" ] ; then
-            echo "Backing up /etc/sudoers.lecture"
-            cp /etc/sudoers.lecture ${backup_dir}
-        fi
-    ;;
-
-    upgrade)
-    ;;
-
-    abort-upgrade)
-    ;;
-
-    *)
-        echo "preinst called with unknown argument \`$1'" >&2
-        exit 1
-    ;;
+	*)
+		echo "preinst called with unknown argument \`$1'" >&2
+		exit 1
+	;;
 esac
 
 # dh_installdeb will replace this with shell code automatically

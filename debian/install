@@ -1,12 +1,12 @@
 environment /etc/
 bashrc /etc/
-profile /etc/
-os-release /etc/
+profile.d/* /etc/profile.d/
+os-release /usr/lib/
 wsl.conf /etc/
 preferences /etc/apt/
 sources.list /etc/apt/
-sources.list.d /etc/apt/
+sources.list.d/* /etc/apt/sources.list.d/
 local.conf /etc/fonts/
-default /etc/dpkg/origins/
+wlinux /etc/dpkg/origins/
 wlinux-help /usr/local/bin/
 wlinux.ico /usr/local/lib/
