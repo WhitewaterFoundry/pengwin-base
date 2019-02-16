@@ -20,17 +20,40 @@ set -e
 
 case "$1" in
 	configure)
-		DIVERT_SUFFIX=".wlinux-divert"
+		# Here we only need to modify sudoers / sudoers.lecture on
+		# non-legacy installs. On legacy installs we also need to
+		# remove our previous /etc/profile modifications and delete
+		# old wlinux scripts
+		if [ -f "/etc/setup" ] ; then
+		if [ -f "/etc/helpme" ] ; then
+			echo "WLinux legacy install detected"
+			
+			echo "Removing legacy wlinux-setup script"
+			rm /etc/setup
 
-		if [ -f "/etc/sudoers${DIVERT_SUFFIX}" ] ; then
-			cp "/etc/sudoers${DIVERT_SUFFIX}" "/etc/sudoers"
-		fi
-		echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "/etc/sudoers"
+			echo "Removing legacy wlinux-help script"
+			rm /etc/helpme
 
-		if [ -f "/etc/sudoers.lecture${DIVERT_SUFFIX}" ] ; then
-			cp "/etc/sudoers.lecture${DIVERT_SUFFIX}" "/etc/sudoers.lecture"
+			echo "Backing up current profile to /etc/profile.old"
+			cp /etc/profile /etc/profile.old
+			echo -n "Downloading default profile..."
+			curl "https://sources.debian.org/data/main/b/base-files/10.1/share/profile" -o /tmp/profile.wlinux 2>&1 /de/null
+			mv /tmp/profile.wlinux /etc/profile
+			echo " Done!"
 		fi
-		echo 'Enter your UNIX password below. This is not your Windows password.' >> /etc/sudoers.lecture
+		else
+			DIVERT_SUFFIX=".wlinux-divert"
+
+			if [ -f "/etc/sudoers${DIVERT_SUFFIX}" ] ; then
+				cp "/etc/sudoers${DIVERT_SUFFIX}" "/etc/sudoers"
+			fi
+			echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "/etc/sudoers"
+
+			if [ -f "/etc/sudoers.lecture${DIVERT_SUFFIX}" ] ; then
+				cp "/etc/sudoers.lecture${DIVERT_SUFFIX}" "/etc/sudoers.lecture"
+			fi
+			echo 'Enter your UNIX password below. This is not your Windows password.' >> /etc/sudoers.lecture
+		fi
 
 		echo 'Symlinking /etc/dpkg/origins/default to /etc/dpkg/origins/wlinux'
 		ln -sf /etc/dpkg/origins/wlinux /etc/dpkg/origins/default
