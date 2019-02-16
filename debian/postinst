@@ -20,6 +20,11 @@ set -e
 
 case "$1" in
 	configure)
+		DIVERT_SUFFIX=".wlinux-divert"
+		if [ -f "/etc/sudoers${DIVERT_SUFFIX}" ] ; then
+			cp "/etc/sudoers${DIVERT_SUFFIX}" "/etc/sudoers"
+		fi
+
 		# Here we only need to modify sudoers / sudoers.lecture on
 		# non-legacy installs. On legacy installs we also need to
 		# remove our previous /etc/profile modifications and delete
@@ -42,16 +47,7 @@ case "$1" in
 			echo " Done!"
 		fi
 		else
-			DIVERT_SUFFIX=".wlinux-divert"
-
-			if [ -f "/etc/sudoers${DIVERT_SUFFIX}" ] ; then
-				cp "/etc/sudoers${DIVERT_SUFFIX}" "/etc/sudoers"
-			fi
 			echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "/etc/sudoers"
-
-			if [ -f "/etc/sudoers.lecture${DIVERT_SUFFIX}" ] ; then
-				cp "/etc/sudoers.lecture${DIVERT_SUFFIX}" "/etc/sudoers.lecture"
-			fi
 			echo 'Enter your UNIX password below. This is not your Windows password.' >> /etc/sudoers.lecture
 		fi
 

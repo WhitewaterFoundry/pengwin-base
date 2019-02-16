@@ -30,8 +30,7 @@ case "$1" in
 			/etc/apt/preferences \
 			/etc/apt/sources.list \
 			/etc/apt/trusted.gpg \
-			/etc/sudoers \
-			/etc/sudoers.lecture"
+			/etc/sudoers"
 
 		# dpkg-divert all currently existing files since 
 		# we overwrite a lot of other package's files
