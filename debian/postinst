@@ -37,7 +37,7 @@ case "$1" in
 			echo "Backing up current profile to /etc/profile.old"
 			cp /etc/profile /etc/profile.old
 			echo -n "Downloading default profile..."
-			curl "https://sources.debian.org/data/main/b/base-files/10.1/share/profile" -o /tmp/profile.wlinux 2>&1 /de/null
+			curl "https://sources.debian.org/data/main/b/base-files/10.1/share/profile" -so /tmp/profile.wlinux
 			mv /tmp/profile.wlinux /etc/profile
 			echo " Done!"
 		fi
