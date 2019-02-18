@@ -54,7 +54,7 @@ case "$1" in
 			fi
 		else
 			if [ -f "/etc/sudoers" ] ; then
-				cp /etc/sudoers /tmp/dpkg.wlinux-base
+				cp /etc/sudoers "${TMPDIR}"
 			fi
 			echo -n "CAT#1: "
 			cat ${TMPDIR}/sudoers
