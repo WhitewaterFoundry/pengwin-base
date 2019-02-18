@@ -16,12 +16,54 @@ set -e
 
 case "$1" in
 	install)
+		TMPDIR="/tmp/dpkg.wlinux-base.inst"
+
 		# Ensure all necessary filesystem directories exist
 		mkdir -p /etcfonts
 		mkdir -p /etc/profile.d
 		mkdir -p /etc/apt/sources.list.d
 		mkdir -p /etc/dpkg/origins
+		mkdir -p ${TMPDIR}
 		
+		# Here we only need to modify sudoers / sudoers.lecture on
+		# non-legacy installs. On legacy installs we also need to
+		# remove our previous /etc/profile modifications and delete
+		# old wlinux scripts
+		if grep -Fq "WLinux" /etc/os-release ; then
+			if [ -f "/etc/setup" ] ; then
+			if [ -f "/etc/helpme" ] ; then
+			echo "WLinux legacy install detected"
+			
+			echo "Removing legacy wlinux-setup script"
+			mv /etc/setup "${TMPDIR}/setup"
+
+			echo "Removing legacy wlinux-help script"
+			mv /etc/helpme "${TMPDIR}/helpme"
+
+			echo -n "Downloading default profile..."
+			curl "https://sources.debian.org/data/main/b/base-files/10.1/share/profile" -so "${TMPDIR}/profile"
+			echo " Done!"
+
+			echo "Removing old /etc/os-release and placing default symlink"
+			mv /etc/os-release "${TMPDIR}/os-release"
+			ln -s /etc/os-release /usr/lib/os-release
+
+			echo "Making copy of /etc/sudoers"
+			cp /etc/sudoers "${TMPDIR}/sudoers"
+			fi
+			fi
+		else
+			if [ -f "/etc/sudoers" ] ; then
+				cp /etc/sudoers /tmp/dpkg.wlinux-base
+			fi
+			echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "${TMPDIR}/sudoers"
+
+			if [ -f "/etc/sudoers.lecture" ] ; then
+				cp /etc/sudoers.lecture /tmp/dpkg.wlinux-base
+			fi
+			echo 'Enter your UNIX password below. This is not your Windows password.' >> "${TMPDIR}/sudoers.lecture"
+		fi
+
 		# List of files we change / require backing up
 		FILES="/etc/fonts/local.conf \
 			/usr/lib/os-release \

@@ -20,43 +20,28 @@ set -e
 
 case "$1" in
 	configure)
-		DIVERT_SUFFIX=".wlinux-divert"
-		if [ -f "/etc/sudoers${DIVERT_SUFFIX}" ] ; then
-			cp "/etc/sudoers${DIVERT_SUFFIX}" "/etc/sudoers"
+		TMPDIR="/tmp/dpkg.wlinux-base.inst"
+
+		if [ -f "${TMPDIR}/profile" ] ; then
+			echo "Moving new profile into /etc"
+			mv "${TMPDIR}/profile" /etc
 		fi
 
-		# Here we only need to modify sudoers / sudoers.lecture on
-		# non-legacy installs. On legacy installs we also need to
-		# remove our previous /etc/profile modifications and delete
-		# old wlinux scripts
-		if [ -f "/etc/setup" ] ; then
-		if [ -f "/etc/helpme" ] ; then
-			echo "WLinux legacy install detected"
-			
-			echo "Removing legacy wlinux-setup script"
-			rm /etc/setup
-
-			echo "Removing legacy wlinux-help script"
-			rm /etc/helpme
-
-			echo "Backing up current profile to /etc/profile.old"
-			cp /etc/profile /etc/profile.old
-			echo -n "Downloading default profile..."
-			curl "https://sources.debian.org/data/main/b/base-files/10.1/share/profile" -so /tmp/profile.wlinux
-			mv /tmp/profile.wlinux /etc/profile
-			echo " Done!"
-		fi
-		else
-			echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "/etc/sudoers"
-			echo 'Enter your UNIX password below. This is not your Windows password.' >> /etc/sudoers.lecture
+		if [ -f "${TMPDIR}/sudoers" ] ; then
+			echo "Moving new sudoers into /etc"
+			mv "${TMPDIR}/sudoers" /etc
 		fi
 
-		echo 'Symlinking /etc/dpkg/origins/default to /etc/dpkg/origins/wlinux'
+		if [ -f "${TMPDIR}/sudoers.lecture" ] ; then
+			echo "Moving new sudoers.lecture into /etc"
+			mv "${TMPDIR}/sudoers.lecture" /etc
+		fi
+		
+		echo "Symlinking /etc/dpkg/origins/wlinux to default"
 		ln -sf /etc/dpkg/origins/wlinux /etc/dpkg/origins/default
 
 		### Whitewater Foundry GPG Key install
 		echo -n "Installing Whitewater Foundry GPG keys..."
-		TMPDIR=$(mktemp -d)
 		cd ${TMPDIR}
 
 		setup_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-setup/gpgkey"
@@ -76,13 +61,17 @@ case "$1" in
 		gpg --ignore-time-conflict --no-options --no-default-keyring --homedir ${TMPDIR} --keyring ${primary_keyring} --import base_gpgkey.pub  > /dev/null 2>&1
 
 		mv ${primary_keyring} ${keyring_location}
-
-		rm -r ${TMPDIR}
 		echo " Done!"
 		###
+
+		# Remove temporary directory
+		echo "Cleaning up wlinux-base temporary install dir"
+		rm -rf ${TMPDIR}
 	;;
 
 	abort-upgrade|abort-remove|abort-deconfigure)
+		echo "Cleaning up wlinux-base temporary install dir"
+		rm -rf ${TMPDIR}
 	;;
 
 	*)
