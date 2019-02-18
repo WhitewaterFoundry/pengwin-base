@@ -46,7 +46,7 @@ case "$1" in
 
 			echo "Removing old /etc/os-release and placing default symlink"
 			mv /etc/os-release "${TMPDIR}/os-release"
-			ln -s /etc/os-release /usr/lib/os-release
+			ln -s /usr/lib/os-release /etc/os-release
 
 			echo "Making copy of /etc/sudoers"
 			cp /etc/sudoers "${TMPDIR}/sudoers"
