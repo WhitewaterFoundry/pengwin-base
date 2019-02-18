@@ -40,7 +40,7 @@ case "$1" in
 			echo "Removing legacy wlinux-help script"
 			mv /etc/helpme "${TMPDIR}/helpme"
 
-			whiptail --title "Update /etc/profile" --msgbox "Due to changes in the way that we add wlinux changes to the default profile, your current /etc/profile will be backed up to /etc/profile.old and a new default profile will be downloaded from Debian. All default WLinux changes are now handled by /etc/profile.d/00-wlinux.sh, but personal changes you may have added can either be copied back to /etc/profile, into your personal ~/.profile, or into a new shell-script under /etc/profile.d" 20 80
+			whiptail --title "Update /etc/profile" --msgbox "Due to changes in the way that we add wlinux changes to the default profile, your current /etc/profile will be backed up to /etc/profile.old and a new default profile will be downloaded from Debian. All default WLinux changes are now handled by /etc/profile.d/00-wlinux.sh, but personal changes you may have added can either be copied back to /etc/profile, into your personal ~/.profile, or into a new shell-script under /etc/profile.d" 10 80
 			echo "Backing up current profile"
 			cp /etc/profile /etc/profile.old
 			echo -n "Downloading default profile..."
