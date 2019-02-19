@@ -42,26 +42,29 @@ case "$1" in
 
 		### Whitewater Foundry GPG Key install
 		echo -n "Installing Whitewater Foundry GPG keys..."
-		CURDIR=$(pwd)
-		cd ${TMPDIR}
+		#CURDIR=$(pwd)
+		#cd ${TMPDIR}
 
 		setup_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-setup/gpgkey"
 		base_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-base/gpgkey"
-		curl -L ${setup_gpgkey} -o setup_gpgkey.pub > /dev/null 2>&1
-		curl -L ${base_gpgkey} -o base_gpgkey.pub > /dev/null 2>&1
+		curl -L "${base_gpgkey}" 	2> /dev/null | apt-key add - &> /dev/null
+		curl -L "${setup_gpgkey}"	2> /dev/null | apt-key add - &> /dev/null
 
-		keyring_location="/etc/apt/trusted.gpg.d"
-		primary_keyring="${TMPDIR}/whitewaterfoundry-archive-keyring.gpg"
+		#curl -L ${setup_gpgkey} -o setup_gpgkey.pub > /dev/null 2>&1
+		#curl -L ${base_gpgkey} -o base_gpgkey.pub > /dev/null 2>&1
 
-		mkdir -p ~/.gnupg # this needs to be done to prevent odd gpg fatal error
-		if [ ! -d "${keyring_location}" ] ; then
-			mkdir -p "${keyring_location}"
-		fi
+		#keyring_location="/etc/apt/trusted.gpg.d"
+		#primary_keyring="${TMPDIR}/whitewaterfoundry-archive-keyring.gpg"
+
+		#mkdir -p ~/.gnupg # this needs to be done to prevent odd gpg fatal error
+		#if [ ! -d "${keyring_location}" ] ; then
+		#	mkdir -p "${keyring_location}"
+		#fi
 		
-		gpg --ignore-time-conflict --no-options --no-default-keyring --homedir ${TMPDIR} --keyring ${primary_keyring} --import setup_gpgkey.pub > /dev/null 2>&1
-		gpg --ignore-time-conflict --no-options --no-default-keyring --homedir ${TMPDIR} --keyring ${primary_keyring} --import base_gpgkey.pub  > /dev/null 2>&1
+		#gpg --ignore-time-conflict --no-options --no-default-keyring --homedir ${TMPDIR} --keyring ${primary_keyring} --import setup_gpgkey.pub > /dev/null 2>&1
+		#gpg --ignore-time-conflict --no-options --no-default-keyring --homedir ${TMPDIR} --keyring ${primary_keyring} --import base_gpgkey.pub  > /dev/null 2>&1
 
-		mv ${primary_keyring} ${keyring_location}
+		#mv ${primary_keyring} ${keyring_location}
 		echo " Done!"
 		###
 
