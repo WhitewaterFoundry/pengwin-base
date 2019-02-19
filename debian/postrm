@@ -23,17 +23,13 @@ case "$1" in
 	purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
 		# Temporary
 		rm -f /etc/apt/sources.list.d/whitewaterfoundry.list
-		rm -f /etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg
 		rm -f /etc/wsl.conf
-	 	#	  if [ -f "/etc/apt/sources.list.d/whitewaterfoundry.list" ] ; then
-	 	#        rm /etc/apt/sources.list.d/whitewaterfoundry.list
-	 	#    fi
-	 	#    if [ -f "/etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg" ] ; then
-	 	#        rm /etc/apt/trusted.gpgp.d/whitewaterfoundry-archive-keyring.gpg
-	 	#    fi
-	 	#    if [ -f "/etc/wsl.conf" ] ; then
-	 	#        rm /etc/wsl.conf
-	 	#    fi
+
+		# Remove our keys from the keyring
+		# wlinux-base
+		apt-key remove "5072 3F92 6561 0360 9BED  4073 88F4 A913 E429 E4F4"
+		# wlinux-setup
+		apt-key remove "A3CC 5F45 5511 DAB0 9888  48F7 29C5 D0C5 CC90 1C28"
 
 		# List of files we change / require backing up
 		FILES="/etc/fonts/local.conf \
