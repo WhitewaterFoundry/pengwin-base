@@ -10,5 +10,5 @@ Vcs-Git: https://github.com/WhitewaterFoundry/wlinux-base.git
 
 Package: wlinux-base
 Architecture: all
-Depends: ${misc:Depends}, curl, apt-transport-https
+Depends: ${misc:Depends}, curl, apt-transport-https, whiptail
 Description: Base modifications for WLinux
