@@ -16,7 +16,7 @@ set -e
 
 case "$1" in
 	install)
-		TMPDIR="/tmp/dpkg.wlinux-base.inst"
+		TMPDIR="/run/dpkg.wlinux-base.inst"
 
 		# Ensure all necessary filesystem directories exist
 		mkdir -p /etcfonts

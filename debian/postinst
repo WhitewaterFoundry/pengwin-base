@@ -20,7 +20,7 @@ set -e
 
 case "$1" in
 	configure)
-		TMPDIR="/tmp/dpkg.wlinux-base.inst"
+		TMPDIR="/run/dpkg.wlinux-base.inst"
 
 		if [ -f "${TMPDIR}/profile" ] ; then
 			echo "Moving new profile into /etc"
