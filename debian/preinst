@@ -44,7 +44,7 @@ case "$1" in
 			echo "Backing up current profile"
 			cp /etc/profile /etc/profile.old
 			echo -n "Downloading default profile..."
-			curl "https://sources.debian.org/data/main/b/base-files/10.1/share/profile" -so "${TMPDIR}/profile"
+			curl "https://salsa.debian.org/rhaist-guest/WSL/raw/master/linux_files/profile" -so "${TMPDIR}/profile"
 			echo " Done!"
 
 			echo "Removing old /etc/os-release and placing default symlink"
