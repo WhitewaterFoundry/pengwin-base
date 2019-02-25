@@ -16,7 +16,7 @@ set -e
 
 case "$1" in
 	install)
-		TMPDIR="/tmp/dpkg.wlinux-base.inst"
+		TMPDIR="/run/dpkg.wlinux-base.inst"
 
 		# Ensure all necessary filesystem directories exist
 		mkdir -p /etcfonts
@@ -48,11 +48,11 @@ case "$1" in
 			echo " Done!"
 
 			echo "Removing old /etc/os-release and placing default symlink"
-			mv /etc/os-release "${TMPDIR}/os-release"
+			mv /etc/os-release "${TMPDIR}"
 			ln -s /usr/lib/os-release /etc/os-release
 
 			echo "Making copy of /etc/sudoers"
-			cp /etc/sudoers "${TMPDIR}/sudoers"
+			cp /etc/sudoers "${TMPDIR}"
 			fi
 			fi
 		else
@@ -62,7 +62,7 @@ case "$1" in
 			echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "${TMPDIR}/sudoers"
 
 			if [ -f "/etc/sudoers.lecture" ] ; then
-				cp /etc/sudoers.lecture /tmp/dpkg.wlinux-base
+				cp /etc/sudoers.lecture "${TMPDIR}"
 			fi
 			echo 'Enter your UNIX password below. This is not your Windows password.' >> "${TMPDIR}/sudoers.lecture"
 		fi
