@@ -1,14 +1,3 @@
-# WSL
-IS_WSL=`grep -i microsoft /proc/version`
-if test "$IS_WSL" = ""; then
-  if [ "`id -u`" -eq 0 ]; then
-    PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-  else
-    PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games"
-  fi
-fi
-export PATH
-
 # enable external x display
 export DISPLAY=:0
 
