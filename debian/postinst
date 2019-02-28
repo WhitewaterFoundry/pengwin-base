@@ -18,6 +18,7 @@ set -e
 # the debian-policy package
 
 TMPDIR="/run/dpkg.wlinux-base.inst"
+FLAGFILE="/etc/apt/.dist-upgrade"
 case "$1" in
 	configure)
 		if [ -f "${TMPDIR}/profile" ] ; then
@@ -53,6 +54,9 @@ case "$1" in
 		echo "Cleaning up wlinux-base temporary install dir"
 		cd ${CURDIR}
 		rm -rf ${TMPDIR}
+
+		# This is a new install, create dist-upgrade flag file
+		touch "${FLAGFILE}"
 	;;
 
 	abort-upgrade|abort-remove|abort-deconfigure)
