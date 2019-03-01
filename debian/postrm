@@ -20,122 +20,52 @@ set -e
 
 
 case "$1" in
-    purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
-	backup_dir=/etc/pre-wlinux
+	purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+		# Temporary
+		rm -f /etc/apt/sources.list.d/whitewaterfoundry.list
+		rm -f /etc/wsl.conf
 
-	# /etc/fonts/local.conf
-	if [ -f "/etc/fonts/local.conf" ] ; then
-	    echo "Deleting current /etc/fonts/local.conf"
-	    rm /etc/fonts/local.conf
-	fi
-        if [ -f "${backup_dir}/local.conf" ] ; then
-            echo "Restoring backup /etc/fonts/local.conf"
-            mv ${backup_dir}/local.conf /etc/fonts
-        fi
+		# Remove our keys from the keyring
+		# wlinux-base
+		apt-key remove "5072 3F92 6561 0360 9BED  4073 88F4 A913 E429 E4F4"
+		# wlinux-setup
+		apt-key remove "A3CC 5F45 5511 DAB0 9888  48F7 29C5 D0C5 CC90 1C28"
 
-	# /etc/profile
-        rm /etc/profile
-        if [ -f "${backup_dir}/profile" ] ; then
-            echo "Restoring backup /etc/profile"
-            mv ${backup_dir}/profile /etc
-        fi
+		# List of files we change / require backing up
+		FILES="/etc/fonts/local.conf \
+			/usr/lib/os-release \
+			/etc/environment \
+			/etc/bashrc \
+			/etc/apt/preferences \
+			/etc/apt/sources.list \
+			/etc/apt/trusted.gpg \
+			/etc/sudoers \
+			/etc/sudoers.lecture"
 
-	# /etc/os-release
-        rm /etc/os-release
-        if [ -f "${backup_dir}/os-release" ] ; then
-            echo "Restoring backup /etc/os-release"
-            mv ${backup_dir}/os-release /etc
-        fi
+		DIVERT_SUFFIX=".wlinux-divert"
+		for FILE in ${FILES} ; do
+			DIVERTED="${FILE}${DIVERT_SUFFIX}"
+			if [ -f "${DIVERTED}" ] ; then
+				if [ -f "${FILE}" ] ; then
+					rm "${FILE}"
+				fi
 
-	# /etc/environment
-        rm /etc/environment
-        if [ -f "${backup_dir}/environment" ] ; then
-            echo "Restoring backup /etc/environment"
-            mv ${backup_dir}/environment /etc
-        fi
+				echo "Restoring diverted ${FILE}"
+				dpkg-divert --remove --rename "${FILE}"
+			fi
+		done
 
-	# /etc/bashrc
-        rm /etc/bashrc
-        if [ -f "${backup_dir}/bashrc" ] ; then
-            echo "Restoring backup /etc/bashrc"
-            mv ${backup_dir}/bashrc /etc
-        fi
+		echo "Restoring /etc/dpkg/origins/debian symlink"
+		ln -sf /etc/dpkg/origins/debian /etc/dpkg/origins/default
+		# if [ -f "/etc/dpkg/origins/wlinux" ] ; then
+		rm -f /etc/dpkg/origins/wlinux
+		# fi
+	;;
 
-	# /etc/apt/preferences
-        rm /etc/apt/preferences
-        if [ -f "${backup_dir}/preferences" ] ; then
-            echo "Restoring backup /etc/apt/preferences"
-            mv ${backup_dir}/preferences /etc/apt
-        fi
-
-	# /etc/apt/sources.list
-        rm /etc/apt/sources.list
-        if [ -f "${backup_dir}/sources.list" ] ; then
-            echo "Restoring backup /etc/apt/sources.list"
-            mv ${backup_dir}/sources.list /etc/apt
-        fi
-
-	# /etc/apt/trusted.gpg
-	if [ -f "/etc/apt/trusted.gpg" ] ; then
-	    echo "Removing current /etc/apt/trusted.gpg"
-	    rm /etc/apt/trusted.gpg
-	fi
-	if [ -f "${backup_dir}/trusted.gpg" ] ; then
-	    echo "Restoring backup /etc/apt/trusted.gpg"
-	    mv ${backup_dir}/trusted.gpg /etc/apt
-	fi
-
-	# /etc/apt/trusted.gpg.d
-	if [ -d "/etc/apt/trusted.gpg.d" ] ; then
-	    echo "Removing current /etc/apt/trusted.gpg.d"
-	    rm -r /etc/apt/trusted.gpg.d
-	fi
-	if [ -d "${backup_dir}/trusted.gpg.d" ] ; then
-	    echo "Restoring backup /etc/apt/trusted.gpg.d"
-	    mv ${backup_dir}/trusted.gpg.d /etc/apt
-	fi
-
-	# /etc/dpkg/origins/default
-        if [ -f "/etc/dpkg/origins/default" ] ; then
-	    echo "Removing current /etc/dpkg/origins/default"
-	    rm /etc/dpkg/origins/default
-	fi
-        if [ -f "${backup_dir}/default" ] ; then
-            echo "Restoring backup /etc/dpkg/origins/default"
-            mv ${backup_dir}/default /etc/dpkg/origins
-        fi
-
-	# /etc/sudoers
-        if [ -f "/etc/sudoers" ] ; then
-	    echo "Removing current /etc/sudoers"
-	    rm /etc/sudoers
-	fi
-        if [ -f "${backup_dir}/sudoers" ] ; then
-            echo "Restoring backup /etc/sudoers"
-            mv ${backup_dir}/sudoers /etc
-        fi
-
-	# /etc/sudoers.lecture
-	if [ -f "/etc/sudoers.lecture" ] ; then
-	    echo "Removing current /etc/sudoers.lecture"
-	    rm /etc/sudoers.lecture
-	fi
-        if [ -f "${backup_dir}/sudoers.lecture" ] ; then
-            echo "Restoring backup /etc/sudoers.lecture"
-            mv ${backup_dir}/sudoers.lecture /etc
-        fi
-
-	# Delete our (now) unused backups dir
-	rm -r ${backup_dir}
-
-	# Delete our sources we added (shouldn't need to be doing this)
-	rm /etc/apt/sources.list.d/whitewaterfoundry.list
-    ;;
-
-    *)
-        echo "postrm called with unknown argument \`$1'" >&2
-        exit 1
-    ;;
+	*)
+		echo "postrm called with unknown argument \`$1'" >&2
+		exit 1
+	;;
 esac
 
 # dh_installdeb will replace this with shell code automatically
