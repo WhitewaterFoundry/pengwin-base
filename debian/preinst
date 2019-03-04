@@ -51,8 +51,6 @@ case "$1" in
 			mv /etc/os-release "${TMPDIR}"
 			ln -s /usr/lib/os-release /etc/os-release
 
-			echo "Making copy of /etc/sudoers"
-			cp /etc/sudoers "${TMPDIR}"
 			fi
 			fi
 		else
@@ -61,9 +59,6 @@ case "$1" in
 			fi
 			echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "${TMPDIR}/sudoers"
 
-			if [ -f "/etc/sudoers.lecture" ] ; then
-				cp /etc/sudoers.lecture "${TMPDIR}"
-			fi
 			echo 'Enter your UNIX password below. This is not your Windows password.' >> "${TMPDIR}/sudoers.lecture"
 		fi
 
@@ -74,8 +69,7 @@ case "$1" in
 			/etc/bashrc \
 			/etc/apt/preferences \
 			/etc/apt/sources.list \
-			/etc/apt/trusted.gpg \
-			/etc/sudoers"
+			/etc/apt/trusted.gpg"
 
 		# dpkg-divert all currently existing files since 
 		# we overwrite a lot of other package's files
