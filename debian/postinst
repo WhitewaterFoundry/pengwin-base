@@ -48,8 +48,10 @@ case "$1" in
 
 		setup_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-setup/gpgkey"
 		base_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-base/gpgkey"
+		wslu_gpgkey="https://packagecloud.io/whitewaterfoundry/wslu/gpgkey"
 		curl -L "${base_gpgkey}" 	 | apt-key add - > /dev/null 2>&1
 		curl -L "${setup_gpgkey}"	 | apt-key add - > /dev/null 2>&1
+		curl -L "${wslu_gpgkey}"	 | apt-key add - > /dev/null 2>&1
 
 		echo " Done!"
 		###
