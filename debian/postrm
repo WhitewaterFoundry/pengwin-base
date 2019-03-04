@@ -30,6 +30,8 @@ case "$1" in
 		apt-key remove "5072 3F92 6561 0360 9BED  4073 88F4 A913 E429 E4F4"
 		# wlinux-setup
 		apt-key remove "A3CC 5F45 5511 DAB0 9888  48F7 29C5 D0C5 CC90 1C28"
+		# wslu
+		apt-key remove "90F6 8549 4B52 C0E9 6DA4  B925 0087 4F17 1073 5619"
 
 		# List of files we change / require backing up
 		FILES="/etc/fonts/local.conf \
