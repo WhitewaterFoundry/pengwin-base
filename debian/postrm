@@ -56,6 +56,8 @@ case "$1" in
 		echo "Restoring /etc/dpkg/origins/debian symlink"
 		ln -sf /etc/dpkg/origins/debian /etc/dpkg/origins/default
 		rm -f /etc/dpkg/origins/wlinux
+
+		echo "Your previous profile can be found at /etc/profile.old"
 	;;
 
 	*)
