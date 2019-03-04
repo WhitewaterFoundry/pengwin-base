@@ -38,9 +38,7 @@ case "$1" in
 			/etc/bashrc \
 			/etc/apt/preferences \
 			/etc/apt/sources.list \
-			/etc/apt/trusted.gpg \
-			/etc/sudoers \
-			/etc/sudoers.lecture"
+			/etc/apt/trusted.gpg"
 
 		DIVERT_SUFFIX=".wlinux-divert"
 		for FILE in ${FILES} ; do
@@ -57,9 +55,7 @@ case "$1" in
 
 		echo "Restoring /etc/dpkg/origins/debian symlink"
 		ln -sf /etc/dpkg/origins/debian /etc/dpkg/origins/default
-		# if [ -f "/etc/dpkg/origins/wlinux" ] ; then
 		rm -f /etc/dpkg/origins/wlinux
-		# fi
 	;;
 
 	*)

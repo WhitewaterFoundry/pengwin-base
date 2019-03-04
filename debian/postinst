@@ -22,11 +22,15 @@ FLAGFILE="/etc/apt/.dist-upgrade"
 case "$1" in
 	configure)
 		if [ -f "${TMPDIR}/profile" ] ; then
+			echo "Backing up old profile to /etc/profile.old"
+			mv "/etc/profile" "/etc/profile.old"
 			echo "Moving new profile into /etc"
 			mv "${TMPDIR}/profile" /etc
 		fi
 
 		if [ -f "${TMPDIR}/sudoers" ] ; then
+			echo "Backup up old sudoers to /etc/sudoers.old"
+			mv "/etc/sudoers" "/etc/sudoers.old"
 			echo "Moving new sudoers into /etc"
 			mv "${TMPDIR}/sudoers" /etc
 		fi
