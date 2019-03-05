@@ -7,3 +7,5 @@ deb https://packagecloud.io/whitewaterfoundry/wlinux-base/debian/ buster main
 deb https://packagecloud.io/whitewaterfoundry/wlinux-setup/debian/ buster main
 #deb-src https://packagecloud.io/whitewaterfoundry/wlinux-setup/debian/ buster main
 
+deb https://packagecloud.io/whitewaterfoundry/wslu/debian/ buster main
+#deb-src https://packagecloud.io/whitewaterfoundry/wslu/debian/ buster main

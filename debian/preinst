@@ -41,8 +41,6 @@ case "$1" in
 			mv /etc/helpme "${TMPDIR}/helpme"
 
 			whiptail --title "Update /etc/profile" --msgbox "Due to changes in the way that we add wlinux changes to the default profile, your current /etc/profile will be backed up to /etc/profile.old and a new default profile will be downloaded from Debian. All default WLinux changes are now handled by /etc/profile.d/00-wlinux.sh, but personal changes you may have added can either be copied back to /etc/profile, into your personal ~/.profile, or into a new shell-script under /etc/profile.d" 14 80
-			echo "Backing up current profile"
-			cp /etc/profile /etc/profile.old
 			echo -n "Downloading default profile..."
 			curl "https://salsa.debian.org/rhaist-guest/WSL/raw/master/linux_files/profile" -so "${TMPDIR}/profile"
 			echo " Done!"
@@ -51,8 +49,6 @@ case "$1" in
 			mv /etc/os-release "${TMPDIR}"
 			ln -s /usr/lib/os-release /etc/os-release
 
-			echo "Making copy of /etc/sudoers"
-			cp /etc/sudoers "${TMPDIR}"
 			fi
 			fi
 		else
@@ -61,9 +57,6 @@ case "$1" in
 			fi
 			echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "${TMPDIR}/sudoers"
 
-			if [ -f "/etc/sudoers.lecture" ] ; then
-				cp /etc/sudoers.lecture "${TMPDIR}"
-			fi
 			echo 'Enter your UNIX password below. This is not your Windows password.' >> "${TMPDIR}/sudoers.lecture"
 		fi
 
@@ -74,8 +67,7 @@ case "$1" in
 			/etc/bashrc \
 			/etc/apt/preferences \
 			/etc/apt/sources.list \
-			/etc/apt/trusted.gpg \
-			/etc/sudoers"
+			/etc/apt/trusted.gpg"
 
 		# dpkg-divert all currently existing files since 
 		# we overwrite a lot of other package's files
