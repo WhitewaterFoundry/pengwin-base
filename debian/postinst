@@ -22,11 +22,15 @@ FLAGFILE="/etc/apt/.dist-upgrade"
 case "$1" in
 	configure)
 		if [ -f "${TMPDIR}/profile" ] ; then
+			echo "Backing up old profile to /etc/profile.old"
+			mv "/etc/profile" "/etc/profile.old"
 			echo "Moving new profile into /etc"
 			mv "${TMPDIR}/profile" /etc
 		fi
 
 		if [ -f "${TMPDIR}/sudoers" ] ; then
+			echo "Backup up old sudoers to /etc/sudoers.old"
+			mv "/etc/sudoers" "/etc/sudoers.old"
 			echo "Moving new sudoers into /etc"
 			mv "${TMPDIR}/sudoers" /etc
 		fi
@@ -44,8 +48,10 @@ case "$1" in
 
 		setup_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-setup/gpgkey"
 		base_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-base/gpgkey"
+		wslu_gpgkey="https://packagecloud.io/whitewaterfoundry/wslu/gpgkey"
 		curl -L "${base_gpgkey}" 	 | apt-key add - > /dev/null 2>&1
 		curl -L "${setup_gpgkey}"	 | apt-key add - > /dev/null 2>&1
+		curl -L "${wslu_gpgkey}"	 | apt-key add - > /dev/null 2>&1
 
 		echo " Done!"
 		###
