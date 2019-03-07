@@ -1,5 +1,4 @@
 environment /etc/
-bashrc /etc/
 profile.d/* /etc/profile.d/
 os-release /usr/lib/
 wsl.conf /etc/

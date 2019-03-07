@@ -64,7 +64,6 @@ case "$1" in
 		FILES="/etc/fonts/local.conf \
 			/usr/lib/os-release \
 			/etc/environment \
-			/etc/bashrc \
 			/etc/apt/preferences \
 			/etc/apt/sources.list \
 			/etc/apt/trusted.gpg"
