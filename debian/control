@@ -12,3 +12,4 @@ Package: wlinux-base
 Architecture: all
 Depends: ${misc:Depends}, curl, apt-transport-https, whiptail, gnupg
 Description: Base modifications for WLinux
+Essential: yes
