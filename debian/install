@@ -6,6 +6,6 @@ preferences /etc/apt/
 sources.list /etc/apt/
 sources.list.d/* /etc/apt/sources.list.d/
 local.conf /etc/fonts/
-wlinux /etc/dpkg/origins/
-wlinux-help /usr/local/bin/
-wlinux.ico /usr/local/lib/
+pengwin /etc/dpkg/origins/
+pengwin-help /usr/local/bin/
+pengwin.ico /usr/local/lib/
