@@ -1,15 +1,15 @@
-Source: wlinux-base
+Source: pengwin-base
 Section: utils
 Priority: optional
 Maintainer: Whitewater Foundry, Ltd. Co. <contact@whitewaterfoundry.com>
 Build-Depends: debhelper (>= 11)
 Standards-Version: 4.1.3
-Homepage: https://github.com/WhitewaterFoundry/wlinux-base
-Vcs-Browser: https://github.com/WhitewaterFoundry/wlinux-base
-Vcs-Git: https://github.com/WhitewaterFoundry/wlinux-base.git
+Homepage: https://github.com/WhitewaterFoundry/pengwin-base
+Vcs-Browser: https://github.com/WhitewaterFoundry/pengwin-base
+Vcs-Git: https://github.com/WhitewaterFoundry/pengwin-base.git
 
-Package: wlinux-base
+Package: pengwin-base
 Architecture: all
 Depends: ${misc:Depends}, curl, apt-transport-https, whiptail, gnupg
-Description: Base modifications for WLinux
+Description: Base modifications for Pengwin
 Essential: yes
