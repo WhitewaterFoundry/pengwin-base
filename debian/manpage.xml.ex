@@ -56,9 +56,9 @@ man(1), man(7), http://www.tldp.org/HOWTO/Man-Page/
   <!ENTITY dhsection   "SECTION">
   <!-- TITLE should be something like "User commands" or similar (see
        http://www.tldp.org/HOWTO/Man-Page/q2.html). -->
-  <!ENTITY dhtitle     "wlinux-base User Manual">
-  <!ENTITY dhucpackage "Wlinux-base">
-  <!ENTITY dhpackage   "wlinux-base">
+  <!ENTITY dhtitle     "pengwin-base User Manual">
+  <!ENTITY dhucpackage "pengwin-base">
+  <!ENTITY dhpackage   "pengwin-base">
 ]>
 
 <refentry>
