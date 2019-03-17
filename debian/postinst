@@ -1,5 +1,5 @@
 #!/bin/sh
-# postinst script for wlinux-base
+# postinst script for pengwin-base
 #
 # see: dh_installdeb(1)
 
@@ -17,7 +17,7 @@ set -e
 # for details, see https://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
-TMPDIR="/run/dpkg.wlinux-base.inst"
+TMPDIR="/run/dpkg.pengwin-base.inst"
 FLAGFILE="/etc/apt/.dist-upgrade"
 case "$1" in
 	configure)
@@ -40,14 +40,14 @@ case "$1" in
 			mv "${TMPDIR}/sudoers.lecture" /etc
 		fi
 		
-		echo "Symlinking /etc/dpkg/origins/wlinux to default"
-		ln -sf /etc/dpkg/origins/wlinux /etc/dpkg/origins/default
+		echo "Symlinking /etc/dpkg/origins/pengwin to default"
+		ln -sf /etc/dpkg/origins/pengwin /etc/dpkg/origins/default
 
 		### Whitewater Foundry GPG Key install
 		echo "Installing Whitewater Foundry GPG keys..."
 
-		setup_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-setup/gpgkey"
-		base_gpgkey="https://packagecloud.io/whitewaterfoundry/wlinux-base/gpgkey"
+		setup_gpgkey="https://packagecloud.io/whitewaterfoundry/pengwin-setup/gpgkey"
+		base_gpgkey="https://packagecloud.io/whitewaterfoundry/pengwin-base/gpgkey"
 		wslu_gpgkey="https://packagecloud.io/whitewaterfoundry/wslu/gpgkey"
 		curl -L "${base_gpgkey}" 	 | apt-key add - > /dev/null 2>&1
 		curl -L "${setup_gpgkey}"	 | apt-key add - > /dev/null 2>&1
@@ -57,7 +57,7 @@ case "$1" in
 		###
 
 		# Remove temporary directory
-		echo "Cleaning up wlinux-base temporary install dir"
+		echo "Cleaning up pengwin-base temporary install dir"
 		cd ${CURDIR}
 		rm -rf ${TMPDIR}
 
@@ -66,7 +66,7 @@ case "$1" in
 	;;
 
 	abort-upgrade|abort-remove|abort-deconfigure)
-		echo "Cleaning up wlinux-base temporary install dir"
+		echo "Cleaning up pengwin-base temporary install dir"
 		rm -rf ${TMPDIR}
 	;;
 

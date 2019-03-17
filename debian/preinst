@@ -1,5 +1,5 @@
 #!/bin/sh
-# preinst script for wlinux-base
+# preinst script for pengwin-base
 #
 # see: dh_installdeb(1)
 
@@ -16,7 +16,7 @@ set -e
 
 case "$1" in
 	install)
-		TMPDIR="/run/dpkg.wlinux-base.inst"
+		TMPDIR="/run/dpkg.pengwin-base.inst"
 
 		# Ensure all necessary filesystem directories exist
 		mkdir -p /etcfonts
@@ -28,19 +28,19 @@ case "$1" in
 		# Here we only need to modify sudoers / sudoers.lecture on
 		# non-legacy installs. On legacy installs we also need to
 		# remove our previous /etc/profile modifications and delete
-		# old wlinux scripts
-		if grep -Fq "WLinux" /etc/os-release ; then
+		# old wlinux/pengwin scripts
+		if grep -Fq "Pengwin" /etc/os-release ; then
 			if [ -f "/etc/setup" ] ; then
 			if [ -f "/etc/helpme" ] ; then
-			echo "WLinux legacy install detected"
+			echo "Pengwin legacy install detected"
 			
-			echo "Removing legacy wlinux-setup script"
+			echo "Removing legacy pengwin-setup script"
 			mv /etc/setup "${TMPDIR}/setup"
 
-			echo "Removing legacy wlinux-help script"
+			echo "Removing legacy pengwin-help script"
 			mv /etc/helpme "${TMPDIR}/helpme"
 
-			whiptail --title "Update /etc/profile" --msgbox "Due to changes in the way that we add wlinux changes to the default profile, your current /etc/profile will be backed up to /etc/profile.old and a new default profile will be downloaded from Debian. All default WLinux changes are now handled by /etc/profile.d/00-wlinux.sh, but personal changes you may have added can either be copied back to /etc/profile, into your personal ~/.profile, or into a new shell-script under /etc/profile.d" 14 80
+			whiptail --title "Update /etc/profile" --msgbox "Due to changes in the way that we make changes to the default profile, your current /etc/profile will be backed up to /etc/profile.old and a new default profile will be downloaded from Debian. All default Pengwin changes are now handled by /etc/profile.d/00-pengwin.sh, but personal changes you may have added can either be copied back to /etc/profile, into your personal ~/.profile, or into a new shell-script under /etc/profile.d" 14 80
 			echo -n "Downloading default profile..."
 			curl "https://salsa.debian.org/rhaist-guest/WSL/raw/master/linux_files/profile" -so "${TMPDIR}/profile"
 			echo " Done!"
@@ -56,7 +56,6 @@ case "$1" in
 				cp /etc/sudoers "${TMPDIR}"
 			fi
 			echo 'Defaults lecture_file = /etc/sudoers.lecture' >> "${TMPDIR}/sudoers"
-
 			echo 'Enter your UNIX password below. This is not your Windows password.' >> "${TMPDIR}/sudoers.lecture"
 		fi
 
@@ -70,7 +69,7 @@ case "$1" in
 
 		# dpkg-divert all currently existing files since 
 		# we overwrite a lot of other package's files
-		DIVERT_SUFFIX=".wlinux-divert"
+		DIVERT_SUFFIX=".pengwin-divert"
 
 		for FILE in ${FILES} ; do
 			if [ -f "${FILE}" ] ; then

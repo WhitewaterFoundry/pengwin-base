@@ -15,6 +15,6 @@ alias ll='ls -al'
 
 # Execute on user's shell first-run
 if [ ! -f "${HOME}/.firstrun" ]; then
-    echo "Welcome to WLinux. Type 'wlinux-setup' to run the setup tool. You will only see this message on first run"
+    echo "Welcome to Pengwin. Type 'pengwin-setup' to run the setup tool. You will only see this message on the first run"
     touch "${HOME}/.firstrun"
 fi

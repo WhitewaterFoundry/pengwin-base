@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: wlinux-base
-Source: https://github.com/WhitewaterFoundry/wlinux-base
+Upstream-Name: pengwin-base
+Source: https://github.com/WhitewaterFoundry/pengwin-base
 
 Files: *
 Copyright: 2019 Whitewater Foundry, Ltd. Co.
