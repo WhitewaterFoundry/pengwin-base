@@ -18,9 +18,11 @@ set -e
 # for details, see https://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
+# To handle
+# upgrade|failed-upgrade|abort-upgrade
 
 case "$1" in
-	purge|remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+	purge|remove|abort-install|disappear)
 		# Temporary
 		rm -f /etc/apt/sources.list.d/whitewaterfoundry.list
 		rm -f /etc/wsl.conf
