@@ -29,7 +29,7 @@ case "$1" in
 		# non-legacy installs. On legacy installs we also need to
 		# remove our previous /etc/profile modifications and delete
 		# old wlinux/pengwin scripts
-		if grep -Fq "Pengwin" /etc/os-release ; then
+		if grep -Fq "WLinux" /etc/os-release ; then
 			if [ -f "/etc/setup" ] ; then
 			if [ -f "/etc/helpme" ] ; then
 			echo "Pengwin legacy install detected"
