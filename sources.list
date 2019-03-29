@@ -9,6 +9,3 @@ deb https://deb.debian.org/debian-security testing/updates main
 
 deb https://deb.debian.org/debian/ unstable main contrib non-free 
 # deb-src https://deb.debian.org/debian/ unstable main contrib non-free
-
-# deb https://repo.whitewaterfoundry.com/ stable main
-# deb-src https://repo.whitewaterfoundry.com/ stable main
