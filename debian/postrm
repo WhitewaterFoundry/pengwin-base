@@ -63,6 +63,9 @@ case "$1" in
 		echo "Your previous profile can be found at /etc/profile.old"
 	;;
 
+	upgrade|failed-upgrade|abort-upgrade)
+	;;
+
 	*)
 		echo "postrm called with unknown argument \`$1'" >&2
 		exit 1
