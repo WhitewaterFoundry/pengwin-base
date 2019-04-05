@@ -19,7 +19,7 @@ case "$1" in
 		TMPDIR="/run/dpkg.pengwin-base.inst"
 
 		# Ensure all necessary filesystem directories exist
-		mkdir -p /etcfonts
+		mkdir -p /etc/fonts
 		mkdir -p /etc/profile.d
 		mkdir -p /etc/apt/sources.list.d
 		mkdir -p /etc/dpkg/origins
