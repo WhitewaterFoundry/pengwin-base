@@ -53,7 +53,7 @@ case "$1" in
 		curl -L "${setup_gpgkey}"	 | apt-key add - > /dev/null 2>&1
 		curl -L "${wslu_gpgkey}"	 | apt-key add - > /dev/null 2>&1
 
-    chmod 755 /usr/local/bin/cmd-exe
+		chmod 755 /usr/local/bin/cmd-exe
 
 		echo " Done!"
 		###
