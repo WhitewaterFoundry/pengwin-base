@@ -63,7 +63,7 @@ case "$1" in
 		rm -rf ${TMPDIR}
 
 		# This is a new install, create dist-upgrade flag file
-		touch "${FLAGFILE}"
+		# touch "${FLAGFILE}"
 	;;
 
 	abort-upgrade|abort-remove|abort-deconfigure)
