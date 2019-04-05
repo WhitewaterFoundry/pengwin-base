@@ -60,11 +60,10 @@ case "$1" in
 
 		# Remove temporary directory
 		echo "Cleaning up pengwin-base temporary install dir"
-		cd ${CURDIR}
 		rm -rf ${TMPDIR}
 
 		# This is a new install, create dist-upgrade flag file
-		touch "${FLAGFILE}"
+		# touch "${FLAGFILE}"
 	;;
 
 	abort-upgrade|abort-remove|abort-deconfigure)
