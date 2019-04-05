@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cd $(wslpath C:\\) >/dev/null
+
+RESULT=$(cmd.exe $@ 2>&1)
+EXIT_STATUS=$?
+
+cd - >/dev/null
+
+echo "${RESULT}"
+exit ${EXIT_STATUS}
