@@ -22,6 +22,10 @@ if ( which cmd.exe >/dev/null ); then
     touch "${HOME}/.firstrun"
   fi
 
+  if ( ! wslpath > /dev/null 2>&1 ); then
+    alias wslpath=legacy_wslupath
+  fi
+
   # Create a symbolic link to the windows home
   wHomeWinPath=$(cmd-exe /c 'echo %HOMEDRIVE%%HOMEPATH%' | tr -d '\r')
   export WIN_HOME=$(wslpath -u "${wHomeWinPath}")
