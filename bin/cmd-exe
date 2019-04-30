@@ -1,11 +1,20 @@
 #!/bin/bash
 
-cd $(wslpath C:\\) >/dev/null
+# !! Leaving this code uncommented for now in case further
+# !! Windows changes make it necessary to revert to this
+# !! method of doing things
 
-RESULT=$(cmd.exe $@ 2>&1)
+#if ( which wslpath > /dev/null 2>&1); then
+#  cd $(wslpath C:\\) > /dev/null 2>&1
+#  CHANGED=1
+#fi
+
+RESULT=$(cmd.exe $@ 2> /dev/null)
 EXIT_STATUS=$?
 
-cd - >/dev/null
+#if [[ $CHANGED == 1 ]]; then
+#  cd - > /dev/null 2>&1
+#fi
 
 echo "${RESULT}"
 exit ${EXIT_STATUS}
