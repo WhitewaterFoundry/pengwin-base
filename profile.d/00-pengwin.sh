@@ -22,7 +22,7 @@ if ( which cmd.exe >/dev/null ); then
     touch "${HOME}/.firstrun"
   fi
 
-  if ( ! wslpath > /dev/null 2>&1 ); then
+  if ( ! wslpath 'C:\' > /dev/null 2>&1 ); then
     alias wslpath=legacy_wslupath
   fi
 
