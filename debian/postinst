@@ -12,7 +12,7 @@ set -e
 #          <new-version>
 #        * <postinst> `abort-remove'
 #        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
-#          <failed-install-package> <version> `removing'FLAGFILE
+#          <failed-install-package> <version> `removing'
 #          <conflicting-package> <version>
 # for details, see https://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
