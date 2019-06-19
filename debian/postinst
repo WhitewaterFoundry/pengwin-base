@@ -12,13 +12,13 @@ set -e
 #          <new-version>
 #        * <postinst> `abort-remove'
 #        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
-#          <failed-install-package> <version> `removing'
+#          <failed-install-package> <version> `removing'FLAGFILE
 #          <conflicting-package> <version>
 # for details, see https://www.debian.org/doc/debian-policy/ or
 # the debian-policy package
 
 TMPDIR="/run/dpkg.pengwin-base.inst"
-FLAGFILE="/etc/apt/.dist-upgrade"
+#FLAGFILE="/etc/apt/.dist-upgrade"
 case "$1" in
 	configure)
 		if [ -f "${TMPDIR}/profile" ] ; then
@@ -55,6 +55,7 @@ case "$1" in
 
 		chmod 755 /usr/local/bin/cmd-exe
 		chmod 755 /usr/local/bin/legacy_wslupath
+    chmod u+s "$(which ping)"
 
 		echo " Done!"
 		###
