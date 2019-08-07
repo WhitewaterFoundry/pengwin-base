@@ -18,7 +18,7 @@ if ( which cmd.exe >/dev/null ); then
 
   # Execute on user's shell first-run
   if [ ! -f "${HOME}/.firstrun" ]; then
-    echo "Welcome to Pengwin. Type 'pengwin-setup' to run the setup tool. You will only see this message on the first run"
+    echo "Welcome to Pengwin. Type 'pengwin-setup' to run the setup tool. You will only see this message on the first run."
     touch "${HOME}/.firstrun"
   fi
 
