@@ -18,7 +18,7 @@ set -e
 # the debian-policy package
 
 TMPDIR="/run/dpkg.pengwin-base.inst"
-FLAGFILE="/etc/apt/.dist-upgrade"
+#FLAGFILE="/etc/apt/.dist-upgrade"
 case "$1" in
 	configure)
 		if [ -f "${TMPDIR}/profile" ] ; then
@@ -53,16 +53,19 @@ case "$1" in
 		curl -L "${setup_gpgkey}"	 | apt-key add - > /dev/null 2>&1
 		curl -L "${wslu_gpgkey}"	 | apt-key add - > /dev/null 2>&1
 
+		chmod 755 /usr/local/bin/cmd-exe
+		chmod 755 /usr/local/bin/legacy_wslupath
+    chmod u+s "$(which ping)"
+
 		echo " Done!"
 		###
 
 		# Remove temporary directory
 		echo "Cleaning up pengwin-base temporary install dir"
-		cd ${CURDIR}
 		rm -rf ${TMPDIR}
 
 		# This is a new install, create dist-upgrade flag file
-		touch "${FLAGFILE}"
+		# touch "${FLAGFILE}"
 	;;
 
 	abort-upgrade|abort-remove|abort-deconfigure)

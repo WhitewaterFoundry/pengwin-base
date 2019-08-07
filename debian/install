@@ -9,3 +9,4 @@ local.conf /etc/fonts/
 pengwin /etc/dpkg/origins/
 pengwin-help /usr/local/bin/
 pengwin.ico /usr/local/lib/
+bin/* /usr/local/bin/

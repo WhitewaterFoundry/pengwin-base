@@ -13,38 +13,26 @@ alias clear='clear -x'
 # Custom aliases
 alias ll='ls -al'
 
-# Execute on user's shell first-run
-if [ ! -f "${HOME}/.firstrun" ]; then
-  echo "Welcome to Pengwin. Type 'pengwin-setup' to run the setup tool. You will only see this message on the first run"
-  touch "${HOME}/.firstrun"
-fi
+# Check if we have Windows Path
+if ( which cmd.exe >/dev/null ); then
 
-function cmd_exe() {
+  # Execute on user's shell first-run
+  if [ ! -f "${HOME}/.firstrun" ]; then
+    echo "Welcome to Pengwin. Type 'pengwin-setup' to run the setup tool. You will only see this message on the first run"
+    touch "${HOME}/.firstrun"
+  fi
 
-  local result
-  local exit_status
-  cd $(wslpath C:\\) >/dev/null
-
-  result=$(cmd.exe $@ 2>&1)
-  exit_status=$?
-
-  cd - >/dev/null
-
-  echo "${result}"
-  return ${exit_status}
-}
-
-function create_winhome_link() {
+  if ( ! wslpath 'C:\' > /dev/null 2>&1 ); then
+    alias wslpath=legacy_wslupath
+  fi
 
   # Create a symbolic link to the windows home
-  local wHomeWinPath=$(cmd_exe /c 'echo %HOMEDRIVE%%HOMEPATH%' | tr -d '\r')
+  wHomeWinPath=$(cmd-exe /c 'echo %HOMEDRIVE%%HOMEPATH%' | tr -d '\r')
   export WIN_HOME=$(wslpath -u "${wHomeWinPath}")
 
-  local win_home_lnk=${HOME}/winhome
+  win_home_lnk=${HOME}/winhome
   if [ ! -e "${win_home_lnk}" ] ; then
     ln -s -f "${WIN_HOME}" "${win_home_lnk}"
   fi
 
-}
-
-create_winhome_link
+fi
