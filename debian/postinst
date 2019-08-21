@@ -55,7 +55,8 @@ case "$1" in
 
 		chmod 755 /usr/local/bin/cmd-exe
 		chmod 755 /usr/local/bin/legacy_wslupath
-    chmod u+s "$(which ping)"
+    		chmod 755 /usr/local/bin/pengwin-help
+		chmod u+s "$(which ping)"
 
 		echo " Done!"
 		###
