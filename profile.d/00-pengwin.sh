@@ -1,5 +1,11 @@
-# enable external x display
-export DISPLAY=:0
+# check whether it is WSL1 for WSL2 by using gcc version kernel built with
+if[ $(grep -oE 'gcc version ([0-9]+)' /proc/version | awk '{print $3}') -gt 5 ]; then
+  # enable external x display for WSL 2
+  export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+else
+  # enable external x display for WSL 1
+  export DISPLAY=:0
+fi
 
 # enable external libgl
 export LIBGL_ALWAYS_INDIRECT=1
