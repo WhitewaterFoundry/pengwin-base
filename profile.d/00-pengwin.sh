@@ -1,7 +1,9 @@
 # check whether it is WSL1 for WSL2 by using gcc version kernel built with
 if[ $(grep -oE 'gcc version ([0-9]+)' /proc/version | awk '{print $3}') -gt 5 ]; then
   # enable external x display for WSL 2
-  export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+  wsl2_d_tmp="$(ipconfig.exe | grep -n WSL | cut -d : -f 1)"
+  wsl2_d_tmp="$(ipconfig.exe | sed ''"$(expr $wsl2_d_tmp + 0)"','"$(expr $wsl2_d_tmp + 4)"'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
+  export DISPLAY=$wsl2_d_tmp:0.0
 else
   # enable external x display for WSL 1
   export DISPLAY=:0
