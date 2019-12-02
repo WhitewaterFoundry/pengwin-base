@@ -1,6 +1,6 @@
 # check whether it is WSL1 for WSL2 by using gcc version kernel built with
 # check whether we have wsl.exe in path
-if ( which wsl.exe >/dev/null ) && ( $(which wsl.exe) -l -v >/dev/null ) && [ $(wsl.exe -l -v 2>&1 |sed -e "s|\r||g" -e "s|\x00||g" | grep WLinux | awk '{print $3}') -eq 2]; then
+if ( which wsl.exe >/dev/null ) && ( $(which wsl.exe) -l -v >/dev/null ) && [ $(wsl.exe -l -v 2>&1 |sed -e "s|\r||g" -e "s|\x00||g" | grep WLinux | awk '{print $3}') -eq 2 ]; then
   # enable external x display for WSL 2
 
   ipconfig_exec=$(wslpath "C:\\Windows\\System32\\ipconfig.exe")
@@ -8,14 +8,17 @@ if ( which wsl.exe >/dev/null ) && ( $(which wsl.exe) -l -v >/dev/null ) && [ $(
     ipconfig_exec=$(which ipconfig.exe)
   fi
 
-  wsl2_d_tmp="eval "$ipconfig_exec" | grep -n WSL | cut -d : -f 1)"
-  wsl2_d_tmp="eval "$ipconfig_exec" | sed ''"$(expr $wsl2_d_tmp + 0)"','"$(expr $wsl2_d_tmp + 4)"'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
+  wsl2_d_tmp="$(eval "$ipconfig_exec" | grep -n WSL | cut -d : -f 1)"
+  wsl2_d_tmp="$(eval "$ipconfig_exec" | sed ''"$(expr $wsl2_d_tmp + 0)"','"$(expr $wsl2_d_tmp + 4)"'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
   export DISPLAY=$wsl2_d_tmp:0.0
-  sed -i 's|DISPLAY=.*$|DISPLAY='$wsl2_d_tmp':0\.0|g' /etc/environment
+
+  unset wsl2_d_tmp
+  #sed -i 's|DISPLAY=.*$|DISPLAY='$wsl2_d_tmp':0\.0|g' /etc/environment
 else
   # enable external x display for WSL 1
   export DISPLAY=:0
-  sed -i 's|DISPLAY=.*$|DISPLAY=:0|g' /etc/environment
+  
+  #sed -i 's|DISPLAY=.*$|DISPLAY=:0|g' /etc/environment
 fi
 
 # enable external libgl
