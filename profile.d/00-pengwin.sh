@@ -1,5 +1,22 @@
-# enable external x display
-export DISPLAY=:0
+# check whether it is WSL1 for WSL2 by using gcc version kernel built with
+# check whether we have wsl.exe in path
+if ( which wsl.exe >/dev/null ) && ( $(which wsl.exe) -l -v >/dev/null ) && [ $(wsl.exe -l -v 2>&1 |sed -e "s|\r||g" -e "s|\x00||g" | grep WLinux | awk '{print $3}') -eq 2 ]; then
+  # enable external x display for WSL 2
+
+  ipconfig_exec=$(wslpath "C:\\Windows\\System32\\ipconfig.exe")
+  if ( which ipconfig.exe >/dev/null ); then
+    ipconfig_exec=$(which ipconfig.exe)
+  fi
+
+  wsl2_d_tmp="$(eval "$ipconfig_exec" | grep -n "Default Gateway.*: [0-9]" | cut -d : -f 1)"
+  wsl2_d_tmp="$(eval "$ipconfig_exec" | sed ''"$(expr $wsl2_d_tmp - 4)"','"$(expr $wsl2_d_tmp + 0)"'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
+  export DISPLAY=$wsl2_d_tmp:0.0
+
+  unset wsl2_d_tmp
+else
+  # enable external x display for WSL 1
+  export DISPLAY=:0
+fi
 
 # enable external libgl
 export LIBGL_ALWAYS_INDIRECT=1
