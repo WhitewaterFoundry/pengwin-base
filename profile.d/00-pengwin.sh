@@ -1,6 +1,6 @@
 # check whether it is WSL1 for WSL2 by using gcc version kernel built with
 # check whether we have wsl.exe in path
-if ( which wsl.exe >/dev/null ) && ( $(which wsl.exe) -l -v >/dev/null ) && [ $(wsl.exe -l -v 2>&1 |sed -e "s|\r||g" -e "s|\x00||g" | grep WLinux | awk '{print $3}') -eq 2 ]; then
+if ( which wsl.exe >/dev/null ) && ( $(which wsl.exe) -l -v >/dev/null ) && [ $(wsl.exe -l -v 2>&1 |sed -e "s|\r||g" -e "s|\x00||g" | grep ${WSL_DISTRO_NAME} | awk '{print $3}') -eq 2 ]; then
   # enable external x display for WSL 2
 
   ipconfig_exec=$(wslpath "C:\\Windows\\System32\\ipconfig.exe")
