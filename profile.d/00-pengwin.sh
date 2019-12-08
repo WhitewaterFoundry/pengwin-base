@@ -2,7 +2,9 @@ set -x
 
 # check whether it is WSL1 for WSL2
 # check whether we have wsl.exe in path
-if ( which wsl.exe >/dev/null ) && ( $(which wsl.exe) -l -v >/dev/null ) && [ $(wsl.exe -l -v 2>&1 |sed -e "s|\r||g" -e "s|\x00||g" | grep ${WSL_DISTRO_NAME} | awk '{print $3}') -eq 2 ]; then
+if ( which wsl.exe >/dev/null ) && ( $(which wsl.exe) -l -v >/dev/null ) && [ $(wsl.exe -l -v 2>&1 | iconv -f Unicode -t $(locale charmap) | sed -e "s|\r||g" -e "s|\x00||g" | grep ${WSL_DISTRO_NAME} | awk '{print $3}') -eq 2 ]; then
+  #Export an enviroment variable for helping other processes
+  export WSL2=1
   # enable external x display for WSL 2
 
   ipconfig_exec=$(wslpath "C:\\Windows\\System32\\ipconfig.exe")
@@ -15,6 +17,7 @@ if ( which wsl.exe >/dev/null ) && ( $(which wsl.exe) -l -v >/dev/null ) && [ $(
   export DISPLAY=$wsl2_d_tmp:0.0
 
   unset wsl2_d_tmp
+  unset ipconfig_exec
 else
   # enable external x display for WSL 1
   export DISPLAY=:0
@@ -53,6 +56,8 @@ if ( which cmd.exe >/dev/null ); then
   if [ ! -e "${win_home_lnk}" ] ; then
     ln -s -f "${WIN_HOME}" "${win_home_lnk}"
   fi
+
+  unset win_home_lnk
 
 fi
 
