@@ -12,7 +12,7 @@ if ( which wsl.exe >/dev/null ) && ( $(which wsl.exe) -l -v >/dev/null ) && [ $(
     ipconfig_exec=$(which ipconfig.exe)
   fi
 
-  wsl2_d_tmp="$(eval "$ipconfig_exec" | grep -n "Default Gateway.*: [0-9a-z]" | cut -d : -f 1)"
+  wsl2_d_tmp="$(eval "$ipconfig_exec" | grep -n -m 1 "Default Gateway.*: [0-9a-z]" | cut -d : -f 1)"
   wsl2_d_tmp="$(eval "$ipconfig_exec" | sed ''"$(expr $wsl2_d_tmp - 4)"','"$(expr $wsl2_d_tmp + 0)"'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
   export DISPLAY=$wsl2_d_tmp:0.0
 
