@@ -1,4 +1,3 @@
-set -x
 
 # check whether it is WSL1 for WSL2
 if [[ -n ${WSL_INTEROP} ]]; then
@@ -22,8 +21,12 @@ else
   export DISPLAY=:0
 fi
 
-# enable external libgl
-export LIBGL_ALWAYS_INDIRECT=1
+# enable external libgl if mesa is not installed
+if ( glxinfo > /dev/null 2>&1 ); then
+  unset LIBGL_ALWAYS_INDIRECT
+else
+  export LIBGL_ALWAYS_INDIRECT=1
+fi
 
 # speed up some GUI apps like gedit
 export NO_AT_BRIDGE=1
@@ -60,4 +63,3 @@ if ( which cmd.exe >/dev/null ); then
 
 fi
 
-set +x
