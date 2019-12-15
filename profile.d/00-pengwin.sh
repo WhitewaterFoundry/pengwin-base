@@ -11,8 +11,12 @@ if [[ -n ${WSL_INTEROP} ]]; then
   fi
 
   wsl2_d_tmp="$(eval "$ipconfig_exec" | grep -n -m 1 "Default Gateway.*: [0-9a-z]" | cut -d : -f 1)"
-  wsl2_d_tmp="$(eval "$ipconfig_exec" | sed ''"$(expr $wsl2_d_tmp - 4)"','"$(expr $wsl2_d_tmp + 0)"'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
-  export DISPLAY=$wsl2_d_tmp:0.0
+  if [[ ${wsl2_d_tmp} ]]; then
+    wsl2_d_tmp="$(eval "$ipconfig_exec" | sed ''"$(expr $wsl2_d_tmp - 4)"','"$(expr $wsl2_d_tmp + 0)"'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
+    export DISPLAY=${wsl2_d_tmp}:0.0
+  else
+    export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+  fi
 
   unset wsl2_d_tmp
   unset ipconfig_exec
@@ -22,7 +26,7 @@ else
 fi
 
 # enable external libgl if mesa is not installed
-if ( glxinfo > /dev/null 2>&1 ); then
+if ( which glxinfo > /dev/null 2>&1 ); then
   unset LIBGL_ALWAYS_INDIRECT
 else
   export LIBGL_ALWAYS_INDIRECT=1
