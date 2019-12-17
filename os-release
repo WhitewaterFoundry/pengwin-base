@@ -1,10 +1,10 @@
 PRETTY_NAME="Pengwin"
 NAME="Pengwin"
-VERSION_ID="10"
-VERSION="10 (buster)"
+VERSION_ID="11"
+VERSION="11 (bullseye)"
 ID=debian
 ID_LIKE=debian
 HOME_URL="https://github.com/whitewaterfoundry/Pengwin"
 SUPPORT_URL="https://github.com/whitewaterfoundry/Pengwin"
 BUG_REPORT_URL="https://github.com/whitewaterfoundry/Pengwin"
-VERSION_CODENAME=buster
+VERSION_CODENAME=bullseye
