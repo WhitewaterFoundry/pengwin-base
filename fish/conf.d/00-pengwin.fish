@@ -2,7 +2,7 @@
 # check whether it is WSL1 for WSL2
 if test -n "$WSL_INTEROP"
   #Export an enviroment variable for helping other processes
-  set --export WSL2 0
+  set --export WSL2 1
   # enable external x display for WSL 2
 
   set ipconfig_exec (wslpath "C:\\Windows\\System32\\ipconfig.exe")
