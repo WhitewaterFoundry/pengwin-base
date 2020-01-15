@@ -1,6 +1,6 @@
 
 # check whether it is WSL1 for WSL2
-if test -n $WSL_INTEROP
+if test -n "$WSL_INTEROP"
   #Export an enviroment variable for helping other processes
   set --export WSL2 0
   # enable external x display for WSL 2
