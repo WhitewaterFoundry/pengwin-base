@@ -22,54 +22,54 @@ set -e
 # upgrade|failed-upgrade|abort-upgrade
 
 case "$1" in
-	purge|remove|abort-install|disappear)
-		# Temporary
-		rm -f /etc/apt/sources.list.d/whitewaterfoundry.list
-		rm -f /etc/wsl.conf
+purge | remove | abort-install | disappear)
+  # Temporary
+  rm -f /etc/apt/sources.list.d/whitewaterfoundry.list
+  rm -f /etc/wsl.conf
 
-		# Remove our keys from the keyring
-		# pengwin-base
-		apt-key remove "5072 3F92 6561 0360 9BED  4073 88F4 A913 E429 E4F4"
-		# pengwin-setup
-		apt-key remove "A3CC 5F45 5511 DAB0 9888  48F7 29C5 D0C5 CC90 1C28"
-		# wslu
-		apt-key remove "90F6 8549 4B52 C0E9 6DA4  B925 0087 4F17 1073 5619"
+  # Remove our keys from the keyring
+  # pengwin-base
+  apt-key remove "5072 3F92 6561 0360 9BED  4073 88F4 A913 E429 E4F4"
+  # pengwin-setup
+  apt-key remove "A3CC 5F45 5511 DAB0 9888  48F7 29C5 D0C5 CC90 1C28"
+  # wslu
+  apt-key remove "90F6 8549 4B52 C0E9 6DA4  B925 0087 4F17 1073 5619"
 
-		# List of files we change / require backing up
-		FILES="/etc/fonts/local.conf \
+  # List of files we change / require backing up
+  FILES="/etc/fonts/local.conf \
 			/usr/lib/os-release \
 			/etc/environment \
 			/etc/apt/preferences \
 			/etc/apt/sources.list \
 			/etc/apt/trusted.gpg"
 
-		DIVERT_SUFFIX=".pengwin-divert"
-		for FILE in ${FILES} ; do
-			DIVERTED="${FILE}${DIVERT_SUFFIX}"
-			if [ -f "${DIVERTED}" ] ; then
-				if [ -f "${FILE}" ] ; then
-					rm "${FILE}"
-				fi
+  DIVERT_SUFFIX=".pengwin-divert"
+  for FILE in ${FILES}; do
+    DIVERTED="${FILE}${DIVERT_SUFFIX}"
+    if [ -f "${DIVERTED}" ]; then
+      if [ -f "${FILE}" ]; then
+        rm "${FILE}"
+      fi
 
-				echo "Restoring diverted ${FILE}"
-				dpkg-divert --remove --rename "${FILE}"
-			fi
-		done
+      echo "Restoring diverted ${FILE}"
+      dpkg-divert --remove --rename "${FILE}"
+    fi
+  done
 
-		echo "Restoring /etc/dpkg/origins/debian symlink"
-		ln -sf /etc/dpkg/origins/debian /etc/dpkg/origins/default
-		rm -f /etc/dpkg/origins/pengwin
+  echo "Restoring /etc/dpkg/origins/debian symlink"
+  ln -sf /etc/dpkg/origins/debian /etc/dpkg/origins/default
+  rm -f /etc/dpkg/origins/pengwin
 
-		echo "Your previous profile can be found at /etc/profile.old"
-	;;
+  echo "Your previous profile can be found at /etc/profile.old"
+  ;;
 
-	upgrade|failed-upgrade|abort-upgrade)
-	;;
+upgrade | failed-upgrade | abort-upgrade) ;;
 
-	*)
-		echo "postrm called with unknown argument \`$1'" >&2
-		exit 1
-	;;
+\
+  *)
+  echo "postrm called with unknown argument \`$1'" >&2
+  exit 1
+  ;;
 esac
 
 # dh_installdeb will replace this with shell code automatically
