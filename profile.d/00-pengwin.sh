@@ -1,6 +1,33 @@
 
 # check whether it is WSL1 for WSL2
 source /etc/environment
+
+function wsl2_change_checker () {
+  wsl2_type=$1; shift
+  wsl2_readable_type=$1; shift
+  wsl_display_cont=$1
+  
+  # no sudo support
+  if [ ! -f /etc/sudoers.d/pengwin-wsl ]; then
+    (echo "%sudo   ALL=NOPASSWD: /bin/sed, /bin/rm" | sudo EDITOR='tee -a' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl) &>/dev/null
+  fi
+
+  if ( which wsl.exe >/dev/null ); then
+    if [ ! $WSL2 -eq $wsl2_type ]; then
+      sudo sed -i 's/^DISPLAY=.*$/DISPLAY='$wsl_display_cont'/g' /etc/environment
+      sudo sed -i 's/^WSL2=.*$/WSL2='$wsl2_type'/g' /etc/environment
+      echo "Detected: Switched to $wsl2_readable_type. Restart Pengwin to apply changes."
+    fi
+  fi
+
+  # cleanup
+  unset wsl2_type
+  unset wsl2_readable_type
+  unset wsl_display_cont
+  sudo rm /etc/sudoers.d/pengwin-wsl
+}
+
+
 if [[ -n ${WSL_INTEROP} ]]; then
   # enable external x display for WSL 2
 
@@ -15,13 +42,7 @@ if [[ -n ${WSL_INTEROP} ]]; then
     export DISPLAY=${wsl2_d_tmp}:0.0
 
     # check if we have wsl.exe in path
-    if ( which wsl.exe >/dev/null ); then
-      if [ ! $WSL2 -eq 1 ]; then
-        wsl.exe -u root -d WLinux -e sed -i 's/^DISPLAY=.*$/DISPLAY='${wsl2_d_tmp}':0\.0/g' /etc/environment
-        wsl.exe -u root -d WLinux -e sed -i 's/^WSL2=.*$/WSL2=1/g' /etc/environment
-        echo "Detected: Switched to WSL2 (Type 2). Restart Pengwin to apply changes."
-      fi
-    fi
+    wsl2_change_checker 1 "WSL2 (Type 2)" "${wsl2_d_tmp}:0\.0"
 
     #Export an enviroment variable for helping other processes
     export WSL2=1
@@ -30,16 +51,10 @@ if [[ -n ${WSL_INTEROP} ]]; then
     export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
 
     # check if we have wsl.exe in path
-    if ( which wsl.exe >/dev/null ); then
-      if [ ! $WSL2 -eq 0 ]; then
-        wsl.exe -u root -d WLinux -e sed -i 's/^DISPLAY=.*$/DISPLAY='$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')':0/g' /etc/environment
-        wsl.exe -u root -d WLinux -e sed -i 's/^WSL2=.*$/WSL2=0/g' /etc/environment
-        echo "Detected: Switched to WSL2 (Type 1). Restart Pengwin to apply changes."
-      fi
-    fi
+    wsl2_change_checker 0 "WSL2 (Type 1)" "$DISPLAY"
 
     #Export an enviroment variable for helping other processes
-    export WSL2=0
+    unset WSL2
   fi
 
 
@@ -52,13 +67,7 @@ else
   export DISPLAY=:0
 
   # check if we have wsl.exe in path
-  if ( which wsl.exe >/dev/null ); then
-    if [ ! $WSL2 -eq 2 ]; then
-      wsl.exe -u root -d WLinux -e sed -i 's/^DISPLAY=.*$/DISPLAY=:0/g' /etc/environment
-      wsl.exe -u root -d WLinux -e sed -i 's/^WSL2=.*$/WSL2=0/g' /etc/environment
-      echo "Detected: Switched to WSL1. Restart Pengwin to apply changes."
-    fi
-  fi
+  wsl2_change_checker 2 "WSL1" ":0"
 
   # Export an enviroment variable for helping other processes
   export WSL2=2
