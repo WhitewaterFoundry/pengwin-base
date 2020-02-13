@@ -1,32 +1,10 @@
 
 # check whether it is WSL1 for WSL2
-source /etc/environment
 
-function wsl2_change_checker () {
-  wsl2_type=$1; shift
-  wsl2_readable_type=$1; shift
-  wsl_display_cont=$1
-  
-  # no sudo support
-  if [ ! -f /etc/sudoers.d/pengwin-wsl ]; then
-    (echo "%sudo   ALL=NOPASSWD: /bin/sed, /bin/rm" | sudo EDITOR='tee -a' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl) &>/dev/null
-  fi
-
-  if ( which wsl.exe >/dev/null ); then
-    if [ ! $WSL2 -eq $wsl2_type ]; then
-      sudo sed -i 's/^DISPLAY=.*$/DISPLAY='$wsl_display_cont'/g' /etc/environment
-      sudo sed -i 's/^WSL2=.*$/WSL2='$wsl2_type'/g' /etc/environment
-      echo "Detected: Switched to $wsl2_readable_type. Restart Pengwin to apply changes."
-    fi
-  fi
-
-  # cleanup
-  unset wsl2_type
-  unset wsl2_readable_type
-  unset wsl_display_cont
-  sudo rm /etc/sudoers.d/pengwin-wsl
-}
-
+if [ ! -f /etc/sudoers.d/pengwin-wsl-profile ]; then
+  echo "First time configurating Pengwin; password required"
+  (echo "%sudo   ALL=NOPASSWD: /usr/local/bin/wsl_change_checker" | sudo EDITOR='tee' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile) &>/dev/null
+fi
 
 if [[ -n ${WSL_INTEROP} ]]; then
   # enable external x display for WSL 2
@@ -42,7 +20,7 @@ if [[ -n ${WSL_INTEROP} ]]; then
     export DISPLAY=${wsl2_d_tmp}:0.0
 
     # check if we have wsl.exe in path
-    wsl2_change_checker 1 "WSL2 (Type 2)" "${wsl2_d_tmp}:0\.0"
+    sudo /usr/local/bin/wsl_change_checker 1 "WSL2 (Type 2)" "${wsl2_d_tmp}:0\.0"
 
     #Export an enviroment variable for helping other processes
     export WSL2=1
@@ -51,7 +29,7 @@ if [[ -n ${WSL_INTEROP} ]]; then
     export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
 
     # check if we have wsl.exe in path
-    wsl2_change_checker 0 "WSL2 (Type 1)" "$DISPLAY"
+    sudo /usr/local/bin/wsl_change_checker 2 "WSL2 (Type 1)" "$DISPLAY"
 
     #Export an enviroment variable for helping other processes
     unset WSL2
@@ -67,7 +45,7 @@ else
   export DISPLAY=:0
 
   # check if we have wsl.exe in path
-  wsl2_change_checker 2 "WSL1" ":0"
+  sudo /usr/local/bin/wsl_change_checker 0 "WSL1" ":0"
 
   # Export an enviroment variable for helping other processes
   export WSL2=2

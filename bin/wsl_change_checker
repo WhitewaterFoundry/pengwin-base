@@ -1,0 +1,20 @@
+#!/bin/bash
+
+source /etc/environment
+
+wsl2_type=$1; shift
+wsl2_readable_type=$1; shift
+wsl_display_cont=$1
+
+if ( which wsl.exe >/dev/null ); then
+  if [ ! $WSL2 -eq $wsl2_type ]; then
+    sed -i 's/^DISPLAY=.*$/DISPLAY='$wsl_display_cont'/g' /etc/environment
+    sed -i 's/^WSL2=.*$/WSL2='$wsl2_type'/g' /etc/environment
+    echo "Detected: Switched to $wsl2_readable_type. Restart Pengwin to apply changes."
+  fi
+fi
+
+# cleanup
+unset wsl2_type
+unset wsl2_readable_type
+unset wsl_display_cont
