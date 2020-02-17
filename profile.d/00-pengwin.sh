@@ -1,11 +1,3 @@
-
-# check whether it is WSL1 for WSL2
-
-if [ ! -f /etc/sudoers.d/pengwin-wsl-profile ]; then
-  echo "First time configurating Pengwin; password required"
-  (echo "%sudo   ALL=NOPASSWD: /usr/local/bin/wsl_change_checker" | sudo EDITOR='tee' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile) &>/dev/null
-fi
-
 if [[ -n ${WSL_INTEROP} ]]; then
   # enable external x display for WSL 2
 
