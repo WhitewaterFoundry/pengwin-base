@@ -17,16 +17,17 @@ if [[ -n ${WSL_INTEROP} ]]; then
 
     # check if the type is changed
     sudo /usr/local/bin/wsl_change_checker 1 "WSL2 (Type 2)" "${wsl2_d_tmp}:0\.0"
-
+    sudo /usr/local/bin/wsl2_ip_checker "$wsl2_d_tmp"
     #Export an enviroment variable for helping other processes
     export WSL2=1
 
   else
-    export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
+    wsl2_d_tmp="$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')"
+    export DISPLAY=${wsl2_d_tmp}:0
 
     # check if we have wsl.exe in path
     sudo /usr/local/bin/wsl_change_checker 2 "WSL2 (Type 1)" "$DISPLAY"
-
+    sudo /usr/local/bin/wsl2_ip_checker "$wsl2_d_tmp"
     #Export an enviroment variable for helping other processes
     unset WSL2
   fi
