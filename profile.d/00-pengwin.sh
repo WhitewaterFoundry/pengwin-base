@@ -1,3 +1,7 @@
+# WSL2 Environment variable meaning:
+# WSL2=0: WSL1
+# WSL2=1: WSL2 (Type 1)
+# WSL2=2: WSL2 (Type 2)
 if [[ -n ${WSL_INTEROP} ]]; then
   # enable external x display for WSL 2
 
@@ -11,7 +15,7 @@ if [[ -n ${WSL_INTEROP} ]]; then
     wsl2_d_tmp="$(eval "$ipconfig_exec" | sed $(expr $wsl2_d_tmp - 4)','$(expr $wsl2_d_tmp + 0)'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
     export DISPLAY=${wsl2_d_tmp}:0.0
 
-    # check if we have wsl.exe in path
+    # check if the type is changed
     sudo /usr/local/bin/wsl_change_checker 1 "WSL2 (Type 2)" "${wsl2_d_tmp}:0\.0"
 
     #Export an enviroment variable for helping other processes
