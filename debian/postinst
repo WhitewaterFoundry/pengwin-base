@@ -55,8 +55,14 @@ case "$1" in
 
 		chmod 755 /usr/local/bin/cmd-exe
 		chmod 755 /usr/local/bin/legacy_wslupath
-    		chmod 755 /usr/local/bin/pengwin-help
+		chmod 755 /usr/local/bin/wsl_change_checker
+		chmod 755 /usr/local/bin/wsl2_ip_checker
+		chmod 755 /usr/local/bin/pengwin-help
 		chmod u+s "$(which ping)"
+
+		if [ ! -f /etc/sudoers.d/pengwin-wsl-profile ]; then
+			(echo -e "%sudo   ALL=NOPASSWD: /usr/local/bin/wsl_change_checker\n%sudo   ALL=NOPASSWD: /usr/local/bin/wsl2_ip_checker" | sudo EDITOR='tee' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile) &>/dev/null
+		fi
 
 		echo " Done!"
 		###
