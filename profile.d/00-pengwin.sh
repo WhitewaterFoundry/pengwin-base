@@ -19,7 +19,7 @@ if [[ -n ${WSL_INTEROP} ]]; then
     sudo /usr/local/bin/wsl_change_checker 1 "WSL2 (Type 2)" "${wsl2_d_tmp}:0\.0"
     sudo /usr/local/bin/wsl2_ip_checker "$wsl2_d_tmp"
     #Export an enviroment variable for helping other processes
-    export WSL2=1
+    export WSL2=2
 
   else
     wsl2_d_tmp="$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')"
@@ -29,10 +29,8 @@ if [[ -n ${WSL_INTEROP} ]]; then
     sudo /usr/local/bin/wsl_change_checker 2 "WSL2 (Type 1)" "$DISPLAY"
     sudo /usr/local/bin/wsl2_ip_checker "$wsl2_d_tmp"
     #Export an enviroment variable for helping other processes
-    unset WSL2
+    export WSL2=1
   fi
-
-
 
   unset wsl2_d_tmp
   unset ipconfig_exec
@@ -45,7 +43,7 @@ else
   sudo /usr/local/bin/wsl_change_checker 0 "WSL1" ":0"
 
   # Export an enviroment variable for helping other processes
-  export WSL2=2
+  unset WSL2
 
 fi
 
