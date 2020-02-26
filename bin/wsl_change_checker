@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source /etc/environment
+
 wsl2_type_env=${WSL2:=0}
 wsl2_type=$1; shift
 wsl2_readable_type=$1; shift
@@ -21,6 +22,7 @@ if [ ! $wsl2_type_env -eq $wsl2_type ]; then
   else
     sed -i 's/^WSL2=.*$/WSL2='$wsl2_type'/g' /etc/environment
   fi
+
   echo "Detected: Switched to $wsl2_readable_type. Restart Pengwin to apply changes."
 fi
 
