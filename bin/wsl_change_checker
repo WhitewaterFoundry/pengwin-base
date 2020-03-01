@@ -18,7 +18,7 @@ if [ ! $wsl2_type_env -eq $wsl2_type ]; then
   elif [ $wsl2_type_env -eq 0 ]; then
     # if origin is WSL1
     # append WSL2 env variable
-    tee -a "WSL2=$wsl2_type" /etc/environment
+    echo "WSL2=$wsl2_type" >> /etc/environment
   else
     sed -i 's/^WSL2=.*$/WSL2='$wsl2_type'/g' /etc/environment
   fi
