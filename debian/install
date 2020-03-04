@@ -1,5 +1,6 @@
 environment /etc/
 profile.d/* /etc/profile.d/
+fish_conf.d/* /etc/fish/conf.d/
 os-release /usr/lib/
 wsl.conf /etc/
 preferences /etc/apt/
