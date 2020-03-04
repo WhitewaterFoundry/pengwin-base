@@ -52,8 +52,10 @@ fi
 # enable external libgl if mesa is not installed
 if ( which glxinfo > /dev/null 2>&1 ); then
   unset LIBGL_ALWAYS_INDIRECT
+  sudo /usr/local/bin/libgl-change-checker 0
 else
   export LIBGL_ALWAYS_INDIRECT=1
+  sudo /usr/local/bin/libgl-change-checker 1
 fi
 
 # speed up some GUI apps like gedit
