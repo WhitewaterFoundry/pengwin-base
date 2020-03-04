@@ -63,6 +63,7 @@ case "$1" in
 		if [ ! -f /etc/sudoers.d/pengwin-wsl-profile ] ; then
 			echo "%sudo   ALL=NOPASSWD: /usr/local/bin/wsl_change_checker" | EDITOR='tee' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile
 			echo "%sudo   ALL=NOPASSWD: /usr/local/bin/wsl2_ip_checker" | EDITOR='tee -a' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile
+			echo "%sudo   ALL=NOPASSWD: /usr/local/bin/libgl-change-checker" | EDITOR='tee -a' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile
 		fi
 
 		echo " Done!"
