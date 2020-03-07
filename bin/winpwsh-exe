@@ -1,0 +1,7 @@
+#!/bin/bash
+
+RESULT=$(powershell.exe -NonInteractive -NoProfile -ExecutionPolicy ByPass -Command "$@" 2> /dev/null)
+EXIT_STATUS=$?
+
+echo "${RESULT}"
+exit ${EXIT_STATUS}
