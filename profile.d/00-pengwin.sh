@@ -10,13 +10,15 @@ if [[ -n ${WSL_INTEROP} ]]; then
     ipconfig_exec=$(which ipconfig.exe)
   fi
 
-  if ( eval "$ipconfig_exec" | grep -n -m 1 "Default Gateway.*: [0-9a-z]" | cut -d : -f 1 ) >/dev/null; then
-    wsl2_d_tmp="$(eval "$ipconfig_exec" | grep -n -m 1 "Default Gateway.*: [0-9a-z]" | cut -d : -f 1)"
+  wsl2_d_tmp="$(eval "$ipconfig_exec 2> /dev/null" | grep -n -m 1 "Default Gateway.*: [0-9a-z]" | cut -d : -f 1)"
+  
+  if [ -n "${wsl2_d_tmp}" ]; then
+
     wsl2_d_tmp="$(eval "$ipconfig_exec" | sed $(expr $wsl2_d_tmp - 4)','$(expr $wsl2_d_tmp + 0)'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
     export DISPLAY=${wsl2_d_tmp}:0.0
 
     # check if the type is changed
-    sudo /usr/local/bin/wsl_change_checker 1 "WSL2 (Type 2)" "${wsl2_d_tmp}:0\.0"
+    sudo /usr/local/bin/wsl_change_checker 2 "WSL2 (Type 2)" "${wsl2_d_tmp}:0\.0"
     sudo /usr/local/bin/wsl2_ip_checker "$wsl2_d_tmp"
     #Export an enviroment variable for helping other processes
     export WSL2=2
@@ -26,7 +28,7 @@ if [[ -n ${WSL_INTEROP} ]]; then
     export DISPLAY=${wsl2_d_tmp}:0
 
     # check if we have wsl.exe in path
-    sudo /usr/local/bin/wsl_change_checker 2 "WSL2 (Type 1)" "$DISPLAY"
+    sudo /usr/local/bin/wsl_change_checker 1 "WSL2 (Type 1)" "$DISPLAY"
     sudo /usr/local/bin/wsl2_ip_checker "$wsl2_d_tmp"
     #Export an enviroment variable for helping other processes
     export WSL2=1
