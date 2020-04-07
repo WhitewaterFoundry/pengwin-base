@@ -16,7 +16,7 @@ sudo sed -i "s\$/pengwin-setup${OLD}/\$/pengwin-setup${NEW}/\$g" /etc/apt/source
 sudo sed -i "s\$/pengwin-base${OLD}/\$/pengwin-base${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
 sudo sed -i "s\$/wslu${OLD}/\$/wslu${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
 
-sudo sed -i "s\$/wslu${NEW}/debian/ buster/\$/wslu${NEW}/debian/ bullseye/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
+sudo sed -i "s\$/wslu${NEW}/debian/ buster\$/wslu${NEW}/debian/ bullseye\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
 
 sudo rm /etc/apt/sources.list.d/whitewaterfoundry_*
 
