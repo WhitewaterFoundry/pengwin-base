@@ -41,8 +41,11 @@ jobs:
                 name: Install packageloud cli
                 command: gem install package_cloud
             - run:
-                name: Push deb package
+                name: Push deb package buster
                 command: package_cloud push whitewaterfoundry/pengwin-base/debian/buster /tmp/pkgs/pengwin-base_0.1-*_all.deb
+            - run:
+                name: Push deb package bullseye
+                command: package_cloud push whitewaterfoundry/pengwin-base/debian/bullseye /tmp/pkgs/pengwin-base_0.1-*_all.deb
     deploydevdeb:
         docker:
             - image: circleci/ruby:2.3-jessie
@@ -55,6 +58,9 @@ jobs:
             - run:
                 name: Push deb package
                 command: package_cloud push whitewaterfoundry/pengwin-base-dev/debian/buster /tmp/pkgs/pengwin-base_0.1-*_all.deb
+            - run:
+                name: Push deb package
+                command: package_cloud push whitewaterfoundry/pengwin-base-dev/debian/bullseye /tmp/pkgs/pengwin-base_0.1-*_all.deb
 workflows:
     version: 2
     testdebbuild:
