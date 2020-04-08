@@ -1,20 +1,25 @@
+# Only the default WSL user should run this script
+if ! (id -Gn | grep -c "adm.*sudo\|sudo.*adm" >/dev/null); then
+  return
+fi
+
 # WSL2 Environment variable meaning:
 # WSL2=0: WSL1
 # WSL2=1: WSL2 (Type 1)
 # WSL2=2: WSL2 (Type 2)
-if [[ -n ${WSL_INTEROP} ]]; then
+if [ -n "${WSL_INTEROP}" ]; then
   # enable external x display for WSL 2
 
   ipconfig_exec=$(wslpath "C:\\Windows\\System32\\ipconfig.exe")
-  if ( which ipconfig.exe &>/dev/null ); then
-    ipconfig_exec=$(which ipconfig.exe)
+  if (command -v ipconfig.exe &>/dev/null); then
+    ipconfig_exec=$(command -v ipconfig.exe)
   fi
 
   wsl2_d_tmp="$(eval "$ipconfig_exec 2> /dev/null" | grep -n -m 1 "Default Gateway.*: [0-9a-z]" | cut -d : -f 1)"
 
   if [ -n "${wsl2_d_tmp}" ]; then
 
-    wsl2_d_tmp="$(eval "$ipconfig_exec" | sed $(expr $wsl2_d_tmp - 4)','$(expr $wsl2_d_tmp + 0)'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
+    wsl2_d_tmp="$(eval "$ipconfig_exec" | sed "$(("$wsl2_d_tmp" - 4))"','"$(("$wsl2_d_tmp" + 0))"'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
     export DISPLAY=${wsl2_d_tmp}:0.0
 
     # check if the type is changed
@@ -24,7 +29,7 @@ if [[ -n ${WSL_INTEROP} ]]; then
     export WSL2=2
 
   else
-    wsl2_d_tmp="$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')"
+    wsl2_d_tmp="$(grep </etc/resolv.conf nameserver | awk '{print $2}')"
     export DISPLAY=${wsl2_d_tmp}:0
 
     # check if we have wsl.exe in path
@@ -49,10 +54,8 @@ else
 
 fi
 
-
-
 # enable external libgl if mesa is not installed
-if ( which glxinfo > /dev/null 2>&1 ); then
+if (command -v glxinfo >/dev/null 2>&1); then
   unset LIBGL_ALWAYS_INDIRECT
   sudo /usr/local/bin/libgl-change-checker 0
 else
@@ -70,7 +73,7 @@ alias clear='clear -x'
 alias ll='ls -al'
 
 # Check if we have Windows Path
-if ( which cmd.exe >/dev/null ); then
+if (command -v cmd.exe >/dev/null); then
 
   # Execute on user's shell first-run
   if [ ! -f "${HOME}/.firstrun" ]; then
@@ -78,20 +81,21 @@ if ( which cmd.exe >/dev/null ); then
     touch "${HOME}/.firstrun"
   fi
 
-  if ( ! wslpath 'C:\' > /dev/null 2>&1 ); then
+  # shellcheck disable=SC1003
+  if (! wslpath 'C:\' >/dev/null 2>&1); then
     alias wslpath=legacy_wslupath
   fi
 
   # Create a symbolic link to the windows home
   wHomeWinPath=$(cmd-exe /c 'echo %HOMEDRIVE%%HOMEPATH%' | tr -d '\r')
+  # shellcheck disable=SC2155
   export WIN_HOME=$(wslpath -u "${wHomeWinPath}")
 
   win_home_lnk=${HOME}/winhome
-  if [ ! -e "${win_home_lnk}" ] ; then
+  if [ ! -e "${win_home_lnk}" ]; then
     ln -s -f "${WIN_HOME}" "${win_home_lnk}"
   fi
 
   unset win_home_lnk
 
 fi
-
