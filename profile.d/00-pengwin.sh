@@ -19,7 +19,7 @@ if [ -n "${WSL_INTEROP}" ]; then
 
   if [ -n "${wsl2_d_tmp}" ]; then
 
-    wsl2_d_tmp="$(eval "$ipconfig_exec" | sed "$(("$wsl2_d_tmp" - 4))"','"$(("$wsl2_d_tmp" + 0))"'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
+    wsl2_d_tmp="$(eval "$ipconfig_exec" | sed "$((wsl2_d_tmp - 4))"','"$((wsl2_d_tmp + 0))"'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
     export DISPLAY=${wsl2_d_tmp}:0.0
 
     # check if the type is changed
