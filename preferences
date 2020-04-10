@@ -1,7 +1,4 @@
 Package: *
-Pin: release a=testing
+Pin: release a=bullseye
 Pin-Priority: 990
 
-Package: *
-Pin: release a=unstable
-Pin-Priority: 500
