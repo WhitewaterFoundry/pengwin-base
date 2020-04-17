@@ -58,6 +58,8 @@ case "$1" in
 		chmod 755 /usr/local/bin/wsl_change_checker
 		chmod 755 /usr/local/bin/wsl2_ip_checker
 		chmod 755 /usr/local/bin/pengwin-help
+		chmod 755 /usr/local/bin/winpwsh-exe
+		
 		chmod u+s "$(which ping)"
 
 		if [ ! -f /etc/sudoers.d/pengwin-wsl-profile ] ; then
