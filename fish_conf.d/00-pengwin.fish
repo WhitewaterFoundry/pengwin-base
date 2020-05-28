@@ -14,7 +14,7 @@ if test -n "$WSL_INTEROP"
   if test -n "$wsl2_d_tmp"
     set first_line (expr $wsl2_d_tmp - 4)
     set wsl2_d_tmp (eval $ipconfig_exec | sed $first_line,$wsl2_d_tmp!d | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")
-    set --export DISPLAY "$wsl2_d_tmp:0.0"
+    set --export DISPLAY "$wsl2_d_tmp:0"
     set -e first_line
   else
     set --export DISPLAY (cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0
@@ -24,7 +24,7 @@ if test -n "$WSL_INTEROP"
   set -e ipconfig_exec
 else
   # enable external x display for WSL 1
-  set --export DISPLAY ":0"
+  set --export DISPLAY "localhost:0"
 end
 
 # enable external libgl if mesa is not installed
