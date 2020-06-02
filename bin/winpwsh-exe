@@ -1,7 +1,11 @@
 #!/bin/bash
 
+chcp_com "$(cat ~/.config/wslu/oemcp)"
+
 RESULT=$(powershell.exe -NonInteractive -NoProfile -ExecutionPolicy ByPass -Command "$@" 2> /dev/null)
 EXIT_STATUS=$?
+
+chcp_com 65001
 
 echo "${RESULT}"
 exit ${EXIT_STATUS}

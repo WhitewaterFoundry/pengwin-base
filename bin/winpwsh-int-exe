@@ -1,0 +1,8 @@
+#!/bin/bash
+
+chcp_com "$(cat ~/.config/wslu/oemcp)"
+
+powershell.exe
+
+chcp_com 65001
+

@@ -39,7 +39,7 @@ case "$1" in
 			echo "Moving new sudoers.lecture into /etc"
 			mv "${TMPDIR}/sudoers.lecture" /etc
 		fi
-		
+
 		echo "Symlinking /etc/dpkg/origins/pengwin to default"
 		ln -sf /etc/dpkg/origins/pengwin /etc/dpkg/origins/default
 
@@ -61,7 +61,8 @@ case "$1" in
 		chmod 755 /usr/local/bin/switch2dev
 		chmod 755 /usr/local/bin/pengwin-help
 		chmod 755 /usr/local/bin/winpwsh-exe
-		
+		chmod 755 /usr/local/bin/winpwsh-int-exe
+
 		chmod u+s "$(which ping)"
 
 		echo "%sudo   ALL=NOPASSWD: /usr/local/bin/wsl_change_checker" | EDITOR='tee' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile
