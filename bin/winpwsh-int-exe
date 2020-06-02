@@ -5,6 +5,6 @@ function chcp_com() {
 
 chcp_com "$(cat ~/.config/wslu/oemcp)"
 
-powershell.exe
+powershell.exe "$@"
 
 chcp_com 65001
