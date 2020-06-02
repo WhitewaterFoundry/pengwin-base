@@ -1,5 +1,9 @@
 #!/bin/bash
 
+function chcp_com() {
+  chcp.com "$@" >/dev/null
+}
+
 chcp_com "$(cat ~/.config/wslu/oemcp)"
 
 RESULT=$(powershell.exe -NonInteractive -NoProfile -ExecutionPolicy ByPass -Command "$@" 2> /dev/null)
