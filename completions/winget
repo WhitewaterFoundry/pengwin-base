@@ -1,0 +1,32 @@
+#! /bin/bash
+
+# file: UseGetOpt-2
+# UseGetOpt-2.sh parameter-completion
+
+_winget ()   #  By convention, the function name
+{                 #+ starts with an underscore.
+  local cur
+  # Pointer to current completion word.
+  # By convention, it's named "cur" but this isn't strictly necessary.
+
+  COMPREPLY=()   # Array variable storing the possible completions.
+  cur=${COMP_WORDS[COMP_CWORD]}
+  prev=${COMP_WORDS[COMP_CWORD - 1]}
+
+  case "$prev" in
+    install|show|search)
+      local program_list
+      program_list="$(winpwsh-exe winget search $cur | sed -z "s/\r/ /g" | tr '[:upper:]' '[:lower:]')"
+      COMPREPLY=( $( compgen -W "$program_list" -- ${cur,,} ) );;
+    validate|-m|--manifest)
+      COMPREPLY=( $( compgen -f -X '!*.yml' -- $cur ) );;
+    *)
+      COMPREPLY=( $( compgen -W 'install show source search hash validate -v --version --info  \
+                                --help -? -m --manifest' -- $cur ) );;
+#   Generate the completion matches and load them into $COMPREPLY array.
+  esac
+
+  return 0
+}
+
+complete -F _winget winget
