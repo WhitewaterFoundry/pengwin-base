@@ -4,6 +4,10 @@ function chcp_com() {
   chcp.com "$@" >/dev/null
 }
 
+if [ ! -f ~/.config/wslu/oemcp ]; then
+  wslsys -v > /dev/null 2>&1
+fi
+
 chcp_com "$(cat ~/.config/wslu/oemcp)"
 
 RESULT=$(powershell.exe -NonInteractive -NoProfile -ExecutionPolicy ByPass -Command "$@" 2> /dev/null)
