@@ -8,7 +8,7 @@ wsl2_readable_type=$1; shift
 wsl_display_cont=$1
 
 #Holding glibc to avoid 2.31
-if [ ! -v ${WSL2} ]; then
+if [ ${wsl2_type} -eq 0 ]; then
   apt-mark hold libc6 >/dev/null 2>&1
 else
   apt-mark unhold libc6 >/dev/null 2>&1
