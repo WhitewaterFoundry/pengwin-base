@@ -1,6 +1,10 @@
 Package: *
-Pin: release a=bullseye
+Pin: release a=testing
 Pin-Priority: 990
+
+Package: *
+Pin: release a=bullseye
+Pin-Priority: 991
 
 Package: *
 Pin: release l=pengwin-base
