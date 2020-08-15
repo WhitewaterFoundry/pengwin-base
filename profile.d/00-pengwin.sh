@@ -21,6 +21,7 @@ if [ -n "${WSL_INTEROP}" ]; then
 
     wsl2_d_tmp="$(eval "$ipconfig_exec" | sed "$((wsl2_d_tmp - 4))"','"$((wsl2_d_tmp + 0))"'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
     export DISPLAY=${wsl2_d_tmp}:0
+    export PULSE_SERVER=${wsl2_d_tmp}
 
     # check if the type is changed
     sudo /usr/local/bin/wsl_change_checker 2 "WSL2" "${wsl2_d_tmp}:0\.0"
@@ -31,6 +32,7 @@ if [ -n "${WSL_INTEROP}" ]; then
   else
     wsl2_d_tmp="$(grep </etc/resolv.conf nameserver | awk '{print $2}')"
     export DISPLAY=${wsl2_d_tmp}:0
+    export PULSE_SERVER=${wsl2_d_tmp}
 
     # check if we have wsl.exe in path
     sudo /usr/local/bin/wsl_change_checker 1 "WSL2" "$DISPLAY"
@@ -45,6 +47,7 @@ else
 
   # enable external x display for WSL 1
   export DISPLAY=localhost:0
+  export PULSE_SERVER=localhost:0
 
   # check if we have wsl.exe in path
   sudo /usr/local/bin/wsl_change_checker 0 "WSL1" "localhost:0"
