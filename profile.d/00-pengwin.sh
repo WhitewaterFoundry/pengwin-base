@@ -47,7 +47,7 @@ else
 
   # enable external x display for WSL 1
   export DISPLAY=localhost:0
-  export PULSE_SERVER=localhost:0
+  export PULSE_SERVER=localhost
 
   # check if we have wsl.exe in path
   sudo /usr/local/bin/wsl_change_checker 0 "WSL1" "localhost:0"
