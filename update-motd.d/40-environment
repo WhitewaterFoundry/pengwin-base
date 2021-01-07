@@ -11,10 +11,10 @@ printf " \n"
 printf " Windows Home Location: "
 printf " %s" "$winhome_path"
 printf " \n"
-printf " The Windows drives are mounted at: "
+printf " The Windows C: drive is mounted at: "
 wslpath -u 'C:\' | awk '{printf "%s", $1}'
 printf " \n"
-printf " To open the current folder with Windows Explorer run: wslview ."
+printf " To open the current folder with Windows Explorer, run: wslview ."
 printf " \n\n"
 if [[ -z "${WSL2}" ]]; then
   printf " Running WSL version 1"
