@@ -31,6 +31,9 @@ jobs:
       - persist_to_workspace:
           root: /tmp/pkgs
           paths: .
+      - store_artifacts:
+          name: Store the package as an artifact
+          path: /tmp/pkgs
   deploymasterdeb:
     docker:
       - image: circleci/ruby:2.3-jessie
