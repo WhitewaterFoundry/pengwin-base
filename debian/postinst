@@ -69,6 +69,12 @@ case "$1" in
 		echo "%sudo   ALL=NOPASSWD: /usr/local/bin/wsl2_ip_checker" | EDITOR='tee -a' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile
 		echo "%sudo   ALL=NOPASSWD: /usr/local/bin/libgl-change-checker" | EDITOR='tee -a' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile
 
+		echo "adding permission of execution to scripts into update-motd.d folder"
+		chmod +x /etc/update-motd.d/00-header
+		chmod +x /etc/update-motd.d/20-help
+		chmod +x /etc/update-motd.d/30-pengwin-setup
+		chmod +x /etc/update-motd.d/40-environment
+
 		echo " Done!"
 		###
 
