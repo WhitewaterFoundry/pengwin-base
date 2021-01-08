@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Only the default WSL user should run this script
 if ! (id -Gn | grep -c "adm.*sudo\|sudo.*adm" >/dev/null); then
   return
@@ -11,7 +13,7 @@ if [ -n "${WSL_INTEROP}" ]; then
   # enable external x display for WSL 2
 
   ipconfig_exec=$(wslpath "C:\\Windows\\System32\\ipconfig.exe")
-  if (command -v ipconfig.exe &>/dev/null); then
+  if (command -v ipconfig.exe >/dev/null 2>&1); then
     ipconfig_exec=$(command -v ipconfig.exe)
   fi
 
@@ -84,6 +86,7 @@ if (command -v cmd.exe >/dev/null); then
 
   # shellcheck disable=SC1003
   if (! wslpath 'C:\' >/dev/null 2>&1); then
+    # shellcheck disable=SC2262
     alias wslpath=legacy_wslupath
   fi
 
