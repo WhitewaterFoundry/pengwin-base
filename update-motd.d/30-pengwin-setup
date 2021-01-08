@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 printf " Pengwin includes 'Pengwin Setup,' which allow new Pengwin users to get started on Linux immediately"
 printf "\n"

@@ -1,5 +1,6 @@
-#!/bin/bash
-source /etc/os-release
+#!/bin/sh
+
+. /etc/os-release
 
 printf "\n"
-printf "Welcome to %s (%s), Based on %s %s\n" "$PRETTY_NAME" "$PENGWIN_VERSION"  "$ID" "$VERSION"
+printf "Welcome to %s (%s), Based on %s %s\n" "${PRETTY_NAME}" "${PENGWIN_VERSION}" "${ID}" "${VERSION}"
