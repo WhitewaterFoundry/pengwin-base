@@ -1,6 +1,6 @@
 #!/bin/bash
 
-printf " Pengwin include 'Pengwin Setup', which allows new Pengwin users to get started on Linux immediately"
+printf " Pengwin includes 'Pengwin Setup,' which allow new Pengwin users to get started on Linux immediately"
 printf "\n"
 printf " To execute, run: pengwin-setup"
 printf "\n"
