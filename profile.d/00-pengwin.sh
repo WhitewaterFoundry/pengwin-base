@@ -91,15 +91,22 @@ if (command -v cmd.exe >/dev/null); then
   fi
 
   # Create a symbolic link to the windows home
-  wHomeWinPath=$(cmd-exe /c 'echo %HOMEDRIVE%%HOMEPATH%' | tr -d '\r')
+
+  # Here have a issue: %HOMEDRIVE% might be using a custom set location
+  # moving cmd to where Windows is installed might help: %SYSTEMDRIVE%
+  wHomeWinPath=$(cmd.exe /c 'cd %SYSTEMDRIVE%\ && echo %HOMEDRIVE%%HOMEPATH%' 2>/dev/null | tr -d '\r')
+
+  if [ ${#wHomeWinPath} -le 3 ]; then #wHomeWinPath contains something like H:\
+    wHomeWinPath=$(cmd.exe /c 'cd %SYSTEMDRIVE%\ && echo %USERPROFILE%' 2>/dev/null | tr -d '\r')
+  fi
+
   # shellcheck disable=SC2155
   export WIN_HOME=$(wslpath -u "${wHomeWinPath}")
 
   win_home_lnk=${HOME}/winhome
   if [ ! -e "${win_home_lnk}" ]; then
-    ln -s -f "${WIN_HOME}" "${win_home_lnk}"
+    ln -s -f "${WIN_HOME}" "${win_home_lnk}" >/dev/null 2>&1
   fi
 
   unset win_home_lnk
-
 fi
