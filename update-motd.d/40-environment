@@ -3,7 +3,18 @@
 winhome_path="${HOME}/winhome"
 
 printf " Environment variables:\n"
-printf "  DISPLAY    %s\n" "${DISPLAY}"
+printf "  DISPLAY        \t%s\n" "${DISPLAY}"
+
+if [ -n "${WSL_DISTRO_NAME}" ]; then
+  printf "  WSL_DISTRO_NAME\t%s\n" "${WSL_DISTRO_NAME}"
+fi
+if [ -n "${WAYLAND_DISPLAY}" ]; then
+  printf "  WAYLAND_DISPLAY\t%s\n" "${WAYLAND_DISPLAY}"
+fi
+if [ -n "${PULSE_AUDIO}" ]; then
+  printf "  PULSE_AUDIO    \t%s\n" "${PULSE_AUDIO}"
+fi
+
 printf " \n"
 printf " Network\n"
 ip -o -f inet addr show | awk '{printf "  IPv4 for %-20s %s\n",$2, $4}' | cut -f1 -d/
