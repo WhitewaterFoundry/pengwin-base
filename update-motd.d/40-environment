@@ -11,8 +11,8 @@ fi
 if [ -n "${WAYLAND_DISPLAY}" ]; then
   printf "  WAYLAND_DISPLAY\t%s\n" "${WAYLAND_DISPLAY}"
 fi
-if [ -n "${PULSE_AUDIO}" ]; then
-  printf "  PULSE_AUDIO    \t%s\n" "${PULSE_AUDIO}"
+if [ -n "${PULSE_SERVER}" ]; then
+  printf "  PULSE_SERVER   \t%s\n" "${PULSE_SERVER}"
 fi
 
 printf " \n"
