@@ -6,23 +6,28 @@ if ! (id -Gn | grep -c "adm.*sudo\|sudo.*adm" >/dev/null); then
 fi
 
 setup_display() {
+
+  if [ -n "${XRDP_SESSION}" ]; then
+    return
+  fi
+
   # WSL2 Environment variable meaning:
   # WSL2=0: WSL1
-  # WSL2=1: WSL2 (Type 1) 
+  # WSL2=1: WSL2 (Type 1)
   # WSL2=2: WSL2 (Type 2)
   # WSL2=3: WSL2 (Type 3)
   if [ -n "${WSL_INTEROP}" ]; then
-  
+
     if [ -n "${DISPLAY}" ]; then
       # check if the type is changed
       sudo /usr/local/bin/wsl_change_checker 3 "WSL2" "${DISPLAY}"
       sudo /usr/local/bin/wsl2_ip_checker "$(echo "$DISPLAY" | cut -d : -f 1)"
       #Export an enviroment variable for helping other processes
       export WSL2=3
-      
+
       return
     fi
-    
+
     # enable external x display for WSL 2
     ipconfig_exec=$(wslpath "C:\\Windows\\System32\\ipconfig.exe")
     if (command -v ipconfig.exe >/dev/null 2>&1); then
