@@ -20,5 +20,5 @@ sudo sed -i "s\$/wslu${NEW}/debian/ buster\$/wslu${NEW}/debian/ bullseye\$g" /et
 
 sudo rm /etc/apt/sources.list.d/whitewaterfoundry_*
 
-sudo apt update
-sudo apt upgrade
+sudo apt -y update
+sudo apt -y upgrade
