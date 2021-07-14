@@ -31,6 +31,10 @@ else
   set --export DISPLAY "localhost:0"
 end
 
+if test -n "${XRDP_SESSION}"
+  set -e DISPLAY
+fi
+
 # enable external libgl if mesa is not installed
 if which glxinfo > /dev/null 2>&1
   set -e LIBGL_ALWAYS_INDIRECT
