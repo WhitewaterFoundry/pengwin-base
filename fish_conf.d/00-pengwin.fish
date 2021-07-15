@@ -31,7 +31,7 @@ else
   set --export DISPLAY "localhost:0"
 end
 
-if test -n "${XRDP_SESSION}"
+if test -n "$XRDP_SESSION"
   set -e DISPLAY
 end
 
