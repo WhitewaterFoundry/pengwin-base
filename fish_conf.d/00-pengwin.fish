@@ -33,7 +33,7 @@ end
 
 if test -n "${XRDP_SESSION}"
   set -e DISPLAY
-fi
+end
 
 # enable external libgl if mesa is not installed
 if which glxinfo > /dev/null 2>&1
