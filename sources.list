@@ -7,4 +7,4 @@ deb https://deb.debian.org/debian bullseye-updates main
 deb https://deb.debian.org/debian-security bullseye-security main
 # deb-src https://deb.debian.org/debian-security bullseye-security main
 
-deb https://deb.debian.org/debian stable main
+deb https://deb.debian.org/debian buster main
