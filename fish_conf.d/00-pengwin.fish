@@ -52,7 +52,7 @@ alias clear='clear -x'
 alias ll='ls -al'
 
 # Check if we have Windows Path
-if which cmd.exe >/dev/null
+if which cmd.exe >/dev/null; and status --is-login
 
   # Execute on user's shell first-run
   if test ! -f "$HOME/.firstrun"
