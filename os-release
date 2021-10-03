@@ -8,4 +8,4 @@ HOME_URL="https://github.com/whitewaterfoundry/Pengwin"
 SUPPORT_URL="https://github.com/WhitewaterFoundry/Pengwin/issues"
 BUG_REPORT_URL="https://github.com/WhitewaterFoundry/Pengwin/issues"
 VERSION_CODENAME=bullseye
-PENGWIN_VERSION="21.9.0"
+PENGWIN_VERSION="21.10.0"
