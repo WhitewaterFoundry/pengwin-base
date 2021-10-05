@@ -6,3 +6,6 @@ Package: *
 Pin: release l=pengwin-setup
 Pin-Priority: 995
 
+Package: *
+Pin: release a=testing
+Pin-Priority: 400
