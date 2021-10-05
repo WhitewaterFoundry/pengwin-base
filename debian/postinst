@@ -63,7 +63,7 @@ case "$1" in
 		chmod 755 /usr/local/bin/winpwsh-exe
 		chmod 755 /usr/local/bin/winpwsh-int-exe
 
-		chmod u+s "$(which ping)"
+		chmod u+s "$(command -v ping)"
 
 		echo "%sudo   ALL=NOPASSWD: /usr/local/bin/wsl_change_checker" | EDITOR='tee' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile
 		echo "%sudo   ALL=NOPASSWD: /usr/local/bin/wsl2_ip_checker" | EDITOR='tee -a' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile
