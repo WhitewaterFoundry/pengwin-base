@@ -95,6 +95,7 @@ alias clear='clear -x'
 # Custom aliases
 alias ll='ls -al'
 alias winget='powershell.exe winget'
+alias wsl='wsl.exe'
 
 # Check if we have Windows Path
 if (command -v cmd.exe >/dev/null); then
