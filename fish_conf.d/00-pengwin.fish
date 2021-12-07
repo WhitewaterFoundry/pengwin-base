@@ -9,8 +9,8 @@ if test -n "$WSL_INTEROP"
     # enable external x display for WSL 2
 
     set ipconfig_exec (wslpath "C:\\Windows\\System32\\ipconfig.exe")
-    if which ipconfig.exe >/dev/null
-      set ipconfig_exec (which ipconfig.exe)
+    if command -q ipconfig.exe
+      set ipconfig_exec (command -s ipconfig.exe)
     end
 
     set wsl2_d_tmp (eval $ipconfig_exec | grep -n -m 1 "Default Gateway.*: [0-9a-z]" | cut -d : -f 1)
@@ -36,7 +36,7 @@ if test -n "$XRDP_SESSION"
 end
 
 # enable external libgl if mesa is not installed
-if which glxinfo > /dev/null 2>&1
+if command -q glxinfo
   set -e LIBGL_ALWAYS_INDIRECT
 else
   set --export LIBGL_ALWAYS_INDIRECT 1
@@ -52,7 +52,7 @@ alias clear='clear -x'
 alias ll='ls -al'
 
 # Check if we have Windows Path
-if which cmd.exe >/dev/null; and status --is-login
+if command -q cmd.exe ; and status --is-login
 
   # Execute on user's shell first-run
   if test ! -f "$HOME/.firstrun"
