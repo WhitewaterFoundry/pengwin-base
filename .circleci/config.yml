@@ -65,9 +65,6 @@ jobs:
           command: gem install package_cloud
       - run:
           name: Push deb package
-          command: package_cloud push whitewaterfoundry/pengwin-base-dev/debian/buster /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
-      - run:
-          name: Push deb package
           command: package_cloud push whitewaterfoundry/pengwin-base-dev/debian/bullseye /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
 workflows:
   version: 2
