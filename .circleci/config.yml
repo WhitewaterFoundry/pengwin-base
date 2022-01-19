@@ -5,8 +5,8 @@ jobs:
     docker:
       - image: debian:bullseye
     environment:
-      DEBEMAIL="contact@whitewaterfoundry.com"
-      DEBFULLNAME="Whitewater Foundry, Ltd. Co."
+      DEBEMAIL: "contact@whitewaterfoundry.com"
+      DEBFULLNAME: "Whitewater Foundry, Ltd. Co."
     steps:
       - checkout
       - run:
@@ -18,7 +18,7 @@ jobs:
           name: Update changelog
           command: |
             rm ./debian/changelog
-            dch --create --distribution buster --package "pengwin-base" --newversion 0.1-${CIRCLE_BUILD_NUM} "Built on Circle CI"
+            dch --create --distribution buster --package "pengwin-base" --newversion 1.0-${CIRCLE_BUILD_NUM} "Built on Circle CI"
       - run:
           name: Build the package
           command: debuild -i -us -uc -b
@@ -30,7 +30,7 @@ jobs:
           command: cp ../pengwin-base_0.1-${CIRCLE_BUILD_NUM}_all.deb /tmp/pkgs
       - persist_to_workspace:
           root: /tmp/pkgs
-          paths: .
+          paths: [ "." ]
       - store_artifacts:
           name: Store the package as an artifact
           path: /tmp/pkgs
@@ -71,7 +71,7 @@ workflows:
       - buildtest:
           filters:
             branches:
-              ignore: 
+              ignore:
                 - development
                 - master
 
