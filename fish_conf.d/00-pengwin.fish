@@ -65,7 +65,7 @@ if command -q cmd.exe ; and status --is-login
   end
 
   # Create a symbolic link to the windows home
-  set wHomeWinPath (cmd.exe /c 'echo %HOMEDRIVE%%HOMEPATH%' 2>/dev/null | tr -d '\r')
+  set wHomeWinPath (cmd-exe /c 'echo %HOMEDRIVE%%HOMEPATH%' 2>/dev/null | tr -d '\r')
   set --export WIN_HOME (wslpath -u $wHomeWinPath)
 
   set win_home_lnk "$HOME/winhome"

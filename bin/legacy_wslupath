@@ -104,7 +104,7 @@ function path_linux
 
 function path_converter
 {
-	new_path=`cmd.exe /c "echo $@" 2>&1 | tr -d "\r"`
+	new_path=`cmd-exe /c "echo $@" 2>&1 | tr -d "\r"`
 	echo $new_path
 }
 
