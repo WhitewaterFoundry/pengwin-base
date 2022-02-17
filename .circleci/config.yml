@@ -61,8 +61,11 @@ jobs:
           name: Install packageloud cli
           command: gem install package_cloud
       - run:
-          name: Push deb package
+          name: Push deb package bullseye
           command: package_cloud push whitewaterfoundry/pengwin-base-dev/debian/bullseye /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
+      - run:
+          name: Push deb package bookworm
+          command: package_cloud push whitewaterfoundry/pengwin-base-dev/debian/bookworm /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
 workflows:
   version: 2
   testdebbuild:
