@@ -7,7 +7,7 @@ fi
 
 setup_display() {
 
-  if [ -n "${XRDP_SESSION}" ]; then
+  if [ -n "${XRDP_SESSION}" ] || [ -n "${SSH_CONNECTION}" ]; then  
     return
   fi
 
