@@ -23,8 +23,6 @@ if [ ! $wsl2_type_env -eq $wsl2_type ]; then
   else
     sed -i 's/^WSL2=.*$/WSL2='$wsl2_type'/g' /etc/environment
   fi
-
-  echo "Updated configuration for $wsl2_readable_type. Restart Pengwin to apply changes."
 fi
 
 
