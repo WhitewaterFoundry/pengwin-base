@@ -8,7 +8,6 @@ env_wsl2_ip_address="$(grep -e ^DISPLAY=.* /etc/environment | sed -e 's/DISPLAY=
 
   if [ ! "$passed_new_ip_address" = "$env_wsl2_ip_address" ]; then
     sed -i 's/DISPLAY='$env_wsl2_ip_address'/DISPLAY='$passed_new_ip_address'/g' /etc/environment
-    echo "Detected: IP Changed from $env_wsl2_ip_address to $passed_new_ip_address. Restart Pengwin to apply changes."
   fi
 
 # cleanup
