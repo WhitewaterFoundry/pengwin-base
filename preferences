@@ -9,3 +9,7 @@ Pin-Priority: 995
 Package: *
 Pin: release a=testing
 Pin-Priority: 400
+
+Package: *
+Pin: release a=bullseye-backports
+Pin-Priority: 500
