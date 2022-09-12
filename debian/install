@@ -13,3 +13,4 @@ pengwin.ico /usr/local/lib/
 bin/* /usr/local/bin/
 completions/* /usr/share/bash-completion/completions/
 update-motd.d/* /etc/update-motd.d/
+xrdp-pulseaudio-installer/* /var/lib/xrdp-pulseaudio-installer/
