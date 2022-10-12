@@ -41,7 +41,7 @@ jobs:
           path: /tmp/pkgs
   deploymasterdeb:
     docker:
-      - image: circleci/ruby:2.3-jessie
+      - image: ruby:2.7
     steps:
       - attach_workspace:
           at: /tmp/pkgs
@@ -53,7 +53,7 @@ jobs:
           command: package_cloud push whitewaterfoundry/pengwin-base/debian/bullseye /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
   deploydevdeb:
     docker:
-      - image: circleci/ruby:2.3-jessie
+      - image: ruby:2.7
     steps:
       - attach_workspace:
           at: /tmp/pkgs
