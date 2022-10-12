@@ -62,6 +62,9 @@ case "$1" in
 		chmod 755 /usr/local/bin/pengwin-help
 		chmod 755 /usr/local/bin/winpwsh-exe
 		chmod 755 /usr/local/bin/winpwsh-int-exe
+		chmod 755 /usr/local/bin/wslsystemctl
+		chmod 755 /usr/local/bin/wsljournalctl
+		chmod 755 /usr/local/bin/start-systemd
 
 		chmod u+s "$(command -v ping)"
 
