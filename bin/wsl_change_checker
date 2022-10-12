@@ -5,11 +5,11 @@ source /etc/environment
 wsl2_type_env=${WSL2:=0}
 wsl2_type=$1; shift
 
-sudo apt-mark unhold libc6 >/dev/null 2>&1
+# Fix for older versions
+apt-mark unhold libc6 >/dev/null 2>&1
+sed -i 's/^DISPLAY=.*$//g' /etc/environment
 
 if [ ! $wsl2_type_env -eq "$wsl2_type" ]; then
-  sed -i 's/^DISPLAY=.*$//g' /etc/environment
-
   if [ "$wsl2_type" -eq 0 ]; then
     # if destination is WSL1
     # remove WSL2 env variable and cleanup empty row
