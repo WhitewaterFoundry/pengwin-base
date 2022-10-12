@@ -7,7 +7,12 @@ fi
 
 setup_display() {
 
-  if [ -n "${XRDP_SESSION}" ] || [ -n "${SSH_CONNECTION}" ]; then
+  if [ -n "${XRDP_SESSION}" ] ; then
+    pulseaudio --start >/dev/null 2>&1
+    return
+  fi
+
+  if [ -n "${SSH_CONNECTION}" ]; then
     return
   fi
 
