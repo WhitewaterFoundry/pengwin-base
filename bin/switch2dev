@@ -8,9 +8,9 @@ else
   export NEW='-dev'
 fi
 
-curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-base${NEW}/script.deb.sh" | sudo env os=debian dist=bullseye bash
-curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-setup${NEW}/script.deb.sh" | sudo env os=debian dist=bullseye bash
-curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/wslu${NEW}/script.deb.sh" | sudo env os=debian dist=bullseye bash
+curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-base${NEW}/script.deb.sh" | sudo env os=debian dist=11 bash
+curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-setup${NEW}/script.deb.sh" | sudo env os=debian dist=11 bash
+curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/wslu${NEW}/script.deb.sh" | sudo env os=debian dist=11 bash
 
 sudo sed -i "s\$/pengwin-setup${OLD}/\$/pengwin-setup${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
 sudo sed -i "s\$/pengwin-base${OLD}/\$/pengwin-base${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
