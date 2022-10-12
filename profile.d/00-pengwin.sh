@@ -7,7 +7,7 @@ fi
 
 setup_display() {
 
-  if [ -n "${XRDP_SESSION}" ] || [ -n "${SSH_CONNECTION}" ]; then  
+  if [ -n "${XRDP_SESSION}" ] || [ -n "${SSH_CONNECTION}" ]; then
     return
   fi
 
@@ -20,8 +20,7 @@ setup_display() {
 
     if [ -n "${DISPLAY}" ]; then
       # check if the type is changed
-      sudo /usr/local/bin/wsl_change_checker 3 "WSL2" "${DISPLAY}"
-      sudo /usr/local/bin/wsl2_ip_checker "$(echo "$DISPLAY" | cut -d : -f 1)"
+      sudo /usr/local/bin/wsl_change_checker 3
       #Export an enviroment variable for helping other processes
       export WSL2=3
 
@@ -42,8 +41,7 @@ setup_display() {
       export DISPLAY=${wsl2_d_tmp}:0
 
       # check if the type is changed
-      sudo /usr/local/bin/wsl_change_checker 2 "WSL2" "${wsl2_d_tmp}:0\.0"
-      sudo /usr/local/bin/wsl2_ip_checker "$wsl2_d_tmp"
+      sudo /usr/local/bin/wsl_change_checker 2
       #Export an enviroment variable for helping other processes
       export WSL2=2
 
@@ -52,8 +50,7 @@ setup_display() {
       export DISPLAY=${wsl2_d_tmp}:0
 
       # check if we have wsl.exe in path
-      sudo /usr/local/bin/wsl_change_checker 1 "WSL2" "$DISPLAY"
-      sudo /usr/local/bin/wsl2_ip_checker "$wsl2_d_tmp"
+      sudo /usr/local/bin/wsl_change_checker 1
       #Export an enviroment variable for helping other processes
       export WSL2=1
     fi
@@ -67,7 +64,7 @@ setup_display() {
     export DISPLAY=localhost:0
 
     # check if we have wsl.exe in path
-    sudo /usr/local/bin/wsl_change_checker 0 "WSL1" "localhost:0"
+    sudo /usr/local/bin/wsl_change_checker 0
 
     # Export an enviroment variable for helping other processes
     unset WSL2
@@ -123,7 +120,7 @@ if (command -v cmd.exe >/dev/null); then
   fi
 
   # shellcheck disable=SC2155
-  export WIN_HOME=$(wslpath -u "${wHomeWinPath}")
+  export WIN_HOME="$(wslpath -u "${wHomeWinPath}")"
 
   win_home_lnk=${HOME}/winhome
   if [ ! -e "${win_home_lnk}" ]; then
