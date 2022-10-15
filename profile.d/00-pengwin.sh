@@ -78,6 +78,11 @@ setup_display() {
       #Export an enviroment variable for helping other processes
       export WSL2=3
 
+      socket_index="$(sudo /usr/local/bin/check_x11_socket "$DISPLAY")"
+      if [ $? -eq 0 ]; then
+        export DISPLAY=":${socket_index}"
+      fi
+
       return
     fi
 
