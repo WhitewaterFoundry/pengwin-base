@@ -42,6 +42,18 @@ setup_interop() {
   export WSL_INTEROP="$(ls -U /run/WSL/*_interop | tail -1)"
 }
 
+setup_display_via_resolv() {
+  wsl2_d_tmp="$(grep </etc/resolv.conf nameserver | awk '{print $2}')"
+  export DISPLAY="${wsl2_d_tmp}":0
+
+  # check if the type is changed
+  sudo /usr/local/bin/wsl_change_checker 1
+  #Export an environment variable for helping other processes
+  export WSL2=1
+
+  unset wsl2_d_tmp
+}
+
 setup_display() {
 
   if [ -n "${XRDP_SESSION}" ] ; then
@@ -72,49 +84,46 @@ setup_display() {
   # WSL2=2: WSL2 (Type 2)
   # WSL2=3: WSL2 (Type 3)
   if [ -n "${WSL_INTEROP}" ]; then
-    if [ -n "${DISPLAY}" ]; then
+    if [ -n "${DISPLAY}" ]; then #WSLg
       # check if the type is changed
       sudo /usr/local/bin/wsl_change_checker 3
-      #Export an enviroment variable for helping other processes
+      #Export an environment variable for helping other processes
       export WSL2=3
 
-      socket_index="$(sudo /usr/local/bin/check_x11_socket "$DISPLAY")"
-      if [ $? -eq 0 ]; then
+      if socket_index="$(sudo /usr/local/bin/check_x11_socket "$DISPLAY")"; then
         export DISPLAY=":${socket_index}"
       fi
 
       return
     fi
 
-    # enable external x display for WSL 2
-    ipconfig_exec=$(wslpath "C:\\Windows\\System32\\ipconfig.exe")
-    if (command -v ipconfig.exe >/dev/null 2>&1); then
-      ipconfig_exec=$(command -v ipconfig.exe)
+    if [ -f "${HOME}/.config/pengwin/display_ip_from_dns" ]; then
+      setup_display_via_resolv
+      return
     fi
 
-    wsl2_d_tmp="$(eval "$ipconfig_exec 2> /dev/null" | grep -n -m 1 "Default Gateway.*: [0-9a-z]" | cut -d : -f 1)"
+    # enable external x display for WSL 2
+    if route_exec_path=$(command -v route.exe 2>/dev/null); then
+      route_exec="${route_exec_path}"
+    else
+      route_exec=$(wslpath 'C:\Windows\system32\route.exe')
+    fi
+
+    wsl2_d_tmp="$(eval "$route_exec print 2> /dev/null" | grep 0.0.0.0 | head -1 | awk '{print $4}')"
 
     if [ -n "${wsl2_d_tmp}" ]; then
-
-      wsl2_d_tmp="$(eval "$ipconfig_exec" | sed "$((wsl2_d_tmp - 4))"','"$((wsl2_d_tmp + 0))"'!d' | grep IPv4 | cut -d : -f 2 | sed -e "s|\s||g" -e "s|\r||g")"
       export DISPLAY="${wsl2_d_tmp}":0
 
       # check if the type is changed
       sudo /usr/local/bin/wsl_change_checker 2
-      #Export an enviroment variable for helping other processes
+      #Export an environment variable for helping other processes
       export WSL2=2
 
     else
-      wsl2_d_tmp="$(grep </etc/resolv.conf nameserver | awk '{print $2}')"
-      export DISPLAY="${wsl2_d_tmp}":0
-
-      # check if we have wsl.exe in path
-      sudo /usr/local/bin/wsl_change_checker 1
-      #Export an enviroment variable for helping other processes
-      export WSL2=1
+      setup_display_via_resolv
     fi
 
-    unset ipconfig_exec
+    unset route_exec
     unset wsl2_d_tmp
 
   else
