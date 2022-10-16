@@ -134,7 +134,7 @@ setup_display() {
     # check if we have wsl.exe in path
     sudo /usr/local/bin/wsl_change_checker 0
 
-    # Export an enviroment variable for helping other processes
+    # Export an environment variable for helping other processes
     unset WSL2
 
   fi
