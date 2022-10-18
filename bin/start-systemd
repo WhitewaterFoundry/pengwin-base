@@ -18,6 +18,7 @@ function setup_interop() {
 # Globals:
 #   HOME
 #   PATH
+#   PENGWIN_COMMAND
 #   PENGWIN_REMOTE_DESKTOP
 #   PULSE_SERVER
 #   SUDO_USER
@@ -106,6 +107,7 @@ function main() {
       echo "WSL_INTEROP='${WSL_INTEROP}'"
       echo "WSL_SYSTEMD_EXECUTION_ARGS='${WSL_SYSTEMD_EXECUTION_ARGS}'"
       echo "PULSE_SERVER='${PULSE_SERVER}'"
+      echo "PENGWIN_COMMAND='${PENGWIN_COMMAND}'"
       echo "PENGWIN_REMOTE_DESKTOP='${PENGWIN_REMOTE_DESKTOP}'"
     } >"${sudo_user_home}/${systemd_environment}"
     chown "${SUDO_USER}:${SUDO_USER}" "${sudo_user_home}/${systemd_environment}"
