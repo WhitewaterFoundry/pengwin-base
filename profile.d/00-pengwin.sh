@@ -8,6 +8,7 @@ save_environment() {
     echo "WSL_INTEROP='$WSL_INTEROP'"
     echo "WSL_SYSTEMD_EXECUTION_ARGS='$WSL_SYSTEMD_EXECUTION_ARGS'"
     echo "PULSE_SERVER='$PULSE_SERVER'"
+    echo "PENGWIN_COMMAND='$PENGWIN_COMMAND'"
     echo "PENGWIN_REMOTE_DESKTOP='$PENGWIN_REMOTE_DESKTOP'"
   } >"${systemd_saved_environment}"
 }
