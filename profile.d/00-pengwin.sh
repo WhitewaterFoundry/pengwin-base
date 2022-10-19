@@ -71,7 +71,9 @@ setup_display() {
       setup_interop
     fi
 
-    pulseaudio --start >/dev/null 2>&1
+    unset PULSE_SERVER
+    pulseaudio --enable-memfd=FALSE --disable-shm=TRUE --log-target=syslog --start >/dev/null 2>&1
+
     return
   fi
 
