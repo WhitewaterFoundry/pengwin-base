@@ -83,11 +83,11 @@ setup_display() {
 
   # WSL2 Environment variable meaning:
   # WSL2=0: WSL1
-  # WSL2=1: WSL2 (Type 1)
-  # WSL2=2: WSL2 (Type 2)
-  # WSL2=3: WSL2 (Type 3)
+  # WSL2=1: WSL2 (Type 1) using the IP of resolv.conf
+  # WSL2=2: WSL2 (Type 2) using the IP of the gateway (host IP)
+  # WSL2=3: WSL2 (Type 3) using the DISPLAY variable already set WSLg?
   if [ -n "${WSL_INTEROP}" ]; then
-    if [ -n "${DISPLAY}" ]; then #WSLg
+    if [ -n "${DISPLAY}" ] && [ ! -f "${HOME}/.config/pengwin/disable_wslg" ]; then #WSLg
       # check if the type is changed
       sudo /usr/local/bin/wsl_change_checker 3
       #Export an environment variable for helping other processes
