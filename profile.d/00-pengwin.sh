@@ -57,7 +57,7 @@ setup_display_via_resolv() {
 
 setup_display() {
 
-  if [ -n "${XRDP_SESSION}" ] ; then
+  if [ -n "${XRDP_SESSION}" ]; then
     if [ -f "${systemd_saved_environment}" ]; then
       set -a
       # shellcheck disable=SC1090
@@ -71,8 +71,9 @@ setup_display() {
       setup_interop
     fi
 
-    unset PULSE_SERVER
-    pulseaudio --enable-memfd=FALSE --disable-shm=TRUE --log-target=syslog --start >/dev/null 2>&1
+    if [ -z "${PULSE_SERVER}" ]; then
+      pulseaudio --enable-memfd=FALSE --disable-shm=TRUE --log-target=syslog --start >/dev/null 2>&1
+    fi
 
     return
   fi
