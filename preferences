@@ -8,8 +8,8 @@ Pin-Priority: 995
 
 Package: *
 Pin: release a=testing
-Pin-Priority: 400
+Pin-Priority: 500
 
 Package: *
-Pin: release a=bullseye-backports
-Pin-Priority: 500
+Pin: release a=bookworm-backports
+Pin-Priority: 400
