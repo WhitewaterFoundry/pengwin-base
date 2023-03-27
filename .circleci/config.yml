@@ -73,17 +73,18 @@ workflows:
               ignore:
                 - development
                 - master
+                - bookworm
 
   deploymasterbranch:
     jobs:
       - buildtest:
           filters:
             branches:
-              only: master
+              only: bookworm
       - deploymasterdeb:
           filters:
             branches:
-              only: master
+              only: bookworm
           requires:
             - buildtest
   deploydevbranch:
