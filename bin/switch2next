@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [[ "$1" == "release" ]]; then
+  export OLD='-dev'
+  export NEW=''
+else
+  export OLD=''
+  export NEW='-dev'
+fi
+
+curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-base/script.deb.sh" | sudo env os=debian dist=12 bash
+curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-setup/script.deb.sh" | sudo env os=debian dist=12 bash
+#curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/wslu${NEW}/script.deb.sh" | sudo env os=debian dist=11 bash
+
+#sudo sed -i "s\$/pengwin-setup${OLD}/\$/pengwin-setup${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
+#sudo sed -i "s\$/pengwin-base${OLD}/\$/pengwin-base${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
+#sudo sed -i "s\$/wslu${OLD}/\$/wslu${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
+
+sudo sed -i "s\$/pengwin-base/debian/ bullseye\$/pengwin-base/debian/ bookworm\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
+sudo sed -i "s\$/pengwin-setup/debian/ bullseye\$/pengwin-setup/debian/ bookworm\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
+
+sudo rm /etc/apt/sources.list.d/whitewaterfoundry_*
+
+sudo apt -y update
+sudo apt -y distupgrade
