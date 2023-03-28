@@ -1,15 +1,11 @@
 Package: *
 Pin: release l=pengwin-base
-Pin-Priority: 995
+Pin-Priority: 1001
 
 Package: *
 Pin: release l=pengwin-setup
-Pin-Priority: 995
-
-Package: *
-Pin: release a=testing
-Pin-Priority: 500
+Pin-Priority: 1001
 
 Package: *
 Pin: release a=bookworm-backports
-Pin-Priority: 400
+Pin-Priority: 500
