@@ -2,7 +2,7 @@
 
 curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-base/script.deb.sh" | sudo env os=debian dist=bookworm bash
 curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-setup/script.deb.sh" | sudo env os=debian dist=bookworm bash
-#curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/wslu${NEW}/script.deb.sh" | sudo env os=debian dist=bookworm bash
+#curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/wslu/script.deb.sh" | sudo env os=debian dist=bookworm bash
 
 sudo sed -i "s\$/pengwin-base/debian/ bullseye\$/pengwin-base/debian/ bookworm\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
 sudo sed -i "s\$/pengwin-setup/debian/ bullseye\$/pengwin-setup/debian/ bookworm\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
@@ -10,5 +10,7 @@ sudo sed -i "s\$/pengwin-setup/debian/ bullseye\$/pengwin-setup/debian/ bookworm
 
 sudo rm /etc/apt/sources.list.d/whitewaterfoundry_*
 
-sudo apt -y update
-sudo apt dist-upgrade
+sudo apt install -t bookworm --allow-downgrades -y pengwin-base pengwin-setup
+
+sudo apt update
+sudo apt dist-upgrade -y
