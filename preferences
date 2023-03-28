@@ -1,10 +1,10 @@
 Package: *
 Pin: release l=pengwin-base
-Pin-Priority: 995
+Pin-Priority: 1001
 
 Package: *
 Pin: release l=pengwin-setup
-Pin-Priority: 995
+Pin-Priority: 1001
 
 Package: *
 Pin: release a=testing
