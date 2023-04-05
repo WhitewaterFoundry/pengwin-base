@@ -15,3 +15,4 @@ completions/* /usr/share/bash-completion/completions/
 update-motd.d/* /etc/update-motd.d/
 xrdp-pulseaudio-installer/* /var/lib/xrdp-pulseaudio-installer/
 sudoers.d/* /etc/sudoers.d/
+binfmt.d/* /usr/lib/binfmt.d/
