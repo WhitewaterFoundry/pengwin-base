@@ -59,6 +59,7 @@ case "$1" in
 		chmod 755 /usr/local/bin/wsl_change_checker
 		chmod 755 /usr/local/bin/libgl-change-checker
 		chmod 755 /usr/local/bin/switch2dev
+		chmod 755 /usr/local/bin/switch2next
 		chmod 755 /usr/local/bin/pengwin-help
 		chmod 755 /usr/local/bin/winpwsh-exe
 		chmod 755 /usr/local/bin/winpwsh-int-exe
