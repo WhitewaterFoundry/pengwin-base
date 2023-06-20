@@ -23,7 +23,7 @@ jobs:
           name: Update changelog
           command: |
             rm ./debian/changelog
-            dch --create --distribution buster --package "pengwin-base" --newversion << pipeline.parameters.package-version >>-${CIRCLE_BUILD_NUM} "Built on Circle CI"
+            dch --create --distribution bookworm --package "pengwin-base" --newversion << pipeline.parameters.package-version >>-${CIRCLE_BUILD_NUM} "Built on Circle CI"
       - run:
           name: Build the package
           command: debuild -i -us -uc -b
@@ -51,6 +51,9 @@ jobs:
       - run:
           name: Push deb package bullseye
           command: package_cloud push whitewaterfoundry/pengwin-base/debian/bullseye /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
+      - run:
+          name: Push deb package bookworm
+          command: package_cloud push whitewaterfoundry/pengwin-base/debian/bookworm /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
   deploydevdeb:
     docker:
       - image: ruby:2.7

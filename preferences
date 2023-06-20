@@ -7,9 +7,5 @@ Pin: release l=pengwin-setup
 Pin-Priority: 1001
 
 Package: *
-Pin: release a=testing
-Pin-Priority: 400
-
-Package: *
-Pin: release a=bullseye-backports
+Pin: release a=bookworm-backports
 Pin-Priority: 500
