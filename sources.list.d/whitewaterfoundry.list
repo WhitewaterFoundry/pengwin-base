@@ -4,5 +4,5 @@ deb https://packagecloud.io/whitewaterfoundry/pengwin-base/debian/ bookworm main
 deb https://packagecloud.io/whitewaterfoundry/pengwin-setup/debian/ bookworm main
 #deb-src https://packagecloud.io/whitewaterfoundry/pengwin-setup/debian/ bookworm main
 
-deb https://packagecloud.io/whitewaterfoundry/wslu/debian/ bookworm main
-#deb-src https://packagecloud.io/whitewaterfoundry/wslu/debian/ bookworm main
+deb https://packagecloud.io/whitewaterfoundry/wslu/debian/ bullseye main
+#deb-src https://packagecloud.io/whitewaterfoundry/wslu/debian/ bullseye main
