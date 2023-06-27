@@ -51,6 +51,12 @@ alias clear='clear -x'
 # Custom aliases
 alias ll='ls -al'
 
+if test -n "$WSL2"
+  #Setup video acceleration
+  set --export VDPAU_DRIVER d3d12
+  set --export LIBVA_DRIVER_NAME d3d12
+end
+
 # Check if we have Windows Path
 if command -q cmd.exe ; and status --is-login
 
