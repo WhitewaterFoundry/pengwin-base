@@ -50,9 +50,16 @@ case "$1" in
 		setup_gpgkey="https://packagecloud.io/whitewaterfoundry/pengwin-setup/gpgkey"
 		base_gpgkey="https://packagecloud.io/whitewaterfoundry/pengwin-base/gpgkey"
 		wslu_gpgkey="https://packagecloud.io/whitewaterfoundry/wslu/gpgkey"
-		curl -L "${base_gpgkey}" 	 | apt-key add - > /dev/null 2>&1
-		curl -L "${setup_gpgkey}"	 | apt-key add - > /dev/null 2>&1
-		curl -L "${wslu_gpgkey}"	 | apt-key add - > /dev/null 2>&1
+
+		keyrings_path="/etc/apt/keyrings"
+
+		setup_gpgkey_file="${keyrings_path}/whitewaterfoundry_pengwin-base-archive-keyring.gpg"
+		base_gpgkey_file="${keyrings_path}/whitewaterfoundry_pengwin-setup-archive-keyring.gpg"
+		wslu_gpgkey_file="${keyrings_path}/whitewaterfoundry_wslu-archive-keyring.gpg"
+
+		curl -fsSL "${base_gpgkey}" 	 | gpg --dearmor >"${setup_gpgkey_file}" 2>/dev/null && chmod 0644 "${setup_gpgkey_file}"
+		curl -fsSL "${setup_gpgkey}"	 | gpg --dearmor >"${base_gpgkey_file}" 2>/dev/null && chmod 0644 "${base_gpgkey_file}"
+		curl -fsSL "${wslu_gpgkey}"	   | gpg --dearmor >"${wslu_gpgkey_file}" 2>/dev/null && chmod 0644 "${wslu_gpgkey_file}"
 
 		chmod 755 /usr/local/bin/cmd-exe
 		chmod 755 /usr/local/bin/legacy_wslupath
