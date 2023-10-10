@@ -8,7 +8,7 @@ jobs:
 
   buildtest:
     docker:
-      - image: debian:bullseye
+      - image: debian:bookworm
     environment:
       DEBEMAIL: "contact@whitewaterfoundry.com"
       DEBFULLNAME: "Whitewater Foundry, Ltd. Co."
@@ -41,7 +41,7 @@ jobs:
           path: /tmp/pkgs
   deploymasterdeb:
     docker:
-      - image: ruby:2.7
+      - image: cimg/ruby:2.7
     steps:
       - attach_workspace:
           at: /tmp/pkgs
@@ -56,7 +56,7 @@ jobs:
           command: package_cloud push whitewaterfoundry/pengwin-base/debian/bookworm /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
   deploydevdeb:
     docker:
-      - image: ruby:2.7
+      - image: cimg/ruby:2.7
     steps:
       - attach_workspace:
           at: /tmp/pkgs
