@@ -9,6 +9,7 @@ jobs:
   buildtest:
     docker:
       - image: debian:bookworm
+    resource_class: small      
     environment:
       DEBEMAIL: "contact@whitewaterfoundry.com"
       DEBFULLNAME: "Whitewater Foundry, Ltd. Co."
@@ -42,6 +43,7 @@ jobs:
   deploymasterdeb:
     docker:
       - image: cimg/ruby:2.7
+    resource_class: small      
     steps:
       - attach_workspace:
           at: /tmp/pkgs
@@ -57,6 +59,7 @@ jobs:
   deploydevdeb:
     docker:
       - image: cimg/ruby:2.7
+    resource_class: small      
     steps:
       - attach_workspace:
           at: /tmp/pkgs
