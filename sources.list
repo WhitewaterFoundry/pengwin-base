@@ -11,4 +11,4 @@ deb https://deb.debian.org/debian bookworm-backports main
 # deb-src https://deb.debian.org/debian bookworm-backports main
 
 deb https://deb.debian.org/debian oldstable main
-deb https://deb.debian.org/debian testing main
+# deb https://deb.debian.org/debian testing main

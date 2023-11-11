@@ -52,6 +52,7 @@ case "$1" in
 		wslu_gpgkey="https://packagecloud.io/whitewaterfoundry/wslu/gpgkey"
 
 		keyrings_path="/etc/apt/keyrings"
+    mkdir -p "${keyrings_path}"
 
 		setup_gpgkey_file="${keyrings_path}/whitewaterfoundry_pengwin-base-archive-keyring.gpg"
 		base_gpgkey_file="${keyrings_path}/whitewaterfoundry_pengwin-setup-archive-keyring.gpg"
