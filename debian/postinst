@@ -19,7 +19,7 @@ set -e
 # the debian-policy package
 
 TMPDIR="/run/dpkg.pengwin-base.inst"
-#FLAGFILE="/etc/apt/.dist-upgrade"
+FLAGFILE="/etc/apt/.dist-upgrade"
 case "$1" in
 	configure)
 		if [ -f "${TMPDIR}/profile" ] ; then
@@ -92,7 +92,7 @@ case "$1" in
 		###
 
 		# Remove temporary directory
-		echo "Cleaning up pengwin-base temporary install dir"
+		echo "Cleaning up pengwin-base temporary install-dir"
 		rm -rf ${TMPDIR}
 
 		# This is a new install, create dist-upgrade flag file
