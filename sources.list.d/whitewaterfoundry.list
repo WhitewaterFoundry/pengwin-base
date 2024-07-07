@@ -1,8 +1,8 @@
-deb https://packagecloud.io/whitewaterfoundry/pengwin-base/debian/ bullseye main
-#deb-src https://packagecloud.io/whitewaterfoundry/pengwin-base/debian/ bullseye main
+deb [signed-by=/etc/apt/keyrings/whitewaterfoundry_pengwin-base-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/pengwin-base/debian/ bookworm main
+#deb-src [signed-by=/etc/apt/keyrings/whitewaterfoundry_pengwin-base-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/pengwin-base/debian/ bookworm main
 
-deb https://packagecloud.io/whitewaterfoundry/pengwin-setup/debian/ bullseye main
-#deb-src https://packagecloud.io/whitewaterfoundry/pengwin-setup/debian/ bullseye main
+deb [signed-by=/etc/apt/keyrings/whitewaterfoundry_pengwin-setup-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/pengwin-setup/debian/ bookworm main
+#deb-src [signed-by=/etc/apt/keyrings/whitewaterfoundry_pengwin-setup-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/pengwin-setup/debian/ bookworm main
 
-deb https://packagecloud.io/whitewaterfoundry/wslu/debian/ bullseye main
-#deb-src https://packagecloud.io/whitewaterfoundry/wslu/debian/ bullseye main
+deb [signed-by=/etc/apt/keyrings/whitewaterfoundry_wslu-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/wslu/debian/ bullseye main
+#deb-src [signed-by=/etc/apt/keyrings/whitewaterfoundry_wslu-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/wslu/debian/ bullseye main

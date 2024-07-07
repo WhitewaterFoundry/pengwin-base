@@ -175,6 +175,12 @@ main() {
   alias winget='powershell.exe winget'
   alias wsl='wsl.exe'
 
+  if [ -n "${WSL2}" ]; then
+    #Setup video acceleration
+    export VDPAU_DRIVER=d3d12
+    export LIBVA_DRIVER_NAME=d3d12
+  fi
+
   # Check if we have Windows Path
   if (command -v cmd.exe >/dev/null); then
 

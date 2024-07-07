@@ -1,11 +1,11 @@
 PRETTY_NAME="Pengwin"
 NAME="Pengwin"
-VERSION_ID="11"
-VERSION="11 (bullseye)"
+VERSION_ID="12"
+VERSION="12 (bookworm)"
 ID=debian
 ID_LIKE=debian
 HOME_URL="https://github.com/whitewaterfoundry/Pengwin"
 SUPPORT_URL="https://github.com/WhitewaterFoundry/Pengwin/issues"
 BUG_REPORT_URL="https://github.com/WhitewaterFoundry/Pengwin/issues"
-VERSION_CODENAME=bullseye
-PENGWIN_VERSION="23.03.1"
+VERSION_CODENAME=bookworm
+PENGWIN_VERSION="24.05.0"
