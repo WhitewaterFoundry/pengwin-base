@@ -8,4 +8,4 @@ HOME_URL="https://github.com/whitewaterfoundry/Pengwin"
 SUPPORT_URL="https://github.com/WhitewaterFoundry/Pengwin/issues"
 BUG_REPORT_URL="https://github.com/WhitewaterFoundry/Pengwin/issues"
 VERSION_CODENAME=bookworm
-PENGWIN_VERSION="24.08.0"
+PENGWIN_VERSION="24.08.2"
