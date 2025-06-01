@@ -183,7 +183,7 @@ main() {
 
     # Setup Gallium Direct3D 12 driver
     export GALLIUM_DRIVER=d3d12
-    sudo /usr/local/bin/load-vgem-module
+    sudo /usr/local/bin/pengwin-load-vgem-module
   fi
 
   # Check if we have Windows Path
