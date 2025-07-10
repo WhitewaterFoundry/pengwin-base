@@ -45,7 +45,7 @@ setup_interop() {
 }
 
 setup_display_via_resolv() {
-  wsl2_d_tmp="$(grep </etc/resolv.conf nameserver | awk '{print $2}')"
+  wsl2_d_tmp="$(ip route | grep default | awk '{print $3; exit;}')"
   export DISPLAY="${wsl2_d_tmp}":0
 
   # check if the type is changed
