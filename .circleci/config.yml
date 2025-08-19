@@ -8,7 +8,7 @@ jobs:
 
   buildtest:
     docker:
-      - image: debian:bookworm
+      - image: debian:trixie
     resource_class: small      
     environment:
       DEBEMAIL: "contact@whitewaterfoundry.com"
@@ -24,7 +24,7 @@ jobs:
           name: Update changelog
           command: |
             rm ./debian/changelog
-            dch --create --distribution bookworm --package "pengwin-base" --newversion << pipeline.parameters.package-version >>-${CIRCLE_BUILD_NUM} "Built on Circle CI"
+            dch --create --distribution trixie --package "pengwin-base" --newversion << pipeline.parameters.package-version >>-${CIRCLE_BUILD_NUM} "Built on Circle CI"
       - run:
           name: Build the package
           command: debuild -i -us -uc -b
@@ -51,11 +51,11 @@ jobs:
           name: Install packageloud cli
           command: gem install package_cloud
       - run:
-          name: Push deb package bullseye
-          command: package_cloud push whitewaterfoundry/pengwin-base/debian/bullseye /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
-      - run:
           name: Push deb package bookworm
           command: package_cloud push whitewaterfoundry/pengwin-base/debian/bookworm /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
+      - run:
+          name: Push deb package trixie
+          command: package_cloud push whitewaterfoundry/pengwin-base/debian/trixie /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
   deploydevdeb:
     docker:
       - image: cimg/ruby:2.7
@@ -67,11 +67,11 @@ jobs:
           name: Install packageloud cli
           command: gem install package_cloud
       - run:
-          name: Push deb package bullseye
-          command: package_cloud push whitewaterfoundry/pengwin-base-dev/debian/bullseye /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
-      - run:
           name: Push deb package bookworm
           command: package_cloud push whitewaterfoundry/pengwin-base-dev/debian/bookworm /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
+      - run:
+          name: Push deb package trixie
+          command: package_cloud push whitewaterfoundry/pengwin-base-dev/debian/trixie /tmp/pkgs/pengwin-base_<< pipeline.parameters.package-version >>-*_all.deb
 workflows:
   version: 2
   testdebbuild:
