@@ -8,6 +8,7 @@ save_environment() {
     echo "WSL_INTEROP='$WSL_INTEROP'"
     echo "WSL_SYSTEMD_EXECUTION_ARGS='$WSL_SYSTEMD_EXECUTION_ARGS'"
     echo "PULSE_SERVER='$PULSE_SERVER'"
+    echo "WAYLAND_DISPLAY='$WAYLAND_DISPLAY'"
     echo "PENGWIN_COMMAND='$PENGWIN_COMMAND'"
     echo "PENGWIN_REMOTE_DESKTOP='$PENGWIN_REMOTE_DESKTOP'"
   } >"${systemd_saved_environment}"
@@ -44,7 +45,7 @@ setup_interop() {
 }
 
 setup_display_via_resolv() {
-  wsl2_d_tmp="$(grep </etc/resolv.conf nameserver | awk '{print $2}')"
+  wsl2_d_tmp="$(ip route | grep default | awk '{print $3; exit;}')"
   export DISPLAY="${wsl2_d_tmp}":0
 
   # check if the type is changed
@@ -176,9 +177,13 @@ main() {
   alias wsl='wsl.exe'
 
   if [ -n "${WSL2}" ]; then
-    #Setup video acceleration
+    # Setup video acceleration
     export VDPAU_DRIVER=d3d12
     export LIBVA_DRIVER_NAME=d3d12
+
+    # Setup Gallium Direct3D 12 driver
+    export GALLIUM_DRIVER=d3d12
+    sudo /usr/local/bin/pengwin-load-vgem-module
   fi
 
   # Check if we have Windows Path
