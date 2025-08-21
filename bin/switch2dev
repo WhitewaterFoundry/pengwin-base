@@ -8,15 +8,31 @@ else
   export NEW='-dev'
 fi
 
-curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-base${NEW}/script.deb.sh" | sudo env os=debian dist=bullseye bash
-curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-setup${NEW}/script.deb.sh" | sudo env os=debian dist=bullseye bash
-curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/wslu${NEW}/script.deb.sh" | sudo env os=debian dist=bullseye bash
+curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-base${NEW}/script.deb.sh" | sudo env os=debian dist=trixie bash
+curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-setup${NEW}/script.deb.sh" | sudo env os=debian dist=trixie bash
+curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/wslu${NEW}/script.deb.sh" | sudo env os=debian dist=trixie bash
 
 sudo sed -i "s\$/pengwin-setup${OLD}/\$/pengwin-setup${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
 sudo sed -i "s\$/pengwin-base${OLD}/\$/pengwin-base${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
 sudo sed -i "s\$/wslu${OLD}/\$/wslu${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
 
-sudo sed -i "s\$/wslu${NEW}/debian/ buster\$/wslu${NEW}/debian/ bullseye\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
+### Whitewater Foundry GPG Key install
+echo "Installing Whitewater Foundry GPG keys..."
+
+setup_gpgkey="https://packagecloud.io/whitewaterfoundry/pengwin-setup${NEW}/gpgkey"
+base_gpgkey="https://packagecloud.io/whitewaterfoundry/pengwin-base${NEW}/gpgkey"
+wslu_gpgkey="https://packagecloud.io/whitewaterfoundry/wslu${NEW}/gpgkey"
+
+keyrings_path="/etc/apt/keyrings"
+mkdir -p "${keyrings_path}"
+
+setup_gpgkey_file="${keyrings_path}/whitewaterfoundry_pengwin-base-archive-keyring.gpg"
+base_gpgkey_file="${keyrings_path}/whitewaterfoundry_pengwin-setup-archive-keyring.gpg"
+wslu_gpgkey_file="${keyrings_path}/whitewaterfoundry_wslu-archive-keyring.gpg"
+
+curl -fsSL "${base_gpgkey}" 	 | gpg --dearmor >"${setup_gpgkey_file}" 2>/dev/null && chmod 0644 "${setup_gpgkey_file}"
+curl -fsSL "${setup_gpgkey}"	 | gpg --dearmor >"${base_gpgkey_file}" 2>/dev/null && chmod 0644 "${base_gpgkey_file}"
+curl -fsSL "${wslu_gpgkey}"	   | gpg --dearmor >"${wslu_gpgkey_file}" 2>/dev/null && chmod 0644 "${wslu_gpgkey_file}"
 
 sudo rm /etc/apt/sources.list.d/whitewaterfoundry_*
 
