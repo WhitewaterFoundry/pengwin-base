@@ -16,6 +16,10 @@ sudo sed -i "s\$/pengwin-setup${OLD}/\$/pengwin-setup${NEW}/\$g" /etc/apt/source
 sudo sed -i "s\$/pengwin-base${OLD}/\$/pengwin-base${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
 sudo sed -i "s\$/wslu${OLD}/\$/wslu${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
 
+sudo sed -i "s/pengwin-setup${OLD}-/pengwin-setup${NEW}-/g" /etc/apt/sources.list.d/whitewaterfoundry.list
+sudo sed -i "s/pengwin-base${OLD}-/pengwin-base${NEW}-/g" /etc/apt/sources.list.d/whitewaterfoundry.list
+sudo sed -i "s/wslu${OLD}-/wslu${NEW}-/g" /etc/apt/sources.list.d/whitewaterfoundry.list
+
 sudo sed -i "s/bullseye/trixie/g" /etc/apt/sources.list.d/whitewaterfoundry.list
 sudo sed -i "s/bookworm/trixie/g" /etc/apt/sources.list.d/whitewaterfoundry.list
 
