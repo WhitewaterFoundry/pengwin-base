@@ -7,5 +7,5 @@ ID_LIKE=debian
 HOME_URL="https://github.com/whitewaterfoundry/Pengwin"
 SUPPORT_URL="https://github.com/WhitewaterFoundry/Pengwin/issues"
 BUG_REPORT_URL="https://github.com/WhitewaterFoundry/Pengwin/issues"
-VERSION_CODENAME=bookworm
+VERSION_CODENAME=trixie
 PENGWIN_VERSION="25.08.1"
