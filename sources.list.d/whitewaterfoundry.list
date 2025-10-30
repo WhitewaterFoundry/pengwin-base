@@ -1,8 +1,8 @@
-deb [signed-by=/etc/apt/keyrings/whitewaterfoundry_pengwin-base-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/pengwin-base/debian/ bookworm main
-#deb-src [signed-by=/etc/apt/keyrings/whitewaterfoundry_pengwin-base-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/pengwin-base/debian/ bookworm main
+deb [signed-by=/etc/apt/keyrings/whitewaterfoundry_pengwin-base-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/pengwin-base/debian/ trixie main
+#deb-src [signed-by=/etc/apt/keyrings/whitewaterfoundry_pengwin-base-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/pengwin-base/debian/ trixie main
 
-deb [signed-by=/etc/apt/keyrings/whitewaterfoundry_pengwin-setup-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/pengwin-setup/debian/ bookworm main
-#deb-src [signed-by=/etc/apt/keyrings/whitewaterfoundry_pengwin-setup-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/pengwin-setup/debian/ bookworm main
+deb [signed-by=/etc/apt/keyrings/whitewaterfoundry_pengwin-setup-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/pengwin-setup/debian/ trixie main
+#deb-src [signed-by=/etc/apt/keyrings/whitewaterfoundry_pengwin-setup-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/pengwin-setup/debian/ trixie main
 
-deb [signed-by=/etc/apt/keyrings/whitewaterfoundry_wslu-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/wslu/debian/ bullseye main
-#deb-src [signed-by=/etc/apt/keyrings/whitewaterfoundry_wslu-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/wslu/debian/ bullseye main
+deb [signed-by=/etc/apt/keyrings/whitewaterfoundry_wslu-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/wslu/debian/ trixie main
+#deb-src [signed-by=/etc/apt/keyrings/whitewaterfoundry_wslu-archive-keyring.gpg] https://packagecloud.io/whitewaterfoundry/wslu/debian/ trixie main
