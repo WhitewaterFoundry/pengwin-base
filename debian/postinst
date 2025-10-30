@@ -110,7 +110,7 @@ case "$1" in
 
 		# Remove temporary directory
 		echo "Cleaning up pengwin-base temporary install-dir"
-		rm -rf ${TMPDIR}
+		rm -rf "${TMPDIR}"
 
 		# Check if Debian version needs upgrading
 		check_debian_version
@@ -122,7 +122,7 @@ case "$1" in
 	abort-upgrade|abort-remove|abort-deconfigure)
 		# Silent, as this directory may not exist
 		# echo "Cleaning up pengwin-base temporary install dir"
-		rm -rf ${TMPDIR}
+		rm -rf "${TMPDIR}"
 	;;
 
 	*)
