@@ -23,9 +23,9 @@ FLAGFILE="/etc/apt/.dist-upgrade"
 
 # Check if Debian version needs upgrading
 check_debian_version() {
-	local PENGWIN_VERSION_ID
-	local DEBIAN_VERSION
-	local DEBIAN_MAJOR_VERSION
+	local pengwin_version_id
+	local debian_version
+	local debian_major_version
 	
 	echo "Checking Debian version compatibility..."
 	
@@ -34,28 +34,28 @@ check_debian_version() {
 	fi
 	
 	# Extract VERSION_ID from os-release (e.g., "13")
-	PENGWIN_VERSION_ID=$(grep "^VERSION_ID=" /usr/lib/os-release | cut -d'=' -f2 | tr -d '"')
+	pengwin_version_id=$(grep "^VERSION_ID=" /usr/lib/os-release | cut -d'=' -f2 | tr -d '"')
 	
 	# Extract major version from debian_version (e.g., "13.0" -> "13")
-	DEBIAN_VERSION=$(cat /etc/debian_version)
+	debian_version=$(cat /etc/debian_version)
 	
 	# Handle both numeric versions (e.g., "13.0") and codename versions (e.g., "trixie/sid")
-	if echo "$DEBIAN_VERSION" | grep -q "^[0-9]"; then
-		DEBIAN_MAJOR_VERSION=$(echo "$DEBIAN_VERSION" | cut -d'.' -f1)
+	if echo "$debian_version" | grep -q "^[0-9]"; then
+		debian_major_version=$(echo "$debian_version" | cut -d'.' -f1)
 	else
 		# For codename versions, we can't easily extract a numeric version
 		# so we'll skip the check
-		DEBIAN_MAJOR_VERSION=""
+		debian_major_version=""
 	fi
 	
 	# Compare major versions
-	if [ -n "$PENGWIN_VERSION_ID" ] && [ -n "$DEBIAN_MAJOR_VERSION" ]; then
-		if [ "$PENGWIN_VERSION_ID" != "$DEBIAN_MAJOR_VERSION" ]; then
-			echo "Debian version mismatch detected (Pengwin: $PENGWIN_VERSION_ID, System: $DEBIAN_MAJOR_VERSION)"
+	if [ -n "$pengwin_version_id" ] && [ -n "$debian_major_version" ]; then
+		if [ "$pengwin_version_id" != "$debian_major_version" ]; then
+			echo "Debian version mismatch detected (Pengwin: $pengwin_version_id, System: $debian_major_version)"
 			echo "Creating flag file to trigger dist-upgrade on next pengwin-setup run"
 			touch "${FLAGFILE}"
 		else
-			echo "Debian version is up to date (version $PENGWIN_VERSION_ID)"
+			echo "Debian version is up to date (version $pengwin_version_id)"
 		fi
 	fi
 }
