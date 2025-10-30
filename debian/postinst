@@ -23,6 +23,10 @@ FLAGFILE="/etc/apt/.dist-upgrade"
 
 # Check if Debian version needs upgrading
 check_debian_version() {
+	local PENGWIN_VERSION_ID
+	local DEBIAN_VERSION
+	local DEBIAN_MAJOR_VERSION
+	
 	echo "Checking Debian version compatibility..."
 	
 	if [ ! -f /usr/lib/os-release ] || [ ! -f /etc/debian_version ]; then
