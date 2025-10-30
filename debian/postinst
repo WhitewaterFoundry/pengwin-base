@@ -20,6 +20,41 @@ set -e
 
 TMPDIR="/run/dpkg.pengwin-base.inst"
 FLAGFILE="/etc/apt/.dist-upgrade"
+
+# Check if Debian version needs upgrading
+check_debian_version() {
+	echo "Checking Debian version compatibility..."
+	
+	if [ ! -f /usr/lib/os-release ] || [ ! -f /etc/debian_version ]; then
+		return 0
+	fi
+	
+	# Extract VERSION_ID from os-release (e.g., "13")
+	PENGWIN_VERSION_ID=$(grep "^VERSION_ID=" /usr/lib/os-release | cut -d'=' -f2 | tr -d '"')
+	
+	# Extract major version from debian_version (e.g., "13.0" -> "13")
+	DEBIAN_VERSION=$(cat /etc/debian_version)
+	
+	# Handle both numeric versions (e.g., "13.0") and codename versions (e.g., "trixie/sid")
+	if echo "$DEBIAN_VERSION" | grep -q "^[0-9]"; then
+		DEBIAN_MAJOR_VERSION=$(echo "$DEBIAN_VERSION" | cut -d'.' -f1)
+	else
+		# For codename versions, we can't easily extract a numeric version
+		# so we'll skip the check
+		DEBIAN_MAJOR_VERSION=""
+	fi
+	
+	# Compare major versions
+	if [ -n "$PENGWIN_VERSION_ID" ] && [ -n "$DEBIAN_MAJOR_VERSION" ]; then
+		if [ "$PENGWIN_VERSION_ID" != "$DEBIAN_MAJOR_VERSION" ]; then
+			echo "Debian version mismatch detected (Pengwin: $PENGWIN_VERSION_ID, System: $DEBIAN_MAJOR_VERSION)"
+			echo "Creating flag file to trigger dist-upgrade on next pengwin-setup run"
+			touch "${FLAGFILE}"
+		else
+			echo "Debian version is up to date (version $PENGWIN_VERSION_ID)"
+		fi
+	fi
+}
 case "$1" in
 	configure)
 		echo "Symlinking /etc/dpkg/origins/pengwin to default"
@@ -78,33 +113,7 @@ case "$1" in
 		rm -rf ${TMPDIR}
 
 		# Check if Debian version needs upgrading
-		echo "Checking Debian version compatibility..."
-		if [ -f /usr/lib/os-release ] && [ -f /etc/debian_version ]; then
-			# Extract VERSION_ID from os-release (e.g., "13")
-			PENGWIN_VERSION_ID=$(grep "^VERSION_ID=" /usr/lib/os-release | cut -d'=' -f2 | tr -d '"')
-			
-			# Extract major version from debian_version (e.g., "13.0" -> "13")
-			DEBIAN_VERSION=$(cat /etc/debian_version)
-			# Handle both numeric versions (e.g., "13.0") and codename versions (e.g., "trixie/sid")
-			if echo "$DEBIAN_VERSION" | grep -q "^[0-9]"; then
-				DEBIAN_MAJOR_VERSION=$(echo "$DEBIAN_VERSION" | cut -d'.' -f1)
-			else
-				# For codename versions, we can't easily extract a numeric version
-				# so we'll skip the check
-				DEBIAN_MAJOR_VERSION=""
-			fi
-			
-			# Compare major versions
-			if [ -n "$PENGWIN_VERSION_ID" ] && [ -n "$DEBIAN_MAJOR_VERSION" ]; then
-				if [ "$PENGWIN_VERSION_ID" != "$DEBIAN_MAJOR_VERSION" ]; then
-					echo "Debian version mismatch detected (Pengwin: $PENGWIN_VERSION_ID, System: $DEBIAN_MAJOR_VERSION)"
-					echo "Creating flag file to trigger dist-upgrade on next pengwin-setup run"
-					touch "${FLAGFILE}"
-				else
-					echo "Debian version is up to date (version $PENGWIN_VERSION_ID)"
-				fi
-			fi
-		fi
+		check_debian_version
 
 		# This is a new install, create dist-upgrade flag file
 		# touch "${FLAGFILE}"
