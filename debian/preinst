@@ -23,7 +23,7 @@ install)
   mkdir -p /etc/fish/conf.d
   mkdir -p /etc/apt/sources.list.d
   mkdir -p /etc/dpkg/origins
-  mkdir -p ${TMPDIR}
+  mkdir -p "${TMPDIR}"
 
   # List of files we change / require backing up
   FILES="/etc/fonts/local.conf \
