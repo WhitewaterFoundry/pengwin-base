@@ -3,7 +3,7 @@ function chcp_com() {
   chcp.com "$@" >/dev/null
 }
 
-chcp_com "$(cat ~/.config/wslu/oemcp)"
+chcp_com "$(cat ~/.local/state/wslu/oemcp)"
 
 powershell.exe "$@"
 
