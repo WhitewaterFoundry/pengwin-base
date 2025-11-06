@@ -10,6 +10,25 @@
 # Arguments:
 #  None
 #######################################
+
+# Helper function to get installed WSL distributions
+_wsl_get_distros() {
+  local distros
+  # Parse wsl --list output, skip header and extract distribution names
+  # Remove " (Default)" suffix and Windows line endings
+  distros=$(wsl.exe --list 2>/dev/null | sed -e 's/\r$//' -e '1d' -e 's/ (Default)$//' | tr -d '\0' | grep -v '^$' | sed 's/^[[:space:]]*//')
+  echo "$distros"
+}
+
+# Helper function to get available WSL distributions for installation
+_wsl_get_online_distros() {
+  local distros
+  # Parse wsl --list --online output, skip header lines and extract NAME column
+  # Skip first 4 lines (2 description lines + blank line + column headers), then get first column
+  distros=$(wsl.exe --list --online 2>/dev/null | sed -e 's/\r$//' | tail -n +5 | awk 'NF > 0 {print $1}')
+  echo "$distros"
+}
+
 function _wsl() {
 
   local cur=${COMP_WORDS[COMP_CWORD]}
@@ -35,9 +54,10 @@ function _wsl() {
       return 0
       ;;
     --distribution|-d|--set-default|-s|--terminate|-t|--unregister|--set-version|--manage|--export)
-      # Suggest distribution names (would need to parse wsl --list output)
-      # For now, provide empty completion
-      COMPREPLY=()
+      # Suggest distribution names from wsl --list output
+      local distros
+      distros=$(_wsl_get_distros)
+      mapfile -t COMPREPLY < <(compgen -W "$distros" -- "${cur}")
       return 0
       ;;
     --mount|--unmount)
@@ -122,10 +142,29 @@ function _wsl() {
   case "$cmd" in
     --install)
       if [[ "$cur" == -* ]]; then
+        # Complete with install options
         mapfile -t COMPREPLY < <(compgen -W "--enable-wsl1 --fixed-vhd --from-file --legacy --location --name --no-distribution --no-launch -n --version --vhd-size --web-download" -- "${cur}")
       else
-        # First positional argument could be a distribution name
-        COMPREPLY=()
+        # Check if we already have a distribution name
+        local has_distro=0
+        for ((i = 1; i < COMP_CWORD; i++)); do
+          if [[ "${COMP_WORDS[i]}" == "--install" ]]; then
+            continue
+          elif [[ "${COMP_WORDS[i]}" != -* ]]; then
+            has_distro=1
+            break
+          fi
+        done
+        
+        if [[ $has_distro -eq 0 ]]; then
+          # No distro yet, complete with online distribution names
+          local distros
+          distros=$(_wsl_get_online_distros)
+          mapfile -t COMPREPLY < <(compgen -W "$distros" -- "${cur}")
+        else
+          # Already have a distro, complete with options (no hyphen prefix)
+          COMPREPLY=()
+        fi
       fi
       return 0
       ;;
