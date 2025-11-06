@@ -29,7 +29,7 @@ function _winget() {
     mapfile -t COMPREPLY < <(compgen -W "install show source search list ls upgrade uninstall hash validate settings features export import \
                                 pin configure download repair dscv3 mcp \
                                 -v --version --info --help -? \
-                                --wait --logs --open-logs --verbose --verbose-logs --nowarn --ignore-warnings --disable-interactivity --proxy --no-proxy" -- "${cur}")
+                                --wait --logs --open-logs --verbose --verbose-logs --nowarn --ignore-warnings --disable-interactivity --proxy --no-proxy -m --manifest" -- "${cur}")
     ;;
     #   Generate the completion matches and load them into $COMPREPLY array.
   esac
