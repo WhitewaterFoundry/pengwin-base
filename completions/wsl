@@ -1,0 +1,181 @@
+#! /bin/bash
+
+#######################################
+# WSL (Windows Subsystem for Linux) bash completion
+#
+# Globals:
+#   COMPREPLY
+#   COMP_CWORD
+#   COMP_WORDS
+# Arguments:
+#  None
+#######################################
+function _wsl() {
+
+  local cur=${COMP_WORDS[COMP_CWORD]}
+  local prev=${COMP_WORDS[COMP_CWORD - 1]}
+  local cmd=""
+  
+  # Find the main command if present
+  local i
+  for ((i = 1; i < COMP_CWORD; i++)); do
+    case "${COMP_WORDS[i]}" in
+      --install|--manage|--mount|--export|--import|--import-in-place|--list|-l|--set-default|-s|--set-version|--terminate|-t|--unregister|--shutdown|--update)
+        cmd="${COMP_WORDS[i]}"
+        break
+        ;;
+    esac
+  done
+
+  # Handle options based on previous word
+  case "$prev" in
+    --cd)
+      # Suggest directories
+      mapfile -t COMPREPLY < <(compgen -d -- "${cur}")
+      return 0
+      ;;
+    --distribution|-d|--set-default|-s|--terminate|-t|--unregister|--set-version|--manage|--export)
+      # Suggest distribution names (would need to parse wsl --list output)
+      # For now, provide empty completion
+      COMPREPLY=()
+      return 0
+      ;;
+    --mount|--unmount)
+      # Disk path - provide file completion
+      mapfile -t COMPREPLY < <(compgen -f -- "${cur}")
+      return 0
+      ;;
+    --distribution-id)
+      # Distribution GUID - no completion
+      COMPREPLY=()
+      return 0
+      ;;
+    --user|-u)
+      # Username - no completion
+      COMPREPLY=()
+      return 0
+      ;;
+    --shell-type)
+      mapfile -t COMPREPLY < <(compgen -W "standard login none" -- "${cur}")
+      return 0
+      ;;
+    --exec|-e)
+      # Command to execute - provide command completion
+      mapfile -t COMPREPLY < <(compgen -c -- "${cur}")
+      return 0
+      ;;
+    --set-default-version|--version)
+      mapfile -t COMPREPLY < <(compgen -W "1 2" -- "${cur}")
+      return 0
+      ;;
+    --from-file|--import-in-place)
+      # File path completion
+      mapfile -t COMPREPLY < <(compgen -f -- "${cur}")
+      return 0
+      ;;
+    --location|--move)
+      # Directory path completion
+      mapfile -t COMPREPLY < <(compgen -d -- "${cur}")
+      return 0
+      ;;
+    --name)
+      # Distribution name - no completion
+      COMPREPLY=()
+      return 0
+      ;;
+    --type)
+      # Filesystem type
+      mapfile -t COMPREPLY < <(compgen -W "ext4 ext3 ext2 btrfs xfs" -- "${cur}")
+      return 0
+      ;;
+    --partition)
+      # Partition index - no completion
+      COMPREPLY=()
+      return 0
+      ;;
+    --options)
+      # Mount options - no completion
+      COMPREPLY=()
+      return 0
+      ;;
+    --vhd-size|--resize)
+      # Memory string - no completion
+      COMPREPLY=()
+      return 0
+      ;;
+    --set-sparse)
+      mapfile -t COMPREPLY < <(compgen -W "true false" -- "${cur}")
+      return 0
+      ;;
+    --set-default-user)
+      # Username - no completion
+      COMPREPLY=()
+      return 0
+      ;;
+    --format)
+      mapfile -t COMPREPLY < <(compgen -W "tar tar.gz tar.xz vhd" -- "${cur}")
+      return 0
+      ;;
+  esac
+
+  # Command-specific completions
+  case "$cmd" in
+    --install)
+      if [[ "$cur" == -* ]]; then
+        mapfile -t COMPREPLY < <(compgen -W "--enable-wsl1 --fixed-vhd --from-file --legacy --location --name --no-distribution --no-launch -n --version --vhd-size --web-download" -- "${cur}")
+      else
+        # First positional argument could be a distribution name
+        COMPREPLY=()
+      fi
+      return 0
+      ;;
+    --manage)
+      mapfile -t COMPREPLY < <(compgen -W "--move --set-sparse -s --set-default-user --resize" -- "${cur}")
+      return 0
+      ;;
+    --mount)
+      if [[ "$COMP_CWORD" -eq 2 ]]; then
+        # First argument after --mount is the disk path
+        mapfile -t COMPREPLY < <(compgen -f -- "${cur}")
+      else
+        mapfile -t COMPREPLY < <(compgen -W "--vhd --bare --name --type --options --partition" -- "${cur}")
+      fi
+      return 0
+      ;;
+    --shutdown)
+      mapfile -t COMPREPLY < <(compgen -W "--force" -- "${cur}")
+      return 0
+      ;;
+    --update)
+      mapfile -t COMPREPLY < <(compgen -W "--pre-release" -- "${cur}")
+      return 0
+      ;;
+    --export)
+      mapfile -t COMPREPLY < <(compgen -W "--format" -- "${cur}")
+      return 0
+      ;;
+    --import)
+      mapfile -t COMPREPLY < <(compgen -W "--version --vhd" -- "${cur}")
+      return 0
+      ;;
+    --list|-l)
+      mapfile -t COMPREPLY < <(compgen -W "--all --running --quiet -q --verbose -v --online -o" -- "${cur}")
+      return 0
+      ;;
+  esac
+
+  # If no command selected yet, provide main options
+  if [[ "$cur" == -* ]]; then
+    local main_opts="--help --debug-shell --install --manage --mount --set-default-version --shutdown --status --unmount --uninstall --update --version -v --export --import --import-in-place --list -l --set-default -s --set-version --terminate -t --unregister"
+    local running_opts="--exec -e --shell-type -- --cd --distribution -d --distribution-id --user -u --system"
+    mapfile -t COMPREPLY < <(compgen -W "$main_opts $running_opts" -- "${cur}")
+  else
+    # No hyphen prefix - could be distribution name or positional argument
+    COMPREPLY=()
+  fi
+
+  return 0
+}
+
+complete -F _wsl wsl
+complete -F _wsl wsl.exe
