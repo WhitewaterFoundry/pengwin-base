@@ -16,7 +16,8 @@ _wsl_get_distros() {
   local distros
   # Parse wsl --list --verbose output (locale-agnostic format)
   # Skip header line, remove leading spaces and asterisk (default marker), extract first column
-  distros=$(wsl.exe --list --verbose 2>/dev/null | sed -e 's/\r$//' | tail -n +2 | sed -e 's/^[* ]*//' | awk 'NF > 0 {print $1}')
+  # Note: wsl.exe outputs UTF-16 LE, so we need to filter null bytes before processing
+  distros=$(wsl.exe --list --verbose 2>/dev/null | tr -d '\0' | sed -e 's/\r$//' | tail -n +2 | sed -e 's/^[* ]*//' | awk 'NF > 0 {print $1}')
   echo "$distros"
 }
 
@@ -25,7 +26,8 @@ _wsl_get_online_distros() {
   local distros
   # Parse wsl --list --online output, skip header lines and extract NAME column
   # Skip first 4 lines (2 description lines + blank line + column headers), then get first column
-  distros=$(wsl.exe --list --online 2>/dev/null | sed -e 's/\r$//' | tail -n +5 | awk 'NF > 0 {print $1}')
+  # Note: wsl.exe outputs UTF-16 LE, so we need to filter null bytes before processing
+  distros=$(wsl.exe --list --online 2>/dev/null | tr -d '\0' | sed -e 's/\r$//' | tail -n +5 | awk 'NF > 0 {print $1}')
   echo "$distros"
 }
 
