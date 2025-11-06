@@ -169,7 +169,7 @@ function _wsl() {
       return 0
       ;;
     --manage)
-      mapfile -t COMPREPLY < <(compgen -W "--move --set-sparse -s --set-default-user --resize" -- "${cur}")
+      mapfile -t COMPREPLY < <(compgen -W "--move --set-sparse --set-default-user --resize" -- "${cur}")
       return 0
       ;;
     --mount)
