@@ -14,9 +14,9 @@
 # Helper function to get installed WSL distributions
 _wsl_get_distros() {
   local distros
-  # Parse wsl --list output, skip header and extract distribution names
-  # Remove " (Default)" suffix and Windows line endings
-  distros=$(wsl.exe --list 2>/dev/null | sed -e 's/\r$//' -e '1d' -e 's/ (Default)$//' | tr -d '\0' | grep -v '^$' | sed 's/^[[:space:]]*//')
+  # Parse wsl --list --verbose output (locale-agnostic format)
+  # Skip header line, remove leading spaces and asterisk (default marker), extract first column
+  distros=$(wsl.exe --list --verbose 2>/dev/null | sed -e 's/\r$//' | tail -n +2 | sed -e 's/^[* ]*//' | awk 'NF > 0 {print $1}')
   echo "$distros"
 }
 
