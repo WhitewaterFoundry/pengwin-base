@@ -121,7 +121,7 @@ case "$1" in
 
 		# Fix WSL1 systemd upgrade
 		if [ -z "${WSL_INTEROP}" ]; then
-			cd /bin && mv -f systemd-sysusers{,.org} && ln -s echo systemd-sysusers && cd -
+			mv -f /bin/systemd-sysusers /bin/systemd-sysusers.org && ln -s /bin/echo /bin/systemd-sysusers
 		fi
 	;;
 
