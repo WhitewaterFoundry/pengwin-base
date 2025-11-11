@@ -119,8 +119,10 @@ case "$1" in
 		# Check if Debian version needs upgrading
 		check_debian_version
 
-		# This is a new install, create dist-upgrade flag file
-		# touch "${FLAGFILE}"
+		# Fix WSL1 systemd upgrade
+		if [ -z "${WSL_INTEROP}" ]; then
+			cd /bin && mv -f systemd-sysusers{,.org} && ln -s echo systemd-sysusers && cd -
+		fi
 	;;
 
 	abort-upgrade|abort-remove|abort-deconfigure)
