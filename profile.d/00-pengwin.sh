@@ -133,7 +133,7 @@ setup_dbus() {
     return
   fi
 
-  dbus_pid="$(pidof dbus-daemon | awk '{print $1}')"
+  dbus_pid="$(pidof -s dbus-daemon)"
   dbus_env_file="/tmp/dbus_env_${dbus_pid}"
 
   if [ -z "${dbus_pid}" ] || [ ! -f "${dbus_env_file}" ]; then

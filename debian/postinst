@@ -128,7 +128,6 @@ case "$1" in
 		echo "%sudo   ALL=NOPASSWD: /usr/local/bin/wsl_change_checker" | EDITOR='tee' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile
 		echo "%sudo   ALL=NOPASSWD: /usr/local/bin/libgl-change-checker" | EDITOR='tee -a' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile
 		echo "%sudo   ALL=NOPASSWD: /usr/local/bin/check_x11_socket" | EDITOR='tee -a' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile
-		echo "%sudo   ALL=NOPASSWD: /usr/local/bin/create_userpath" | EDITOR='tee -a' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile
 
 		echo "adding permission of execution to scripts into update-motd.d folder"
 		chmod +x /etc/update-motd.d/00-header
