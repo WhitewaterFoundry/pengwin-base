@@ -70,11 +70,11 @@ case "$1" in
 			if [ ! -e /etc/wsl.conf ]; then
 				# Fresh install or wsl.conf was removed - install template
 				echo "Installing wsl.conf from template..."
-				cp /usr/share/pengwin-base/wsl.conf.default /etc/wsl.conf
+				install -m 644 /usr/share/pengwin-base/wsl.conf.default /etc/wsl.conf
 			else
 				# File exists - create .dpkg-new for user to review
 				echo "Existing wsl.conf found, creating /etc/wsl.conf.dpkg-new..."
-				cp /usr/share/pengwin-base/wsl.conf.default /etc/wsl.conf.dpkg-new
+				install -m 644 /usr/share/pengwin-base/wsl.conf.default /etc/wsl.conf.dpkg-new
 			fi
 		else
 			echo "Warning: Template file /usr/share/pengwin-base/wsl.conf.default not found"
