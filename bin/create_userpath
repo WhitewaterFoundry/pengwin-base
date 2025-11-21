@@ -10,16 +10,22 @@
 # Returns:
 #   Exit status of the final command executed:
 #     - 0 if the directory already exists or was created successfully.
-#     - Non-zero if directory creation fails.
+#     - Non-zero if directory creation fails or uid is invalid.
 # Side effects:
 #   May create /run/user/<uid>.
 #   Suppresses mkdir error output (stderr) to avoid noisy logs.
 #######################################
-function main() {
-  local uid="${1}"
+main() {
+  uid="${1}"
 
-  local user_path="/run/user/${uid}"
-  if [[ ! -d "${user_path}" ]]; then
+  # Validate that uid is a positive integer
+  if [ -z "${uid}" ] || ! echo "${uid}" | grep -qE '^[0-9]+$'; then
+    echo "Error: Invalid uid '${uid}'. Must be a positive integer." >&2
+    return 1
+  fi
+
+  user_path="/run/user/${uid}"
+  if [ ! -d "${user_path}" ]; then
     mkdir -p "${user_path}" 2>/dev/null
     chown -R "${uid}:${uid}" "${user_path}" 2>/dev/null
 

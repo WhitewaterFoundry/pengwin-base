@@ -209,10 +209,10 @@ main() {
 
     # Here has an issue: %HOMEDRIVE% might be using a custom set location
     # moving cmd to where Windows is installed might help: %SYSTEMDRIVE%
-    wHomeWinPath=$(cmd.exe /c 'cd %SYSTEMDRIVE%\ && echo %HOMEDRIVE%%HOMEPATH%' 2>/dev/null | tr -d '\r')
+    wHomeWinPath=$(cmd-exe /c 'cd %SYSTEMDRIVE%\ && echo %HOMEDRIVE%%HOMEPATH%' 2>/dev/null | tr -d '\r')
 
     if [ ${#wHomeWinPath} -le 3 ]; then #wHomeWinPath contains something like H:\
-      wHomeWinPath=$(cmd.exe /c 'cd %SYSTEMDRIVE%\ && echo %USERPROFILE%' 2>/dev/null | tr -d '\r')
+      wHomeWinPath=$(cmd-exe /c 'cd %SYSTEMDRIVE%\ && echo %USERPROFILE%' 2>/dev/null | tr -d '\r')
     fi
 
     # shellcheck disable=SC2155
