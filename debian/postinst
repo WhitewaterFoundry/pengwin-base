@@ -66,14 +66,18 @@ case "$1" in
 
 		# Handle wsl.conf configuration file
 		echo "Managing wsl.conf configuration..."
-		if [ ! -f /etc/wsl.conf ]; then
-			# Fresh install or wsl.conf was removed - install template
-			echo "Installing wsl.conf from template..."
-			cp /usr/share/pengwin-base/wsl.conf.default /etc/wsl.conf
+		if [ -f /usr/share/pengwin-base/wsl.conf.default ]; then
+			if [ ! -e /etc/wsl.conf ]; then
+				# Fresh install or wsl.conf was removed - install template
+				echo "Installing wsl.conf from template..."
+				cp /usr/share/pengwin-base/wsl.conf.default /etc/wsl.conf
+			else
+				# File exists - create .dpkg-new for user to review
+				echo "Existing wsl.conf found, creating /etc/wsl.conf.dpkg-new..."
+				cp /usr/share/pengwin-base/wsl.conf.default /etc/wsl.conf.dpkg-new
+			fi
 		else
-			# File exists - create .dpkg-new for user to review
-			echo "Existing wsl.conf found, creating /etc/wsl.conf.dpkg-new..."
-			cp /usr/share/pengwin-base/wsl.conf.default /etc/wsl.conf.dpkg-new
+			echo "Warning: Template file /usr/share/pengwin-base/wsl.conf.default not found"
 		fi
 
 		### Whitewater Foundry GPG Key install
