@@ -2,7 +2,7 @@ environment /etc/
 profile.d/* /etc/profile.d/
 fish_conf.d/* /etc/fish/conf.d/
 os-release /usr/lib/
-wsl.conf /etc/
+usr/share/pengwin-base/wsl.conf.default /usr/share/pengwin-base/
 preferences /etc/apt/
 sources.list /etc/apt/
 sources.list.d/* /etc/apt/sources.list.d/

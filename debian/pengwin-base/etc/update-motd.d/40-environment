@@ -1,0 +1,38 @@
+#!/bin/sh
+
+winhome_path="${HOME}/winhome"
+
+printf " Environment variables:\n"
+printf "  DISPLAY        \t%s\n" "${DISPLAY}"
+
+if [ -n "${WSL_DISTRO_NAME}" ]; then
+  printf "  WSL_DISTRO_NAME\t%s\n" "${WSL_DISTRO_NAME}"
+fi
+if [ -n "${WAYLAND_DISPLAY}" ]; then
+  printf "  WAYLAND_DISPLAY\t%s\n" "${WAYLAND_DISPLAY}"
+fi
+if [ -n "${PULSE_SERVER}" ]; then
+  printf "  PULSE_SERVER   \t%s\n" "${PULSE_SERVER}"
+fi
+
+printf " \n"
+printf " Network\n"
+ip -o -f inet addr show | awk '{printf "  IPv4 for %-20s %s\n",$2, $4}' | cut -f1 -d/
+printf " \n"
+printf " Windows Home Location: "
+printf " %s" "${winhome_path}"
+printf " \n"
+printf " The Windows C: drive is mounted at: "
+wslpath -u 'C:\' | awk '{printf "%s", $1}'
+printf " \n"
+printf " To open the current folder with Windows Explorer, run: wslview ."
+printf " \n\n"
+
+if [ -z "${WSL2}" ]; then
+  printf " Running WSL version 1"
+else
+  printf " Running WSL version 2"
+fi
+printf " \n"
+
+unset winhome_path

@@ -1,0 +1,11 @@
+[automount]
+enabled = true
+options = "metadata,uid=1000,gid=1000,umask=0022,fmask=11,case=off"
+mountFsTab = true
+
+[network]
+generateHosts = true
+generateResolvConf = true
+
+[filesystem]
+umask = 0022

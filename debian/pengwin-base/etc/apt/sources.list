@@ -1,0 +1,14 @@
+deb https://deb.debian.org/debian trixie main contrib non-free non-free-firmware
+# deb-src https://deb.debian.org/debian trixie main contrib non-free non-free-firmware
+
+deb https://deb.debian.org/debian trixie-updates main
+# deb-src https://deb.debian.org/debian trixie-updates main
+
+deb https://deb.debian.org/debian-security trixie-security main
+# deb-src https://deb.debian.org/debian-security trixie-security main
+
+deb https://deb.debian.org/debian trixie-backports main
+# deb-src https://deb.debian.org/debian trixie-backports main
+
+deb https://deb.debian.org/debian oldstable main
+# deb https://deb.debian.org/debian testing main

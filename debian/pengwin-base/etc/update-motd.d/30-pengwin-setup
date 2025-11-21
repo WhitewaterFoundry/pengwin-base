@@ -1,0 +1,8 @@
+#!/bin/sh
+
+printf " Pengwin includes 'Pengwin Setup,' which allow new Pengwin users to get started on Linux immediately"
+printf "\n"
+printf " To execute, run: pengwin-setup"
+printf "\n"
+printf " To check for updates, run: pengwin-setup update"
+printf "\n\n"

@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if [[ "$1" == "release" ]]; then
+  export OLD='-dev'
+  export NEW=''
+else
+  export OLD=''
+  export NEW='-dev'
+fi
+
+curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-base${NEW}/script.deb.sh" | sudo env os=debian dist=trixie bash
+curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/pengwin-setup${NEW}/script.deb.sh" | sudo env os=debian dist=trixie bash
+curl -s "https://packagecloud.io/install/repositories/whitewaterfoundry/wslu${NEW}/script.deb.sh" | sudo env os=debian dist=trixie bash
+
+sudo sed -i "s\$/pengwin-setup${OLD}/\$/pengwin-setup${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
+sudo sed -i "s\$/pengwin-base${OLD}/\$/pengwin-base${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
+sudo sed -i "s\$/wslu${OLD}/\$/wslu${NEW}/\$g" /etc/apt/sources.list.d/whitewaterfoundry.list
+
+sudo sed -i "s/pengwin-setup${OLD}-a/pengwin-setup${NEW}-a/g" /etc/apt/sources.list.d/whitewaterfoundry.list
+sudo sed -i "s/pengwin-base${OLD}-a/pengwin-base${NEW}-a/g" /etc/apt/sources.list.d/whitewaterfoundry.list
+sudo sed -i "s/wslu${OLD}-a/wslu${NEW}-a/g" /etc/apt/sources.list.d/whitewaterfoundry.list
+
+sudo sed -i "s/bullseye/trixie/g" /etc/apt/sources.list.d/whitewaterfoundry.list
+sudo sed -i "s/bookworm/trixie/g" /etc/apt/sources.list.d/whitewaterfoundry.list
+
+sudo rm /etc/apt/sources.list.d/whitewaterfoundry_*
+
+sudo apt -y update
+sudo apt -y upgrade
