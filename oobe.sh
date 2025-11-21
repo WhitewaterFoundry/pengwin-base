@@ -59,7 +59,7 @@ function main() {
     elif [ ${#username} -gt 32 ]; then
       echo "Error: Username must be 32 characters or less."
       continue
-    elif ! echo "${username}" | grep -qE '^[a-z_][a-z0-9_-]*$'; then
+    elif [[ ! ${username} =~ ^[a-z_][a-z0-9_-]*$ ]]; then
       echo "Error: Username must start with a letter or underscore and contain only lowercase letters, numbers, underscores, and hyphens."
       continue
     fi
@@ -67,7 +67,7 @@ function main() {
     create_user "${username}" && break
   done
 
-  if [ ! -f /etc/wsl.conf ] || ! grep -q '^\[user\]' /etc/wsl.conf 2>/dev/null; then
+  if ! grep -q '^\[user\]' /etc/wsl.conf 2>/dev/null; then
     echo -e "\n[user]\ndefault=${username}" >> /etc/wsl.conf
   else
     sed -i "s/\(default=\)\(.*\)/\1${username}/" /etc/wsl.conf
