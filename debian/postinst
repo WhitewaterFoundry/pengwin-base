@@ -122,6 +122,9 @@ case "$1" in
 		chmod 755 /usr/local/bin/start-systemd
     chmod 755 /usr/local/bin/check_x11_socket
 
+		# Set permissions for WSL architecture files
+		chmod 755 /usr/lib/wsl/oobe.sh
+
 		chmod u+s "$(command -v ping)"
 
 		echo "%sudo   ALL=NOPASSWD: /usr/local/bin/wsl_change_checker" | EDITOR='tee' visudo --quiet --file=/etc/sudoers.d/pengwin-wsl-profile
