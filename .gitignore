@@ -1,0 +1,15 @@
+# Debian build artifacts
+debian/.debhelper/
+debian/debhelper-build-stamp
+debian/pengwin-base/
+debian/files
+debian/*.substvars
+debian/*.debhelper.log
+debian/tmp/
+
+# Build output
+*.deb
+*.dsc
+*.changes
+*.buildinfo
+*.build

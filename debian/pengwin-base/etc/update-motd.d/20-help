@@ -1,8 +1,0 @@
-#!/bin/sh
-
-. /etc/os-release
-
-printf "\n"
-printf " * Home:           %s\n" "${HOME_URL}"
-printf " * Support:        %s\n" "${SUPPORT_URL}"
-printf "\n"
