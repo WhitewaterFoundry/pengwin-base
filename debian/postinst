@@ -71,10 +71,13 @@ case "$1" in
 				# Fresh install or wsl.conf was removed - install template
 				echo "Installing wsl.conf from template..."
 				install -m 644 /usr/share/pengwin-base/wsl.conf.default /etc/wsl.conf
-			else
-				# File exists - create .dpkg-new for user to review
+			elif [ -f /etc/wsl.conf ]; then
+				# Regular file exists - create .dpkg-new for user to review
 				echo "Existing wsl.conf found, creating /etc/wsl.conf.dpkg-new..."
 				install -m 644 /usr/share/pengwin-base/wsl.conf.default /etc/wsl.conf.dpkg-new
+			else
+				# Path exists but is not a regular file (directory/symlink/etc)
+				echo "Warning: /etc/wsl.conf exists but is not a regular file, skipping..."
 			fi
 		else
 			echo "Warning: Template file /usr/share/pengwin-base/wsl.conf.default not found"
