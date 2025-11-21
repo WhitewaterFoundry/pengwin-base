@@ -81,6 +81,7 @@ setup_display() {
           ln -fs "${wslg_pulse_dir}"/pid "${pulse_path}"/ 2>/dev/null
 
         elif [ -S "${pulse_path}/native" ]; then
+          # Handle stale socket: remove it and recreate as symlink to WSLg pulse
           rm -f "${pulse_path}/native" 2>/dev/null
           ln -s "${wslg_pulse_dir}"/native "${pulse_path}"/ 2>/dev/null
         fi

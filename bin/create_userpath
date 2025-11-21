@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #######################################
 # Ensures the user's runtime directory exists under /run/user/<uid>.
