@@ -37,7 +37,7 @@ function main() {
   fi
 
   # If the default user is already created, we exit the script.
-  if getent passwd ${DEFAULT_UID} > /dev/null; then
+  if getent passwd "${DEFAULT_UID}" > /dev/null; then
     return 0
   fi
 
@@ -55,7 +55,7 @@ function main() {
   done
 
   if [ "$(grep -c "\[user\]" /etc/wsl.conf)" -eq 0 ]; then
-    echo -e "\n[user]\ndefault=${username}">>/etc/wsl.conf
+    echo -e "\n[user]\ndefault=${username}" >> /etc/wsl.conf
   else
     sed -i "s/\(default=\)\(.*\)/\1${username}/" /etc/wsl.conf
   fi
