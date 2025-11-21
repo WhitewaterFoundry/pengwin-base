@@ -18,10 +18,10 @@
 main() {
   uid="${1}"
 
-  # Validate that uid is a positive integer using safe parameter expansion
+  # Validate that uid is a non-negative integer using safe parameter expansion
   case "${uid}" in
     ''|*[!0-9]*)
-      echo "Error: Invalid uid '${uid}'. Must be a positive integer." >&2
+      echo "Error: Invalid uid '${uid}'. Must be a non-negative integer." >&2
       return 1
       ;;
   esac

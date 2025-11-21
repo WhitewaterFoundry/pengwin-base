@@ -134,9 +134,8 @@ setup_dbus() {
   fi
 
   dbus_pid="$(pidof -s dbus-daemon)"
-  dbus_env_file="/tmp/dbus_env_${dbus_pid}"
 
-  if [ -z "${dbus_pid}" ] || [ ! -f "${dbus_env_file}" ]; then
+  if [ -z "${dbus_pid}" ]; then
     dbus_env="$(timeout 2s dbus-launch --auto-syntax)"
     eval "${dbus_env}"
 
@@ -144,8 +143,12 @@ setup_dbus() {
     echo "${dbus_env}" >"${dbus_env_file}"
 
     unset dbus_env
-  else # Running from a previous session
-    eval "$(cat "${dbus_env_file}")"
+  else
+    # Reuse existing dbus session
+    dbus_env_file="/tmp/dbus_env_${dbus_pid}"
+    if [ -f "${dbus_env_file}" ]; then
+      eval "$(cat "${dbus_env_file}")"
+    fi
   fi
 
   unset dbus_pid
