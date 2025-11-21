@@ -80,6 +80,7 @@ setup_wsl_conf() {
 		echo "Warning: Template file /usr/share/pengwin-base/wsl.conf.default not found"
 	fi
 }
+
 case "$1" in
 	configure)
 		echo "Symlinking /etc/dpkg/origins/pengwin to default"
