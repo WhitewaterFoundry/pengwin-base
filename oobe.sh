@@ -67,7 +67,7 @@ function main() {
     create_user "${username}" && break
   done
 
-  if ! grep -q '^\\[user\\]' /etc/wsl.conf 2>/dev/null; then
+  if ! grep -q '^\[user\]' /etc/wsl.conf 2>/dev/null; then
     echo -e "\n[user]\ndefault=${username}" >> /etc/wsl.conf
   else
     sed -i "s/\(default=\)\(.*\)/\1${username}/" /etc/wsl.conf
