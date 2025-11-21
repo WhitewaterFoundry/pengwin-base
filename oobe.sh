@@ -51,6 +51,19 @@ function main() {
     # Prompt for the username
     read -rp 'Enter new Linux username: ' username
 
+    # Validate username: must be 1-32 chars, start with letter or underscore,
+    # contain only letters, numbers, underscore, hyphen
+    if [ -z "${username}" ]; then
+      echo "Error: Username cannot be empty."
+      continue
+    elif [ ${#username} -gt 32 ]; then
+      echo "Error: Username must be 32 characters or less."
+      continue
+    elif ! echo "${username}" | grep -qE '^[a-z_][a-z0-9_-]*$'; then
+      echo "Error: Username must start with a letter or underscore and contain only lowercase letters, numbers, underscores, and hyphens."
+      continue
+    fi
+
     create_user "${username}" && break
   done
 
