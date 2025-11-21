@@ -47,9 +47,9 @@ function main() {
   echo 'Please create a default Linux user account. The username does not need to match your Windows username.'
   echo 'For more information visit: https://aka.ms/wslusers'
 
+  local username
   while true; do
     # Prompt for the username
-    local username
     read -rp 'Enter new Linux username: ' username
 
     create_user "${username}" && break
