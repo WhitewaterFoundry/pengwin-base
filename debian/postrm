@@ -40,6 +40,11 @@ purge | remove | abort-install | disappear)
   rm -f /etc/systemd/system/NetworkManager.service
   rm -f /etc/systemd/system/NetworkManager-wait-online.service
 
+  # Reload systemd configuration to recognize unmasked services
+  if command -v systemctl >/dev/null 2>&1; then
+    systemctl daemon-reload 2>/dev/null || true
+  fi
+
   # Remove our keys from the keyring
   # pengwin-base
   apt-key remove "5072 3F92 6561 0360 9BED  4073 88F4 A913 E429 E4F4"

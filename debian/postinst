@@ -135,19 +135,26 @@ case "$1" in
 		chmod +x /etc/update-motd.d/40-environment
 
 		# Mask conflicting systemd services for WSL compatibility
-		echo "Masking conflicting systemd services for WSL..."
-		ln -sf /dev/null /etc/systemd/system/systemd-resolved.service
-		ln -sf /dev/null /etc/systemd/system/systemd-networkd.service
-		ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-setup.service
-		ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-clean.service
-		ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-clean.timer
-		ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-setup-dev-early.service
-		ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-setup-dev.service
-		ln -sf /dev/null /etc/systemd/system/tmp.mount
-		ln -sf /dev/null /etc/systemd/system/NetworkManager.service
-		ln -sf /dev/null /etc/systemd/system/NetworkManager-wait-online.service
+		# Reference: https://learn.microsoft.com/en-us/windows/wsl/systemd
+		if [ -d /etc/systemd/system ]; then
+			echo "Masking conflicting systemd services for WSL..."
+			ln -sf /dev/null /etc/systemd/system/systemd-resolved.service
+			ln -sf /dev/null /etc/systemd/system/systemd-networkd.service
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-setup.service
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-clean.service
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-clean.timer
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-setup-dev-early.service
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-setup-dev.service
+			ln -sf /dev/null /etc/systemd/system/tmp.mount
+			ln -sf /dev/null /etc/systemd/system/NetworkManager.service
+			ln -sf /dev/null /etc/systemd/system/NetworkManager-wait-online.service
 
-		echo " Done!"
+			# Reload systemd to pick up masked services immediately
+			if command -v systemctl >/dev/null 2>&1; then
+				systemctl daemon-reload 2>/dev/null || true
+			fi
+			echo " Done!"
+		fi
 		###
 
 		# Remove temporary directory
