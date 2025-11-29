@@ -27,6 +27,19 @@ purge | remove | abort-install | disappear)
   rm -f /etc/apt/sources.list.d/whitewaterfoundry.list
   rm -f /etc/wsl.conf
 
+  # Unmask systemd services that were masked for WSL compatibility
+  echo "Unmasking systemd services..."
+  rm -f /etc/systemd/system/systemd-resolved.service
+  rm -f /etc/systemd/system/systemd-networkd.service
+  rm -f /etc/systemd/system/systemd-tmpfiles-setup.service
+  rm -f /etc/systemd/system/systemd-tmpfiles-clean.service
+  rm -f /etc/systemd/system/systemd-tmpfiles-clean.timer
+  rm -f /etc/systemd/system/systemd-tmpfiles-setup-dev-early.service
+  rm -f /etc/systemd/system/systemd-tmpfiles-setup-dev.service
+  rm -f /etc/systemd/system/tmp.mount
+  rm -f /etc/systemd/system/NetworkManager.service
+  rm -f /etc/systemd/system/NetworkManager-wait-online.service
+
   # Remove our keys from the keyring
   # pengwin-base
   apt-key remove "5072 3F92 6561 0360 9BED  4073 88F4 A913 E429 E4F4"
