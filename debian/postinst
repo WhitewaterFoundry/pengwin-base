@@ -148,11 +148,6 @@ case "$1" in
 			ln -sf /dev/null /etc/systemd/system/tmp.mount
 			ln -sf /dev/null /etc/systemd/system/NetworkManager.service
 			ln -sf /dev/null /etc/systemd/system/NetworkManager-wait-online.service
-
-			# Reload systemd to pick up masked services immediately
-			if command -v systemctl >/dev/null 2>&1; then
-				systemctl daemon-reload 2>/dev/null || true
-			fi
 			echo " Done!"
 		fi
 		###
