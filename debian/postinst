@@ -135,7 +135,22 @@ case "$1" in
 		chmod +x /etc/update-motd.d/30-pengwin-setup
 		chmod +x /etc/update-motd.d/40-environment
 
-		echo " Done!"
+		# Mask conflicting systemd services for WSL compatibility
+		# Reference: https://learn.microsoft.com/en-us/windows/wsl/systemd
+		if [ -d /etc/systemd/system ]; then
+			echo "Masking conflicting systemd services for WSL..."
+			ln -sf /dev/null /etc/systemd/system/systemd-resolved.service
+			ln -sf /dev/null /etc/systemd/system/systemd-networkd.service
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-setup.service
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-clean.service
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-clean.timer
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-setup-dev-early.service
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-setup-dev.service
+			ln -sf /dev/null /etc/systemd/system/tmp.mount
+			ln -sf /dev/null /etc/systemd/system/NetworkManager.service
+			ln -sf /dev/null /etc/systemd/system/NetworkManager-wait-online.service
+			echo " Done!"
+		fi
 		###
 
 		# Remove temporary directory
@@ -145,8 +160,10 @@ case "$1" in
 		# Check if Debian version needs upgrading
 		check_debian_version
 
-		# This is a new install, create dist-upgrade flag file
-		# touch "${FLAGFILE}"
+		# Fix WSL1 systemd upgrade
+		if [ -z "${WSL_INTEROP}" ]; then
+			mv -f /bin/systemd-sysusers /bin/systemd-sysusers.org && ln -s /bin/echo /bin/systemd-sysusers
+		fi
 	;;
 
 	abort-upgrade|abort-remove|abort-deconfigure)
