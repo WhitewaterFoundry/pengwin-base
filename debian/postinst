@@ -81,6 +81,32 @@ setup_wsl_conf() {
 	fi
 }
 
+# Setup polkitd user and group if they don't exist
+setup_polkitd_user() {
+	POLKIT_USER='polkitd'
+	echo "Setting up polkit user/group (${POLKIT_USER})..."
+
+	# Create system group if it doesn't exist
+	if ! getent group "$POLKIT_USER" >/dev/null; then
+		echo "Creating system group ${POLKIT_USER}..."
+		groupadd --system "$POLKIT_USER"
+	fi
+
+	# Create system user if it doesn't exist
+	if ! getent passwd "$POLKIT_USER" >/dev/null; then
+		echo "Creating system user ${POLKIT_USER}..."
+		useradd --system \
+			--gid "$POLKIT_USER" \
+			--home-dir /var/lib/polkit-1 \
+			--no-create-home \
+			--shell /usr/sbin/nologin \
+			"$POLKIT_USER"
+	fi
+
+	# Create runtime/state directory that polkit uses
+	install -d -m 700 -o "$POLKIT_USER" -g "$POLKIT_USER" /var/lib/polkit-1
+}
+
 case "$1" in
 	configure)
 		echo "Symlinking /etc/dpkg/origins/pengwin to default"
@@ -88,6 +114,9 @@ case "$1" in
 
 		# Handle wsl.conf configuration file
 		setup_wsl_conf
+
+		# Setup polkitd user/group
+		setup_polkitd_user
 
 		### Whitewater Foundry GPG Key install
 		echo "Installing Whitewater Foundry GPG keys..."
