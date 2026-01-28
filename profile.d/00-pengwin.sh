@@ -146,6 +146,11 @@ setup_display() {
       return
     fi
 
+    if [ -f "${HOME}/.config/pengwin/display_ip_from_dns" ]; then
+      setup_display_via_resolv
+      return
+    fi
+
     # enable external x display for WSL 2
     route_exec=$(wslpath 'C:\Windows\system32\route.exe')
 
