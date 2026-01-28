@@ -134,7 +134,7 @@ setup_display() {
       elif [ -S "${pulse_path}/native" ]; then
         # Handle stale socket: remove it and recreate as symlink to WSLg pulse
         rm -f "${pulse_path}/native" 2>/dev/null
-        ln -s "${wslg_pulse_dir}"/native "${pulse_path}"/ 2>/dev/null
+        ln -fs "${wslg_pulse_dir}"/native "${pulse_path}"/ 2>/dev/null
       fi
 
       unset user_path
@@ -197,26 +197,48 @@ setup_dbus() {
     return
   fi
 
+  # Use a per-user directory for storing the D-Bus environment
+  dbus_env_dir="${XDG_RUNTIME_DIR:-${HOME}/.cache}"
+  mkdir -p "${dbus_env_dir}" 2>/dev/null || true
+
   dbus_pid="$(pidof -s dbus-daemon)"
 
   if [ -z "${dbus_pid}" ]; then
-    dbus_env="$(timeout 2s dbus-launch --auto-syntax)"
-    eval "${dbus_env}"
+    dbus_env="$(timeout 2s dbus-launch --auto-syntax)" || return
 
-    dbus_env_file="/tmp/dbus_env_${DBUS_SESSION_BUS_PID}"
-    echo "${dbus_env}" >"${dbus_env_file}"
+    # Extract and export only the expected variables from dbus-launch output
+    DBUS_SESSION_BUS_ADDRESS="$(printf '%s\n' "${dbus_env}" | sed -n "s/^DBUS_SESSION_BUS_ADDRESS='\(.*\)';\$/\1/p")"
+    DBUS_SESSION_BUS_PID="$(printf '%s\n' "${dbus_env}" | sed -n "s/^DBUS_SESSION_BUS_PID=\([0-9][0-9]*\);$/\1/p")"
+
+    if [ -n "${DBUS_SESSION_BUS_ADDRESS}" ] && [ -n "${DBUS_SESSION_BUS_PID}" ]; then
+      export DBUS_SESSION_BUS_ADDRESS
+      export DBUS_SESSION_BUS_PID
+
+      dbus_env_file="${dbus_env_dir}/dbus_env_${DBUS_SESSION_BUS_PID}"
+      {
+        echo "DBUS_SESSION_BUS_ADDRESS='${DBUS_SESSION_BUS_ADDRESS}'"
+        echo "DBUS_SESSION_BUS_PID='${DBUS_SESSION_BUS_PID}'"
+      } >"${dbus_env_file}"
+      chmod 600 "${dbus_env_file}" 2>/dev/null || true
+    fi
 
     unset dbus_env
   else
     # Reuse existing dbus session
-    dbus_env_file="/tmp/dbus_env_${dbus_pid}"
+    dbus_env_file="${dbus_env_dir}/dbus_env_${dbus_pid}"
     if [ -f "${dbus_env_file}" ]; then
-      eval "$(cat "${dbus_env_file}")"
+      DBUS_SESSION_BUS_ADDRESS="$(sed -n "s/^DBUS_SESSION_BUS_ADDRESS='\(.*\)'\$/\1/p" "${dbus_env_file}")"
+      DBUS_SESSION_BUS_PID="$(sed -n "s/^DBUS_SESSION_BUS_PID='\([0-9][0-9]*\)'\$/\1/p" "${dbus_env_file}")"
+      if [ -n "${DBUS_SESSION_BUS_ADDRESS}" ] && [ -n "${DBUS_SESSION_BUS_PID}" ]; then
+        export DBUS_SESSION_BUS_ADDRESS
+        export DBUS_SESSION_BUS_PID
+      fi
     fi
   fi
 
   unset dbus_pid
   unset dbus_env_file
+  unset dbus_env_dir
 }
 
 main() {
