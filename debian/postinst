@@ -121,6 +121,7 @@ case "$1" in
 		chmod 755 /usr/local/bin/wsljournalctl
 		chmod 755 /usr/local/bin/start-systemd
     chmod 755 /usr/local/bin/check_x11_socket
+    chmod 755 /usr/local/bin/create_userpath
 
 		chmod u+s "$(command -v ping)"
 

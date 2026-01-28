@@ -57,7 +57,6 @@ setup_display_via_resolv() {
 }
 
 setup_display() {
-
   if [ -n "${XRDP_SESSION}" ]; then
     if [ -f "${systemd_saved_environment}" ]; then
       set -a
@@ -70,6 +69,11 @@ setup_display() {
       export WSL2=1
 
       setup_interop
+    fi
+
+    unset WAYLAND_DISPLAY
+    if [ -n "$SYSTEMD_PID" ]; then
+      rm -f /run/user/"$(id -u)"/wayland* 2>/dev/null
     fi
 
     if [ -z "${PULSE_SERVER}" ]; then
@@ -89,6 +93,9 @@ setup_display() {
   # WSL2=2: WSL2 (Type 2) using the IP of the gateway (host IP)
   # WSL2=3: WSL2 (Type 3) using the DISPLAY variable already set WSLg?
   if [ -n "${WSL_INTEROP}" ]; then
+    #Export an environment variable for helping other processes
+    export WSL2=1
+
     if [ -n "${DISPLAY}" ] && [ ! -f "${HOME}/.config/pengwin/disable_wslg" ]; then #WSLg
       # check if the type is changed
       sudo /usr/local/bin/wsl_change_checker 3
@@ -99,6 +106,43 @@ setup_display() {
         export DISPLAY=":${socket_index}"
       fi
 
+      uid="$(id -u)"
+
+      user_path="/run/user/${uid}"
+      if [ ! -d "${user_path}" ]; then
+        sudo /usr/local/bin/create_userpath "${uid}" 2>/dev/null
+      fi
+
+      if [ -z "$SYSTEMD_PID" ]; then
+        export XDG_RUNTIME_DIR="${user_path}"
+      fi
+
+      wslg_runtime_dir="/mnt/wslg/runtime-dir"
+
+      ln -fs "${wslg_runtime_dir}"/wayland-0 "${user_path}"/ 2>/dev/null
+      ln -fs "${wslg_runtime_dir}"/wayland-0.lock "${user_path}"/ 2>/dev/null
+
+      pulse_path="${user_path}/pulse"
+      wslg_pulse_dir="${wslg_runtime_dir}"/pulse
+
+      if [ ! -d "${pulse_path}" ]; then
+        mkdir -p "${pulse_path}" 2>/dev/null
+
+        ln -fs "${wslg_pulse_dir}"/native "${pulse_path}"/ 2>/dev/null
+        ln -fs "${wslg_pulse_dir}"/pid "${pulse_path}"/ 2>/dev/null
+
+      elif [ -S "${pulse_path}/native" ]; then
+        # Handle stale socket: remove it and recreate as symlink to WSLg pulse
+        rm -f "${pulse_path}/native" 2>/dev/null
+        ln -fs "${wslg_pulse_dir}"/native "${pulse_path}"/ 2>/dev/null
+      fi
+
+      unset user_path
+      unset wslg_runtime_dir
+      unset wslg_pulse_dir
+      unset pulse_path
+      unset uid
+
       return
     fi
 
@@ -108,10 +152,10 @@ setup_display() {
     fi
 
     # enable external x display for WSL 2
+    route_exec=$(wslpath 'C:\Windows\system32\route.exe')
+
     if route_exec_path=$(command -v route.exe 2>/dev/null); then
       route_exec="${route_exec_path}"
-    else
-      route_exec=$(wslpath 'C:\Windows\system32\route.exe')
     fi
 
     wsl2_d_tmp="$(eval "$route_exec print 2> /dev/null" | grep 0.0.0.0 | head -1 | awk '{print $4}')"
@@ -128,11 +172,9 @@ setup_display() {
       setup_display_via_resolv
     fi
 
-    unset route_exec
     unset wsl2_d_tmp
-
+    unset route_exec
   else
-
     # enable external x display for WSL 1
     export DISPLAY=localhost:0
 
@@ -141,8 +183,62 @@ setup_display() {
 
     # Export an environment variable for helping other processes
     unset WSL2
-
   fi
+}
+
+setup_dbus() {
+  # if dbus-launch is installed, then load it
+  if ! (command -v dbus-launch >/dev/null); then
+    return
+  fi
+
+  # Enabled via systemd
+  if [ -n "${DBUS_SESSION_BUS_ADDRESS}" ]; then
+    return
+  fi
+
+  # Use a per-user directory for storing the D-Bus environment
+  dbus_env_dir="${XDG_RUNTIME_DIR:-${HOME}/.cache}"
+  mkdir -p "${dbus_env_dir}" 2>/dev/null || true
+
+  dbus_pid="$(pidof -s dbus-daemon)"
+
+  if [ -z "${dbus_pid}" ]; then
+    dbus_env="$(timeout 2s dbus-launch --auto-syntax)" || return
+
+    # Extract and export only the expected variables from dbus-launch output
+    DBUS_SESSION_BUS_ADDRESS="$(printf '%s\n' "${dbus_env}" | sed -n "s/^DBUS_SESSION_BUS_ADDRESS='\(.*\)';\$/\1/p")"
+    DBUS_SESSION_BUS_PID="$(printf '%s\n' "${dbus_env}" | sed -n "s/^DBUS_SESSION_BUS_PID=\([0-9][0-9]*\);$/\1/p")"
+
+    if [ -n "${DBUS_SESSION_BUS_ADDRESS}" ] && [ -n "${DBUS_SESSION_BUS_PID}" ]; then
+      export DBUS_SESSION_BUS_ADDRESS
+      export DBUS_SESSION_BUS_PID
+
+      dbus_env_file="${dbus_env_dir}/dbus_env_${DBUS_SESSION_BUS_PID}"
+      {
+        echo "DBUS_SESSION_BUS_ADDRESS='${DBUS_SESSION_BUS_ADDRESS}'"
+        echo "DBUS_SESSION_BUS_PID='${DBUS_SESSION_BUS_PID}'"
+      } >"${dbus_env_file}"
+      chmod 600 "${dbus_env_file}" 2>/dev/null || true
+    fi
+
+    unset dbus_env
+  else
+    # Reuse existing dbus session
+    dbus_env_file="${dbus_env_dir}/dbus_env_${dbus_pid}"
+    if [ -f "${dbus_env_file}" ]; then
+      DBUS_SESSION_BUS_ADDRESS="$(sed -n "s/^DBUS_SESSION_BUS_ADDRESS='\(.*\)'\$/\1/p" "${dbus_env_file}")"
+      DBUS_SESSION_BUS_PID="$(sed -n "s/^DBUS_SESSION_BUS_PID='\([0-9][0-9]*\)'\$/\1/p" "${dbus_env_file}")"
+      if [ -n "${DBUS_SESSION_BUS_ADDRESS}" ] && [ -n "${DBUS_SESSION_BUS_PID}" ]; then
+        export DBUS_SESSION_BUS_ADDRESS
+        export DBUS_SESSION_BUS_PID
+      fi
+    fi
+  fi
+
+  unset dbus_pid
+  unset dbus_env_file
+  unset dbus_env_dir
 }
 
 main() {
@@ -154,15 +250,11 @@ main() {
   systemd_saved_environment="$HOME/.systemd.env"
 
   check_and_start_systemd
+  SYSTEMD_PID="$(ps -C systemd -o pid= | head -n1)"
   setup_display
 
-  # enable external libgl if mesa is not installed
-  if (command -v glxinfo >/dev/null 2>&1); then
-    unset LIBGL_ALWAYS_INDIRECT
-    sudo /usr/local/bin/libgl-change-checker 0
-  else
-    export LIBGL_ALWAYS_INDIRECT=1
-    sudo /usr/local/bin/libgl-change-checker 1
+  if [ -z "$SYSTEMD_PID" ]; then
+    setup_dbus
   fi
 
   # speed up some GUI apps like gedit
@@ -180,17 +272,18 @@ main() {
     # Setup video acceleration
     export VDPAU_DRIVER=d3d12
     export LIBVA_DRIVER_NAME=d3d12
+    sudo /usr/local/bin/pengwin-load-vgem-module
 
     # Setup Gallium Direct3D 12 driver
     export GALLIUM_DRIVER=d3d12
-    sudo /usr/local/bin/pengwin-load-vgem-module
   fi
 
-  # Check if we have Windows Path
-  if (command -v cmd.exe >/dev/null); then
+  if [ -z "$SYSTEMD_PID" ]; then
 
     save_environment
+  fi
 
+  if (command -v cmd.exe >/dev/null); then
     # Execute on user's shell first-run
     if [ ! -f "${HOME}/.firstrun" ]; then
       echo "Welcome to Pengwin. Type 'pengwin-setup' to run the setup tool. You will only see this message on the first run."
@@ -202,10 +295,14 @@ main() {
       # shellcheck disable=SC2262
       alias wslpath=legacy_wslupath
     fi
+  fi
+
+  # Check if we have Windows Path
+  if [ -z "$WIN_HOME" ] && (command -v cmd.exe >/dev/null 2>&1); then
 
     # Create a symbolic link to the windows home
 
-    # Here have a issue: %HOMEDRIVE% might be using a custom set location
+    # Here has an issue: %HOMEDRIVE% might be using a custom set location
     # moving cmd to where Windows is installed might help: %SYSTEMDRIVE%
     wHomeWinPath=$(cmd-exe /c 'cd %SYSTEMDRIVE%\ && echo %HOMEDRIVE%%HOMEPATH%' 2>/dev/null | tr -d '\r')
 
@@ -226,4 +323,4 @@ main() {
   fi
 }
 
-main
+main "$@"
