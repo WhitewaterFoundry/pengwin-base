@@ -89,15 +89,15 @@ setup_polkitd_user() {
 	# Create system group if it doesn't exist
 	if ! getent group "$POLKIT_USER" >/dev/null; then
 		echo "Creating system group ${POLKIT_USER}..."
-		groupadd --system "$POLKIT_USER"
+		addgroup --system "$POLKIT_USER"
 	fi
 
 	# Create system user if it doesn't exist
 	if ! getent passwd "$POLKIT_USER" >/dev/null; then
 		echo "Creating system user ${POLKIT_USER}..."
-		useradd --system \
-			--gid "$POLKIT_USER" \
-			--home-dir /var/lib/polkit-1 \
+		adduser --system \
+			--ingroup "$POLKIT_USER" \
+			--home /var/lib/polkit-1 \
 			--no-create-home \
 			--shell /usr/sbin/nologin \
 			"$POLKIT_USER"
