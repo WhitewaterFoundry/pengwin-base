@@ -11,5 +11,6 @@ Vcs-Git: https://github.com/WhitewaterFoundry/pengwin-base.git
 Package: pengwin-base
 Architecture: all
 Depends: ${misc:Depends}, curl, apt-transport-https, whiptail, gnupg, bc, udev, mesa-libgallium, mesa-va-drivers, vainfo, apt-utils, kmod, procps
+Recommends: casdial
 Description: Base modifications for Pengwin
 Essential: yes
