@@ -1,17 +1,19 @@
 {
   "profiles": [
     {
-      "pathTranslationStyle": "wsl",
-      "backgroundImageAlignment": "bottomRight",
-      "backgroundImageOpacity": 0.2,
-      "backgroundImageStretchMode": "none",
+      "acrylicOpacity": 0.9,
       "bellStyle": "none",
       "colorScheme": "Pengwin",
       "cursorShape": "vintage",
       "fontFace": "Cascadia Code",
-      "startingDirectory": "~",
+      "useAcrylic": true,
+      "startingDirectory": null,
+      "closeOnExit": "never",
       "showMarksOnScrollbar": true,
-      "autoMarkPrompts": true
+      "autoMarkPrompts": true,
+      "pathTranslationStyle": "wsl",
+      "wsl.distribution-type": "debian",
+      "wsl.distribution-version": "13.0"
     }
   ],
   "schemes": [
