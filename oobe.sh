@@ -58,7 +58,7 @@ function main() {
       echo "Error: Username must be 32 characters or less."
       continue
     elif [[ ! ${username} =~ ^[a-z_][a-z0-9_-]*$ ]]; then
-      echo "Error: Username must start with a letter or underscore and contain only lowercase letters, numbers, underscores, and hyphens."
+      echo "Error: Username must start with a lowercase letter or underscore and contain only lowercase letters, numbers, underscores, and hyphens."
       continue
     fi
 

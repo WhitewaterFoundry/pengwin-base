@@ -5,7 +5,7 @@ os-release /usr/lib/
 wsl.conf.default /usr/share/pengwin-base/
 wsl-distribution.conf /usr/lib/wsl/
 terminal.json /usr/lib/wsl/
-pengwin.png /usr/lib/wsl/
+pengwin.ico /usr/lib/wsl/
 oobe.sh /usr/lib/wsl/
 preferences /etc/apt/
 sources.list /etc/apt/
