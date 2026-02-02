@@ -23,10 +23,6 @@ FLAGFILE="/etc/apt/.dist-upgrade"
 
 # Check if Debian version needs upgrading
 check_debian_version() {
-	local pengwin_version_id
-	local debian_version
-	local debian_major_version
-	
 	echo "Checking Debian version compatibility..."
 	
 	if [ ! -f /usr/lib/os-release ] || [ ! -f /etc/debian_version ]; then
@@ -58,6 +54,10 @@ check_debian_version() {
 			echo "Debian version is up to date (version $pengwin_version_id)"
 		fi
 	fi
+
+	unset pengwin_version_id
+	unset debian_version
+	unset debian_major_version
 }
 
 # Handle wsl.conf configuration file installation
@@ -81,6 +81,34 @@ setup_wsl_conf() {
 	fi
 }
 
+# Setup polkitd user and group if they don't exist
+setup_polkitd_user() {
+	POLKIT_USER='polkitd'
+	echo "Setting up polkit user/group (${POLKIT_USER})..."
+
+	# Create system group if it doesn't exist
+	if ! getent group "${POLKIT_USER}" >/dev/null; then
+		echo "Creating system group ${POLKIT_USER}..."
+		addgroup --system "$POLKIT_USER"
+	fi
+
+	# Create system user if it doesn't exist
+	if ! getent passwd "${POLKIT_USER}" >/dev/null; then
+		echo "Creating system user ${POLKIT_USER}..."
+		adduser --system \
+			--ingroup "${POLKIT_USER}" \
+			--home /var/lib/polkit-1 \
+			--no-create-home \
+			--shell /usr/sbin/nologin \
+			"${POLKIT_USER}"
+	fi
+
+	# Create runtime/state directory that polkit uses
+	install -d -m 700 -o "${POLKIT_USER}" -g "${POLKIT_USER}" /var/lib/polkit-1
+
+	unset POLKIT_USER
+}
+
 case "$1" in
 	configure)
 		echo "Symlinking /etc/dpkg/origins/pengwin to default"
@@ -88,6 +116,9 @@ case "$1" in
 
 		# Handle wsl.conf configuration file
 		setup_wsl_conf
+
+		# Setup polkitd user/group
+		setup_polkitd_user
 
 		### Whitewater Foundry GPG Key install
 		echo "Installing Whitewater Foundry GPG keys..."
@@ -145,8 +176,10 @@ case "$1" in
 		# Check if Debian version needs upgrading
 		check_debian_version
 
-		# This is a new install, create dist-upgrade flag file
-		# touch "${FLAGFILE}"
+		# Fix WSL1 systemd upgrade
+		if [ -z "${WSL_INTEROP}" ]; then
+			mv -f /bin/systemd-sysusers /bin/systemd-sysusers.org && ln -s /bin/echo /bin/systemd-sysusers
+		fi
 	;;
 
 	abort-upgrade|abort-remove|abort-deconfigure)
