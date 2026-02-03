@@ -56,6 +56,39 @@ setup_display_via_resolv() {
   unset wsl2_d_tmp
 }
 
+define_xdg_environment() {
+  # XDG Base Directory Specification
+  # https://specifications.freedesktop.org/basedir/latest/
+
+  if [ -z "${XDG_DATA_HOME}" ]; then
+    export XDG_DATA_HOME="${HOME}/.local/share"
+  fi
+  mkdir -p "${XDG_DATA_HOME}"
+
+  if [ -z "${XDG_CONFIG_HOME}" ]; then
+    export XDG_CONFIG_HOME="${HOME}/.config"
+  fi
+  mkdir -p "${XDG_CONFIG_HOME}"
+
+  if [ -z "${XDG_STATE_HOME}" ]; then
+    export XDG_STATE_HOME="${HOME}/.local/state"
+  fi
+  mkdir -p "${XDG_STATE_HOME}"
+
+  if [ -z "${XDG_CACHE_HOME}" ]; then
+    export XDG_CACHE_HOME="${HOME}/.cache"
+  fi
+  mkdir -p "${XDG_CACHE_HOME}"
+
+  if [ -z "${XDG_DATA_DIRS}" ]; then
+    export XDG_DATA_DIRS="/usr/local/share:/usr/share"
+  fi
+
+  if [ -z "${XDG_CONFIG_DIRS}" ]; then
+    export XDG_CONFIG_DIRS="/etc/xdg"
+  fi
+}
+
 setup_display() {
   if [ -n "${XRDP_SESSION}" ]; then
     if [ -f "${systemd_saved_environment}" ]; then
@@ -237,6 +270,8 @@ main() {
       alias wslpath=legacy_wslupath
     fi
   fi
+
+  define_xdg_environment
 
   # Check if we have Windows Path
   if [ -z "$WIN_HOME" ] && (command -v cmd.exe >/dev/null 2>&1); then
