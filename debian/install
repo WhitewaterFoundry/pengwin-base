@@ -3,7 +3,7 @@ profile.d/* /etc/profile.d/
 fish_conf.d/* /etc/fish/conf.d/
 os-release /usr/lib/
 wsl.conf.default /usr/share/pengwin-base/
-wsl-distribution.conf /usr/lib/wsl/
+wsl-distribution.conf /etc/
 terminal.json /usr/lib/wsl/
 pengwin.ico /usr/lib/wsl/
 oobe.sh /usr/lib/wsl/
