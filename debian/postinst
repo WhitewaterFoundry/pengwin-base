@@ -60,6 +60,27 @@ check_debian_version() {
 	unset debian_major_version
 }
 
+# Handle wsl.conf configuration file installation
+setup_wsl_conf() {
+	echo "Managing wsl.conf configuration..."
+	if [ -f /usr/share/pengwin-base/wsl.conf.default ]; then
+		if [ ! -e /etc/wsl.conf ]; then
+			# Fresh install or wsl.conf was removed - install template
+			echo "Installing wsl.conf from template..."
+			install -m 644 /usr/share/pengwin-base/wsl.conf.default /etc/wsl.conf
+		elif [ -f /etc/wsl.conf ]; then
+			# Regular file exists - create .dpkg-new for user to review
+			echo "Existing wsl.conf found, creating /etc/wsl.conf.dpkg-new..."
+			install -m 644 /usr/share/pengwin-base/wsl.conf.default /etc/wsl.conf.dpkg-new
+		else
+			# Path exists but is not a regular file (directory/symlink/etc)
+			echo "Warning: /etc/wsl.conf exists but is not a regular file, skipping..."
+		fi
+	else
+		echo "Warning: Template file /usr/share/pengwin-base/wsl.conf.default not found"
+	fi
+}
+
 # Setup polkitd user and group if they don't exist
 setup_polkitd_user() {
 	POLKIT_USER='polkitd'
@@ -92,6 +113,9 @@ case "$1" in
 	configure)
 		echo "Symlinking /etc/dpkg/origins/pengwin to default"
 		ln -sf /etc/dpkg/origins/pengwin /etc/dpkg/origins/default
+
+		# Handle wsl.conf configuration file
+		setup_wsl_conf
 
 		# Setup polkitd user/group
 		setup_polkitd_user
@@ -127,7 +151,9 @@ case "$1" in
 		chmod 755 /usr/local/bin/wslsystemctl
 		chmod 755 /usr/local/bin/wsljournalctl
 		chmod 755 /usr/local/bin/start-systemd
-    chmod 755 /usr/local/bin/check_x11_socket
+		chmod 755 /usr/local/bin/check_x11_socket
+		chmod 755 /usr/lib/wsl/oobe.sh
+    chmod 755 /usr/local/bin/create_userpath
 
 		chmod u+s "$(command -v ping)"
 
@@ -141,7 +167,22 @@ case "$1" in
 		chmod +x /etc/update-motd.d/30-pengwin-setup
 		chmod +x /etc/update-motd.d/40-environment
 
-		echo " Done!"
+		# Mask conflicting systemd services for WSL compatibility
+		# Reference: https://learn.microsoft.com/en-us/windows/wsl/systemd
+		if [ -d /etc/systemd/system ]; then
+			echo "Masking conflicting systemd services for WSL..."
+			ln -sf /dev/null /etc/systemd/system/systemd-resolved.service
+			ln -sf /dev/null /etc/systemd/system/systemd-networkd.service
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-setup.service
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-clean.service
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-clean.timer
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-setup-dev-early.service
+			ln -sf /dev/null /etc/systemd/system/systemd-tmpfiles-setup-dev.service
+			ln -sf /dev/null /etc/systemd/system/tmp.mount
+			ln -sf /dev/null /etc/systemd/system/NetworkManager.service
+			ln -sf /dev/null /etc/systemd/system/NetworkManager-wait-online.service
+			echo " Done!"
+		fi
 		###
 
 		# Remove temporary directory

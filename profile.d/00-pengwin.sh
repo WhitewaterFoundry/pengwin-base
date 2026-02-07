@@ -56,8 +56,40 @@ setup_display_via_resolv() {
   unset wsl2_d_tmp
 }
 
-setup_display() {
+define_xdg_environment() {
+  # XDG Base Directory Specification
+  # https://specifications.freedesktop.org/basedir/latest/
 
+  if [ -z "${XDG_DATA_HOME}" ]; then
+    export XDG_DATA_HOME="${HOME}/.local/share"
+  fi
+  mkdir -p "${XDG_DATA_HOME}"
+
+  if [ -z "${XDG_CONFIG_HOME}" ]; then
+    export XDG_CONFIG_HOME="${HOME}/.config"
+  fi
+  mkdir -p "${XDG_CONFIG_HOME}"
+
+  if [ -z "${XDG_STATE_HOME}" ]; then
+    export XDG_STATE_HOME="${HOME}/.local/state"
+  fi
+  mkdir -p "${XDG_STATE_HOME}"
+
+  if [ -z "${XDG_CACHE_HOME}" ]; then
+    export XDG_CACHE_HOME="${HOME}/.cache"
+  fi
+  mkdir -p "${XDG_CACHE_HOME}"
+
+  if [ -z "${XDG_DATA_DIRS}" ]; then
+    export XDG_DATA_DIRS="/usr/local/share:/usr/share"
+  fi
+
+  if [ -z "${XDG_CONFIG_DIRS}" ]; then
+    export XDG_CONFIG_DIRS="/etc/xdg"
+  fi
+}
+
+setup_display() {
   if [ -n "${XRDP_SESSION}" ]; then
     if [ -f "${systemd_saved_environment}" ]; then
       set -a
@@ -70,6 +102,11 @@ setup_display() {
       export WSL2=1
 
       setup_interop
+    fi
+
+    unset WAYLAND_DISPLAY
+    if [ -n "$SYSTEMD_PID" ]; then
+      rm -f /run/user/"$(id -u)"/wayland* 2>/dev/null
     fi
 
     if [ -z "${PULSE_SERVER}" ]; then
@@ -89,6 +126,9 @@ setup_display() {
   # WSL2=2: WSL2 (Type 2) using the IP of the gateway (host IP)
   # WSL2=3: WSL2 (Type 3) using the DISPLAY variable already set WSLg?
   if [ -n "${WSL_INTEROP}" ]; then
+    #Export an environment variable for helping other processes
+    export WSL2=1
+
     if [ -n "${DISPLAY}" ] && [ ! -f "${HOME}/.config/pengwin/disable_wslg" ]; then #WSLg
       # check if the type is changed
       sudo /usr/local/bin/wsl_change_checker 3
@@ -99,6 +139,43 @@ setup_display() {
         export DISPLAY=":${socket_index}"
       fi
 
+      uid="$(id -u)"
+
+      user_path="/run/user/${uid}"
+      if [ ! -d "${user_path}" ]; then
+        sudo /usr/local/bin/create_userpath "${uid}" 2>/dev/null
+      fi
+
+      if [ -z "$SYSTEMD_PID" ]; then
+        export XDG_RUNTIME_DIR="${user_path}"
+      fi
+
+      wslg_runtime_dir="/mnt/wslg/runtime-dir"
+
+      ln -fs "${wslg_runtime_dir}"/wayland-0 "${user_path}"/ 2>/dev/null
+      ln -fs "${wslg_runtime_dir}"/wayland-0.lock "${user_path}"/ 2>/dev/null
+
+      pulse_path="${user_path}/pulse"
+      wslg_pulse_dir="${wslg_runtime_dir}"/pulse
+
+      if [ ! -d "${pulse_path}" ]; then
+        mkdir -p "${pulse_path}" 2>/dev/null
+
+        ln -fs "${wslg_pulse_dir}"/native "${pulse_path}"/ 2>/dev/null
+        ln -fs "${wslg_pulse_dir}"/pid "${pulse_path}"/ 2>/dev/null
+
+      elif [ -S "${pulse_path}/native" ]; then
+        # Handle stale socket: remove it and recreate as symlink to WSLg pulse
+        rm -f "${pulse_path}/native" 2>/dev/null
+        ln -fs "${wslg_pulse_dir}"/native "${pulse_path}"/ 2>/dev/null
+      fi
+
+      unset user_path
+      unset wslg_runtime_dir
+      unset wslg_pulse_dir
+      unset pulse_path
+      unset uid
+
       return
     fi
 
@@ -108,10 +185,10 @@ setup_display() {
     fi
 
     # enable external x display for WSL 2
+    route_exec=$(wslpath 'C:\Windows\system32\route.exe')
+
     if route_exec_path=$(command -v route.exe 2>/dev/null); then
       route_exec="${route_exec_path}"
-    else
-      route_exec=$(wslpath 'C:\Windows\system32\route.exe')
     fi
 
     wsl2_d_tmp="$(eval "$route_exec print 2> /dev/null" | grep 0.0.0.0 | head -1 | awk '{print $4}')"
@@ -128,11 +205,9 @@ setup_display() {
       setup_display_via_resolv
     fi
 
-    unset route_exec
     unset wsl2_d_tmp
-
+    unset route_exec
   else
-
     # enable external x display for WSL 1
     export DISPLAY=localhost:0
 
@@ -141,7 +216,6 @@ setup_display() {
 
     # Export an environment variable for helping other processes
     unset WSL2
-
   fi
 }
 
@@ -154,16 +228,8 @@ main() {
   systemd_saved_environment="$HOME/.systemd.env"
 
   check_and_start_systemd
+  SYSTEMD_PID="$(ps -C systemd -o pid= | head -n1)"
   setup_display
-
-  # enable external libgl if mesa is not installed
-  if (command -v glxinfo >/dev/null 2>&1); then
-    unset LIBGL_ALWAYS_INDIRECT
-    sudo /usr/local/bin/libgl-change-checker 0
-  else
-    export LIBGL_ALWAYS_INDIRECT=1
-    sudo /usr/local/bin/libgl-change-checker 1
-  fi
 
   # speed up some GUI apps like gedit
   export NO_AT_BRIDGE=1
@@ -180,17 +246,18 @@ main() {
     # Setup video acceleration
     export VDPAU_DRIVER=d3d12
     export LIBVA_DRIVER_NAME=d3d12
+    sudo /usr/local/bin/pengwin-load-vgem-module
 
     # Setup Gallium Direct3D 12 driver
     export GALLIUM_DRIVER=d3d12
-    sudo /usr/local/bin/pengwin-load-vgem-module
   fi
 
-  # Check if we have Windows Path
-  if (command -v cmd.exe >/dev/null); then
+  if [ -z "$SYSTEMD_PID" ]; then
 
     save_environment
+  fi
 
+  if (command -v cmd.exe >/dev/null); then
     # Execute on user's shell first-run
     if [ ! -f "${HOME}/.firstrun" ]; then
       echo "Welcome to Pengwin. Type 'pengwin-setup' to run the setup tool. You will only see this message on the first run."
@@ -202,10 +269,16 @@ main() {
       # shellcheck disable=SC2262
       alias wslpath=legacy_wslupath
     fi
+  fi
+
+  define_xdg_environment
+
+  # Check if we have Windows Path
+  if [ -z "$WIN_HOME" ] && (command -v cmd.exe >/dev/null 2>&1); then
 
     # Create a symbolic link to the windows home
 
-    # Here have a issue: %HOMEDRIVE% might be using a custom set location
+    # Here has an issue: %HOMEDRIVE% might be using a custom set location
     # moving cmd to where Windows is installed might help: %SYSTEMDRIVE%
     wHomeWinPath=$(cmd-exe /c 'cd %SYSTEMDRIVE%\ && echo %HOMEDRIVE%%HOMEPATH%' 2>/dev/null | tr -d '\r')
 
@@ -226,4 +299,4 @@ main() {
   fi
 }
 
-main
+main "$@"

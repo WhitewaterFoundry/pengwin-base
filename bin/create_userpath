@@ -1,0 +1,40 @@
+#!/bin/sh
+
+#######################################
+# Ensures the user's runtime directory exists under /run/user/<uid>.
+# If the directory does not exist, it is created (parents included).
+# Globals:
+#   None
+# Arguments:
+#   uid: Numeric user ID whose runtime directory should exist.
+# Returns:
+#   Exit status of the final command executed:
+#     - 0 if the directory already exists or was created successfully.
+#     - Non-zero if directory creation fails or uid is invalid.
+# Side effects:
+#   May create /run/user/<uid>.
+#   Suppresses mkdir error output (stderr) to avoid noisy logs.
+#######################################
+main() {
+  uid="${1}"
+
+  # Validate that uid is a non-negative integer using safe parameter expansion
+  case "${uid}" in
+    ''|*[!0-9]*)
+      echo "Error: Invalid uid '${uid}'. Must be a non-negative integer." >&2
+      return 1
+      ;;
+  esac
+
+  user_path="/run/user/${uid}"
+  if [ ! -d "${user_path}" ]; then
+    mkdir -p "${user_path}" 2>/dev/null
+    # Use uid only for ownership (group will default to user's primary group)
+    chown -R "${uid}" "${user_path}" 2>/dev/null
+
+    # Take advantage of the superuser and try to create other possible missing directories when systemd is not running
+    mkdir -p "/etc/xdg" 2>/dev/null
+  fi
+}
+
+main "$@"
