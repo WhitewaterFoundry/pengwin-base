@@ -167,6 +167,8 @@ case "$1" in
 		chmod +x /etc/update-motd.d/30-pengwin-setup
 		chmod +x /etc/update-motd.d/40-environment
 
+		chmod +x /usr/local/libexec/pulseaudio-module-xrdp/load_pa_modules.sh
+
 		# Mask conflicting systemd services for WSL compatibility
 		# Reference: https://learn.microsoft.com/en-us/windows/wsl/systemd
 		if [ -d /etc/systemd/system ]; then
