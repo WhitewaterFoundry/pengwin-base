@@ -15,7 +15,7 @@
 #   None
 function main() {
   if ! lsmod | grep -q vgem; then
-    modprobe vgem
+    modprobe vgem 2>/dev/null
   fi
 }
 
