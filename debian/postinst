@@ -24,17 +24,17 @@ FLAGFILE="/etc/apt/.dist-upgrade"
 # Check if Debian version needs upgrading
 check_debian_version() {
 	echo "Checking Debian version compatibility..."
-	
+
 	if [ ! -f /usr/lib/os-release ] || [ ! -f /etc/debian_version ]; then
 		return 0
 	fi
-	
+
 	# Extract VERSION_ID from os-release (e.g., "13")
 	pengwin_version_id=$(grep "^VERSION_ID=" /usr/lib/os-release | cut -d'=' -f2 | tr -d '"')
-	
+
 	# Extract major version from debian_version (e.g., "13.0" -> "13")
 	debian_version=$(cat /etc/debian_version)
-	
+
 	# Handle both numeric versions (e.g., "13.0") and codename versions (e.g., "trixie/sid")
 	if echo "$debian_version" | grep -q "^[0-9]"; then
 		debian_major_version=$(echo "$debian_version" | cut -d'.' -f1)
@@ -43,7 +43,7 @@ check_debian_version() {
 		# so we'll skip the check
 		debian_major_version=""
 	fi
-	
+
 	# Compare major versions
 	if [ -n "$pengwin_version_id" ] && [ -n "$debian_major_version" ]; then
 		if [ "$pengwin_version_id" != "$debian_major_version" ]; then
