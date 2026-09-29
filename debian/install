@@ -17,6 +17,9 @@ pengwin.ico /usr/local/lib/
 bin/* /usr/local/bin/
 completions/* /usr/share/bash-completion/completions/
 update-motd.d/* /etc/update-motd.d/
-xrdp-pulseaudio-installer/* /var/lib/xrdp-pulseaudio-installer/
+xrdp-pulseaudio-installer/*.so /usr/lib/pulse-17.0+dfsg1/modules/
+xrdp-pulseaudio-installer/*.la /usr/lib/pulse-17.0+dfsg1/modules/
+xrdp-pulseaudio-installer/*.sh /usr/local/libexec/pulseaudio-module-xrdp/
+xrdp-pulseaudio-installer/*.desktop /etc/xdg/autostart/
 sudoers.d/* /etc/sudoers.d/
 binfmt.d/* /usr/lib/binfmt.d/
