@@ -241,6 +241,7 @@ main() {
   alias ll='ls -al'
   alias winget='powershell.exe winget'
   alias wsl='wsl.exe'
+  alias wslc='wslc.exe'
 
   if [ -n "${WSL2}" ]; then
     # Setup video acceleration

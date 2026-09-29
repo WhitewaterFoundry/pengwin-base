@@ -50,6 +50,7 @@ alias clear='clear -x'
 
 # Custom aliases
 alias ll='ls -al'
+alias wslc='wslc.exe'
 
 if test -n "$WSL2"
   #Setup video acceleration
